@@ -1,20 +1,24 @@
 /* ************************************************************************************** */
 /*                                                                                        */
 /*                                                                   :::      ::::::::    */
-/*   minishell.h                                                   :+:      :+:    :+:    */
+/*   signals.c                                                     :+:      :+:    :+:    */
 /*                                                               +:+ +:+         +:+      */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr>              +#+  +:+       +#+         */
 /*                                                           +#+#+#+#+#+   +#+            */
-/*   Created: 2025/05/25 18:08:25 by aaycan                       #+#    #+#              */
-/*   Updated: 2025/05/25 18:08:25 by aaycan                      ###   ########.tr        */
+/*   Created: 2025/06/04 00:09:03 by aaycan                       #+#    #+#              */
+/*   Updated: 2025/06/04 00:09:03 by aaycan                      ###   ########.tr        */
 /*                                                                                        */
 /* ************************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
+#include <unistd.h>
+#include <readline/readline.h>
 
-void	print_banner(void);
-void	handle_sigint(int signum);
-char	**split_tokens(const char *input);
-
-#endif
+void	handle_sigint(int signum)
+{
+	(void)signum;
+	rl_replace_line("", 0);
+	write(1, "\n", 1);
+	rl_on_new_line();
+	rl_redisplay();
+}
