@@ -1,27 +1,23 @@
 /* ************************************************************************************** */
 /*                                                                                        */
 /*                                                                   :::      ::::::::    */
-/*   lexer.c                                                       :+:      :+:    :+:    */
+/*   lexer_pt_one.c                                                :+:      :+:    :+:    */
 /*                                                               +:+ +:+         +:+      */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr>              +#+  +:+       +#+         */
 /*                                                           +#+#+#+#+#+   +#+            */
-/*   Created: 2025/06/04 00:09:48 by aaycan                       #+#    #+#              */
-/*   Updated: 2025/06/04 00:09:48 by aaycan                      ###   ########.tr        */
+/*   Created: 2025/06/04 16:04:06 by aaycan                       #+#    #+#              */
+/*   Updated: 2025/06/04 16:04:06 by aaycan                      ###   ########.tr        */
 /*                                                                                        */
 /* ************************************************************************************** */
 
 #include "minishell.h"
-#include "libraries/libft.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-static size_t	count_tokens(const char *s);
-static int		is_metachar(char c);
-static int		ft_isspace(char c);
-static char		*extract_token(const char *s, size_t *i);
-static char		*ft_strndup(const char *s, size_t n);
 static int		has_unclosed_quotes(const char *s);
-static char		*strip_quotes(const char *s);
+static size_t	count_tokens(const char *s);
+static char		*extract_token(const char *s, size_t *i);
+static char		*strip_quotes(char *s);
 
 char	**split_tokens(const char *input)
 {
@@ -45,6 +41,24 @@ char	**split_tokens(const char *input)
 		tokens[t++] = strip_quotes(extract_token(input, &i));
 	tokens[t] = NULL;
 	return (tokens);
+}
+
+static int	has_unclosed_quotes(const char *s)
+{
+	char	quote;
+	size_t	i;
+
+	quote = 0;
+	i = 0;
+	while (s[i])
+	{
+		if (!quote && ((s[i] == '\'') || (s[i] == '\"')))
+			quote = s[i];
+		else if (quote && (s[i] == quote))
+			quote = 0;
+		i++;
+	}
+	return (quote != 0);
 }
 
 static size_t	count_tokens(const char *s)
@@ -86,34 +100,6 @@ static size_t	count_tokens(const char *s)
 	return (count);
 }
 
-static int	is_metachar(char c)
-{
-	return ((c == '|') || (c == '<') || (c == '>'));
-}
-
-static int	ft_isspace(char c)
-{
-	return ((c == ' ') || (c >= 9 && c <= 13));
-}
-
-static char	*ft_strndup(const char *s, size_t n)
-{
-	char *dup;
-	size_t i;
-
-	dup = malloc(n + 1);
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (i < n)
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	dup[n] = '\0';
-	return (dup);
-}
-
 static char	*extract_token(const char *s, size_t *i)
 {
 	size_t	start;
@@ -145,25 +131,7 @@ static char	*extract_token(const char *s, size_t *i)
 	return (ft_strndup(s + start, *i - start));
 }
 
-static int	has_unclosed_quotes(const char *s)
-{
-	char	quote;
-	size_t	i;
-
-	quote = 0;
-	i = 0;
-	while (s[i])
-	{
-		if (!quote && ((s[i] == '\'') || (s[i] == '\"')))
-			quote = s[i];
-		else if (quote && (s[i] == quote))
-			quote = 0;
-		i++;
-	}
-	return (quote != 0);
-}
-
-static char	*strip_quotes(const char *s)
+static char	*strip_quotes(char *s)
 {
 	size_t	i;
 	size_t	j;
@@ -172,15 +140,18 @@ static char	*strip_quotes(const char *s)
 
 	result = malloc(ft_strlen(s) + 1);
 	if (!result)
+	{
+		free(s);
 		return (NULL);
+	}
 	i = 0;
 	j = 0;
 	while (s[i])
 	{
-		if ((s[i] == '"') || (s[i] == '\''))
+		if ((s[i] == '\"') || (s[i] == '\''))
 		{
 			quote = s[i++];
-			while (s[i] && s[i] != quote)
+			while (s[i] && (s[i] != quote))
 				result[j++] = s[i++];
 			if (s[i])
 				i++;
@@ -189,5 +160,6 @@ static char	*strip_quotes(const char *s)
 			result[j++] = s[i++];
 	}
 	result[j] = '\0';
+	free(s);
 	return (result);
 }

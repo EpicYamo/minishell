@@ -13,8 +13,25 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-void	print_banner(void);
-void	handle_sigint(int signum);
-char	**split_tokens(const char *input);
+#include <stddef.h>
+
+typedef struct s_command
+{
+	char				**argv;
+	char				*infile;
+	char				*outfile;
+	int					append;
+	int					heredoc;
+	struct s_command	*next;
+}t_command;
+
+void		print_banner(void);
+void		handle_sigint(int signum);
+char		**split_tokens(const char *input);
+size_t		ft_strlen(const char *s);
+char		*ft_strndup(const char *s, size_t n);
+int			ft_isspace(char c);
+int			is_metachar(char c);
+t_command	*parse_tokens(char **tokens);
 
 #endif

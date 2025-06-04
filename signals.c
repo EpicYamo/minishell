@@ -10,15 +10,17 @@
 /*                                                                                        */
 /* ************************************************************************************** */
 
-#include "minishell.h"
 #include <unistd.h>
+#include <signal.h>
 #include <readline/readline.h>
 
 void	handle_sigint(int signum)
 {
-	(void)signum;
-	rl_replace_line("", 0);
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_redisplay();
+	if (signum == SIGINT)
+	{
+		rl_replace_line("", 0);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
 }
