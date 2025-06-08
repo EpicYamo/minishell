@@ -32,7 +32,7 @@ t_command *parse_tokens(char **tokens)
 	{
 		if (!cmd && !head)
 		{
-			head = new_command();
+			head = new_command();  // return val is NULL free everything and fail exit
 			cmd = head;
 			argc = 0;
 		}
@@ -40,7 +40,7 @@ t_command *parse_tokens(char **tokens)
 		{
 			free(tokens[i]);
 			cmd->argv[argc] = NULL;
-			cmd->next = new_command();
+			cmd->next = new_command(); // return val is NULL free everything and fail exit
 			cmd = cmd->next;
 			argc = 0;
 			i++;
