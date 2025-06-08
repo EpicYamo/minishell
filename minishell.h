@@ -33,5 +33,7 @@ char		*ft_strndup(const char *s, size_t n);
 int			ft_isspace(char c);
 int			is_metachar(char c);
 t_command	*parse_tokens(char **tokens);
+void		free_commands(t_command *cmd);
+int			command_executor(t_command *cmd);
 
 #endif

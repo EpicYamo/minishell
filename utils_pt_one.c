@@ -10,6 +10,7 @@
 /*                                                                                        */
 /* ************************************************************************************** */
 
+#include "minishell.h"
 #include <stdlib.h>
 
 int	is_metachar(char c)
@@ -50,4 +51,28 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+void	free_commands(t_command *cmd)
+{
+	t_command	*next;
+	size_t		i;
+
+	while (cmd)
+	{
+		next = cmd->next;
+		i = 0;
+		if (cmd->argv)
+		{
+			while (cmd->argv[i])
+				free(cmd->argv[i++]);			
+			free(cmd->argv);
+		}
+		if (cmd->infile)
+			free(cmd->infile);
+		if (cmd->outfile)
+			free(cmd->outfile);
+		free(cmd);
+		cmd = next;
+	}
 }

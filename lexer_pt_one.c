@@ -29,16 +29,25 @@ char	**split_tokens(const char *input)
 	if (has_unclosed_quotes(input))
 	{
 		printf("\033[0;31mSyntax error: unclosed quote\033[0m\n");
-		return (NULL);
+		return (NULL); // do not return NULL, return a key to prevent processing it like an allocation error.
 	}
 	i = 0;
-	t = 0;
+	t = -1;
 	token_count = count_tokens(input);
 	tokens = malloc(sizeof(char *) * (token_count + 1));
 	if (!tokens)
 		return (NULL);
-	while (t < token_count)
-		tokens[t++] = strip_quotes(extract_token(input, &i));
+	while (++t < token_count)
+	{
+		tokens[t] = extract_token(input, &i);
+		//if (!tokens[t])
+		//free tokens in a loop then free token
+		//return NULL
+		tokens[t] = strip_quotes(tokens[t]);
+		//if (!tokens[t])
+		//free tokens in a loop then free token
+		//return NULL
+	}
 	tokens[t] = NULL;
 	return (tokens);
 }
@@ -104,6 +113,7 @@ static char	*extract_token(const char *s, size_t *i)
 {
 	size_t	start;
 	char	quote;
+	char 	*token;
 
 	while (ft_isspace(s[*i]))
 		(*i)++;
@@ -128,7 +138,10 @@ static char	*extract_token(const char *s, size_t *i)
 				(*i)++;
 		}
 	}
-	return (ft_strndup(s + start, *i - start));
+	token = ft_strndup(s + start, *i - start);
+	if (!token)
+		return (NULL);
+	return (token);
 }
 
 static char	*strip_quotes(char *s)
@@ -140,10 +153,7 @@ static char	*strip_quotes(char *s)
 
 	result = malloc(ft_strlen(s) + 1);
 	if (!result)
-	{
-		free(s);
 		return (NULL);
-	}
 	i = 0;
 	j = 0;
 	while (s[i])

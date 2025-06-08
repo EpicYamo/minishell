@@ -1,5 +1,5 @@
 SRCS 	= minishell.c banner_func.c signals.c lexer_pt_one.c utils_pt_one.c \
-			parser_pt_one.c
+			parser_pt_one.c executor_pt_one.c
 LIBS	= -lreadline
 NAME	=	minishell
 CC		=	cc

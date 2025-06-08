@@ -19,7 +19,6 @@
 #include <readline/history.h>
 
 static void	print_commands(t_command *cmd);
-static void free_commands(t_command *cmd);
 
 int	main(void)
 {
@@ -33,23 +32,42 @@ int	main(void)
 	while (1)
     {
         line = readline("\001\033[0;32m\002🜁 Y-Shell> \001\033[0m\002");
-        if (!line)
+        tokens = NULL;
+		cmd = NULL;
+		if (!line)
 		{
 			printf("exit\n");
+			rl_clear_history();
 			break;
 		}
         if (line)
 			add_history(line);
 		tokens = split_tokens(line);
+		if (!tokens)
+		{
+			printf("\033[0;31mSystem error: memory allocation failed in \"split_tokens\" function\033[0m\n");
+			free(line);
+			continue;
+		}
 		if (tokens)
+		{
+			free(line);
 			cmd = parse_tokens(tokens);
+		}
+		if (!cmd)
+		{
+			printf("\033[0;31mSystem error: memory allocation failed in \"parse_tokens\" function\033[0m\n");
+			free(line);
+			//free tokens in a loop
+			free(tokens);
+			continue;
+		}
 		if (cmd)
 		{
 			print_commands(cmd);
 			free_commands(cmd);
+			free(tokens);
 		}
-		free(tokens);
-        free(line);
     }
 	return (0);
 }
@@ -63,36 +81,18 @@ static void	print_commands(t_command *cmd)
 	{
 		printf("\n\033[1;34m[ Command %d ]\033[0m\n", cmd_id++);
 		i = 0;
-		while (cmd->argv && cmd->argv[i])
+		if (cmd->argv)
 		{
-			printf("argv[%d]: \"%s\"\n", i, cmd->argv[i]);
-			i++;
+			while (cmd->argv && cmd->argv[i])
+			{
+				printf("argv[%d]: \"%s\"\n", i, cmd->argv[i]);
+				i++;
+			}
 		}
 		printf("infile   : %s\n", cmd->infile ? cmd->infile : "(none)");
 		printf("outfile  : %s\n", cmd->outfile ? cmd->outfile : "(none)");
 		printf("append   : %d\n", cmd->append);
 		printf("heredoc  : %d\n", cmd->heredoc);
 		cmd = cmd->next;
-	}
-}
-
-static void free_commands(t_command *cmd)
-{
-	while (cmd)
-	{
-		t_command *next = cmd->next;
-		size_t i = 0;
-		if (cmd->argv)
-		{
-			while (cmd->argv[i])
-				free(cmd->argv[i++]);			
-			free(cmd->argv);
-		}
-		if (cmd->infile)
-			free(cmd->infile);
-		if (cmd->outfile)
-			free(cmd->outfile);
-		free(cmd);
-		cmd = next;
 	}
 }
