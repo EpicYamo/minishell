@@ -65,9 +65,11 @@ int	main(void)
 		if (cmd)
 		{
 			print_commands(cmd);
+			command_executor(cmd);
 			free_commands(cmd);
 			free(tokens);
 		}
+		
     }
 	return (0);
 }
