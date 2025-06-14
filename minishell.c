@@ -34,37 +34,27 @@ int	main(void)
         line = readline("\001\033[0;32m\002🜁 Y-Shell> \001\033[0m\002");
         tokens = NULL;
 		cmd = NULL;
-		if (!line)
+		if (line == NULL)
 		{
 			printf("exit\n");
 			rl_clear_history();
 			break;
 		}
-        if (line)
+        else if (line != NULL)
 			add_history(line);
 		tokens = split_tokens(line);
-		if (!tokens)
+		if (tokens == NULL)
 		{
 			printf("\033[0;31mSystem error: memory allocation failed in \"split_tokens\" function\033[0m\n");
-			free(line);
 			continue;
 		}
-		if (tokens)
+		else if (tokens != NULL)
 		{
-			free(line);
 			cmd = parse_tokens(tokens);
-			if (!cmd)
-			{
-				//free tokens in the parse_tokens func;
-				free(tokens);
-				continue;
-			}
-			if (cmd)
+			if (cmd != NULL)
 			{
 				//print_commands(cmd);
 				command_executor(cmd);
-				free_commands(cmd);
-				free(tokens);
 			}
 		}
     }

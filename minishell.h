@@ -25,6 +25,11 @@ typedef struct s_command
 	struct s_command	*next;
 }t_command;
 
+typedef struct s_garbage_collector
+{
+	void	**ptrs;
+}t_gc;
+
 void		print_banner(void);
 void		handle_sigint(int signum);
 char		**split_tokens(const char *input);
@@ -33,9 +38,7 @@ char		*ft_strndup(const char *s, size_t n);
 int			ft_isspace(char c);
 int			is_metachar(char c);
 t_command	*parse_tokens(char **tokens);
-void		free_commands(t_command *cmd);
 void		command_executor(t_command *cmd);
-void		env_unset(const char *var);
 int			ft_strcmp(const char *s1, const char *s2);
 
 #endif

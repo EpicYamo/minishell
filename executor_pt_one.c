@@ -111,47 +111,4 @@ static void	execute_built_in_commands(t_command *cmd)
 			exit_code = atoi(cmd->argv[1]);
 		exit(0);
 	}
-	else if (strcmp(cmd->argv[0], "env") == 0)
-	{
-		for (char **env = environ; *env; ++env)
-			printf("%s\n", *env);
-	}
-	else if (strcmp(cmd->argv[0], "export") == 0)
-	{
-		if (!cmd->argv[1])
-		{
-			for (char **env = environ; *env; ++env)
-				printf("declare -x %s\n", *env);
-		}
-		else
-		{
-			// Support for the basic key value.
-			putenv(cmd->argv[1]);
-		}
-	}
-	else if (strcmp(cmd->argv[0], "unset") == 0)
-	{
-		if (cmd->argv[1])
-			env_unset(cmd->argv[1]);
-	}
-}
-
-void	env_unset(const char *var)
-{
-	extern char **environ;
-	int i = 0;
-	int len = strlen(var);
-	while (environ[i])
-	{
-		if (strncmp(environ[i], var, len) == 0 && environ[i][len] == '=')
-		{
-			while (environ[i])
-			{
-				environ[i] = environ[i + 1];
-				i++;
-			}
-			break;
-		}
-		i++;
-	}
 }
