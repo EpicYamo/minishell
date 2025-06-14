@@ -17,10 +17,8 @@
 #include <stdlib.h>
 #include <errno.h>
 
-extern char **environ;
-
-static void execute_built_in_commands(t_command *cmd);
-static int is_builtin(const char *cmd);
+static void	execute_built_in_commands(t_command *cmd);
+static int	is_builtin(const char *cmd);
 
 void	command_executor(t_command *cmd)
 {
@@ -31,7 +29,7 @@ void	command_executor(t_command *cmd)
 	// execve processos will be made right here...
 }
 
-static int is_builtin(const char *cmd)
+static int	is_builtin(const char *cmd)
 {
 	int	flag;
 
@@ -106,6 +104,13 @@ static void	execute_built_in_commands(t_command *cmd)
 				perror("cd");
 		}
 	}
+	else if (strcmp(cmd->argv[0], "exit") == 0)
+	{
+		int exit_code = 0;
+		if (cmd->argv[1])
+			exit_code = atoi(cmd->argv[1]);
+		exit(0);
+	}
 	else if (strcmp(cmd->argv[0], "env") == 0)
 	{
 		for (char **env = environ; *env; ++env)
@@ -128,13 +133,6 @@ static void	execute_built_in_commands(t_command *cmd)
 	{
 		if (cmd->argv[1])
 			env_unset(cmd->argv[1]);
-	}
-	else if (strcmp(cmd->argv[0], "exit") == 0)
-	{
-		int exit_code = 0;
-		if (cmd->argv[1])
-			exit_code = atoi(cmd->argv[1]);
-		exit(0);
 	}
 }
 
