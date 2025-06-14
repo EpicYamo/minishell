@@ -34,7 +34,8 @@ int			ft_isspace(char c);
 int			is_metachar(char c);
 t_command	*parse_tokens(char **tokens);
 void		free_commands(t_command *cmd);
-int			command_executor(t_command *cmd);
+void		command_executor(t_command *cmd);
 void		env_unset(const char *var);
+int			ft_strcmp(const char *s1, const char *s2);
 
 #endif

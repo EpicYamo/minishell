@@ -11,10 +11,10 @@
 /* ************************************************************************************** */
 
 #include "minishell.h"
-#include <string.h>  // strcmp
-#include <unistd.h>  // write, chdir, getcwd
-#include <stdio.h>   // printf, perror
-#include <stdlib.h>  // exit
+#include <unistd.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <errno.h>
 
 extern char **environ;
@@ -22,40 +22,47 @@ extern char **environ;
 static void execute_built_in_commands(t_command *cmd);
 static int is_builtin(const char *cmd);
 
-int	command_executor(t_command *cmd)
+void	command_executor(t_command *cmd)
 {
 	if (!cmd || !cmd->argv || !cmd->argv[0])
-		return (1);
+		return;
 	if (is_builtin(cmd->argv[0]))
-	{
 		execute_built_in_commands(cmd);
-		return (0);
-	}
 	// execve processos will be made right here...
-	return (1);
 }
 
 static int is_builtin(const char *cmd)
 {
 	int	flag;
 
-	flag = strcmp(cmd, "echo");
-	flag = strcmp(cmd, "cd");
-	flag = strcmp(cmd, "pwd");
-	flag = strcmp(cmd, "export");
-	flag = strcmp(cmd, "unset");
-	flag = strcmp(cmd, "env");
-	flag = strcmp(cmd, "exit");
-	return(flag);
-	// if flag is init as '1' return process will cout as the parameter of the function if not it wont so use
-	// variadic variables for reallocating the memory.
+	flag = ft_strcmp(cmd, "echo");
+	if (flag == 0)
+		return (1);
+	flag = ft_strcmp(cmd, "cd");
+	if (flag == 0)
+		return (1);
+	flag = ft_strcmp(cmd, "pwd");
+	if (flag == 0)
+		return (1);
+	flag = ft_strcmp(cmd, "export");
+	if (flag == 0)
+		return (1);
+	flag = ft_strcmp(cmd, "unset");
+	if (flag == 0)
+		return (1);
+	flag = ft_strcmp(cmd, "env");
+	if (flag == 0)
+		return (1);
+	flag = ft_strcmp(cmd, "exit");
+	if (flag == 0)
+		return (1);
+	return (0);
 }
 
 static void	execute_built_in_commands(t_command *cmd)
 {
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return;
-
 	if (strcmp(cmd->argv[0], "echo") == 0)
 	{
 		int i = 1;
@@ -127,7 +134,7 @@ static void	execute_built_in_commands(t_command *cmd)
 		int exit_code = 0;
 		if (cmd->argv[1])
 			exit_code = atoi(cmd->argv[1]);
-		exit(exit_code);
+		exit(0);
 	}
 }
 

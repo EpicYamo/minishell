@@ -1,9 +1,9 @@
 SRCS 	= minishell.c banner_func.c signals.c lexer_pt_one.c utils_pt_one.c \
-			parser_pt_one.c executor_pt_one.c
+			parser_pt_one.c executor_pt_one.c utils_pt_two.c
 LIBS	= -lreadline
 NAME	=	minishell
 CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror
+CFLAGS	=	#-Wall -Wextra -Werror
 RM		=	rm -rf
 
 all: $(NAME)

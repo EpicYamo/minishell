@@ -53,23 +53,20 @@ int	main(void)
 		{
 			free(line);
 			cmd = parse_tokens(tokens);
+			if (!cmd)
+			{
+				//free tokens in the parse_tokens func;
+				free(tokens);
+				continue;
+			}
+			if (cmd)
+			{
+				//print_commands(cmd);
+				command_executor(cmd);
+				free_commands(cmd);
+				free(tokens);
+			}
 		}
-		if (!cmd)
-		{
-			printf("\033[0;31mSystem error: memory allocation failed in \"parse_tokens\" function\033[0m\n");
-			free(line);
-			//free tokens in a loop
-			free(tokens);
-			continue;
-		}
-		if (cmd)
-		{
-			print_commands(cmd);
-			command_executor(cmd);
-			free_commands(cmd);
-			free(tokens);
-		}
-		
     }
 	return (0);
 }
