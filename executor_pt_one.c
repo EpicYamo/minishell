@@ -17,15 +17,15 @@
 #include <stdlib.h>
 #include <errno.h>
 
-static void	execute_built_in_commands(t_command *cmd);
+static void	execute_built_in_commands(t_command *cmd, t_gc *gc, char *line);
 static int	is_builtin(const char *cmd);
 
-void	command_executor(t_command *cmd)
+void	command_executor(t_command *cmd, t_gc *gc, char *line)
 {
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return;
 	if (is_builtin(cmd->argv[0]))
-		execute_built_in_commands(cmd);
+		execute_built_in_commands(cmd, gc, line);
 	// execve processos will be made right here...
 }
 
@@ -57,7 +57,7 @@ static int	is_builtin(const char *cmd)
 	return (0);
 }
 
-static void	execute_built_in_commands(t_command *cmd)
+static void	execute_built_in_commands(t_command *cmd, t_gc *gc, char *line)
 {
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return;
@@ -109,6 +109,8 @@ static void	execute_built_in_commands(t_command *cmd)
 		int exit_code = 0;
 		if (cmd->argv[1])
 			exit_code = atoi(cmd->argv[1]);
+		gc_collect_all(gc);
+		free(line);
 		exit(0);
 	}
 }

@@ -18,22 +18,25 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-static void	print_commands(t_command *cmd);
+static void	shell_loop(void);
+static void	shell_loop_pt_two(char *line);
 
 int	main(void)
 {
-	char		*line;
-	char		**tokens;
-	t_command	*cmd;
-
 	print_banner();
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
+	shell_loop();
+	return (0);
+}
+
+static void	shell_loop(void)
+{
+	char	*line;
+
 	while (1)
     {
         line = readline("\001\033[0;32m\002🜁 Y-Shell> \001\033[0m\002");
-        tokens = NULL;
-		cmd = NULL;
 		if (line == NULL)
 		{
 			printf("exit\n");
@@ -42,46 +45,29 @@ int	main(void)
 		}
         else if (line != NULL)
 			add_history(line);
-		tokens = split_tokens(line);
-		if (tokens == NULL)
-		{
-			printf("\033[0;31mSystem error: memory allocation failed in \"split_tokens\" function\033[0m\n");
-			continue;
-		}
-		else if (tokens != NULL)
-		{
-			cmd = parse_tokens(tokens);
-			if (cmd != NULL)
-			{
-				//print_commands(cmd);
-				command_executor(cmd);
-			}
-		}
+		shell_loop_pt_two(line);
+		free(line);
     }
-	return (0);
 }
 
-static void	print_commands(t_command *cmd)
+static void	shell_loop_pt_two(char *line)
 {
-	int	i;
-	int	cmd_id = 1;
+	char		**tokens;
+	t_command	*cmd;
+	t_gc		*garbage_c;
 
-	while (cmd)
+	tokens = NULL;
+	garbage_c = init_garbage_collector();
+	if (garbage_c != NULL)
+		tokens = split_tokens(line, garbage_c);
+	if (tokens != NULL)
 	{
-		printf("\n\033[1;34m[ Command %d ]\033[0m\n", cmd_id++);
-		i = 0;
-		if (cmd->argv)
+		cmd = parse_tokens(tokens, garbage_c);
+		if (cmd != NULL)
 		{
-			while (cmd->argv && cmd->argv[i])
-			{
-				printf("argv[%d]: \"%s\"\n", i, cmd->argv[i]);
-				i++;
-			}
+			//print_commands(cmd);
+			command_executor(cmd, garbage_c, line);
 		}
-		printf("infile   : %s\n", cmd->infile ? cmd->infile : "(none)");
-		printf("outfile  : %s\n", cmd->outfile ? cmd->outfile : "(none)");
-		printf("append   : %d\n", cmd->append);
-		printf("heredoc  : %d\n", cmd->heredoc);
-		cmd = cmd->next;
 	}
+	gc_collect_all(garbage_c);
 }

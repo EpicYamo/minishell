@@ -14,106 +14,61 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static int		has_unclosed_quotes(const char *s);
-static size_t	count_tokens(const char *s);
-static char		*extract_token(const char *s, size_t *i);
-static char		*strip_quotes(char *s);
+static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_count, t_gc *garbage_c);
+static char	*extract_token(const char *s, size_t *i);
+static void	extract_token_pt_two(const char *s, size_t *i);
 
-char	**split_tokens(const char *input)
+char	**split_tokens(const char *input, t_gc *garbage_c)
 {
-	size_t	token_count;
 	char	**tokens;
-	size_t	i;
-	size_t	t;
+	size_t	token_count;
 
 	if (has_unclosed_quotes(input))
 	{
 		printf("\033[0;31mSyntax error: unclosed quote\033[0m\n");
-		return (NULL); // do not return NULL, return a key to prevent processing it like an allocation error.
-	}
-	i = 0;
-	t = -1;
-	token_count = count_tokens(input);
-	tokens = malloc(sizeof(char *) * (token_count + 1));
-	if (!tokens)
 		return (NULL);
-	while (++t < token_count)
-	{
-		tokens[t] = extract_token(input, &i);
-		//if (!tokens[t])
-		//free tokens in a loop then free token
-		//return NULL
-		tokens[t] = strip_quotes(tokens[t]);
-		//if (!tokens[t])
-		//free tokens in a loop then free token
-		//return NULL
 	}
-	tokens[t] = NULL;
+	token_count = count_tokens(input);
+	tokens = gc_malloc(garbage_c, (sizeof(char *) * (token_count + 1)));
+	if (!tokens)
+	{
+		printf("\033[0;31mSystem error: memory allocation failed in \"split_tokens\" function\033[0m\n");
+		return (NULL);
+	}
+	if (split_tokens_pt_two(input, tokens, token_count, garbage_c) != 0)
+	{
+		printf("\033[0;31mSystem error: memory allocation failed in \"split_tokens\" function\033[0m\n");
+		return (NULL);
+	}
 	return (tokens);
 }
 
-static int	has_unclosed_quotes(const char *s)
+static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_count, t_gc *garbage_c)
 {
-	char	quote;
 	size_t	i;
+	size_t	j;
 
-	quote = 0;
-	i = 0;
-	while (s[i])
+	i = -1;
+	j = 0;
+	while (++i < token_count)
 	{
-		if (!quote && ((s[i] == '\'') || (s[i] == '\"')))
-			quote = s[i];
-		else if (quote && (s[i] == quote))
-			quote = 0;
-		i++;
+		tokens[i] = extract_token(input, &j);
+		if (!tokens[i])
+			return (1);
+		gc_add(garbage_c, tokens[i]);
+		tokens[i] = strip_quotes(tokens[i]);
+		if (!tokens[i])
+			return (1);
+		gc_add(garbage_c, tokens[i]);
 	}
-	return (quote != 0);
-}
-
-static size_t	count_tokens(const char *s)
-{
-	size_t	count;
-	size_t	i;
-	char	quote;
-
-	count = 0;
-	i = 0;
-	while (s[i])
-	{
-		while (ft_isspace(s[i]))
-			i++;
-		if (!s[i])
-			break;
-		if (((s[i] == '<') && (s[i + 1] == '<')) || ((s[i] == '>') && (s[i + 1] == '>')))
-			i += 2;
-		else if (is_metachar(s[i]))
-			i++;
-		else
-		{
-			while (s[i] && !ft_isspace(s[i]) && !is_metachar(s[i]))
-			{
-				if ((s[i] == '\"') || (s[i] == '\''))
-				{
-					quote = s[i++];
-					while (s[i] && (s[i] != quote))
-						i++;
-					if (s[i])
-						i++;
-				}
-				else
-					i++;
-			}
-		}
-		count++;
-	}
-	return (count);
+	tokens[i] = NULL;
+	return (0);
 }
 
 static char	*extract_token(const char *s, size_t *i)
 {
 	size_t	start;
-	char	quote;
-	char 	*token;
+	char	*token;
 
 	while (ft_isspace(s[*i]))
 		(*i)++;
@@ -123,53 +78,28 @@ static char	*extract_token(const char *s, size_t *i)
 	else if (is_metachar(s[*i]))
 		(*i)++;
 	else
-	{
-		while (s[*i] && !ft_isspace(s[*i]) && !is_metachar(s[*i]))
-		{
-			if ((s[*i] == '\"') || (s[*i] == '\''))
-			{
-				quote = s[(*i)++];
-				while (s[*i] && (s[*i] != quote))
-					(*i)++;
-				if (s[*i])
-					(*i)++;
-			}
-			else
-				(*i)++;
-		}
-	}
+		extract_token_pt_two(s, i);
 	token = ft_strndup(s + start, *i - start);
 	if (!token)
 		return (NULL);
 	return (token);
 }
 
-static char	*strip_quotes(char *s)
+static void	extract_token_pt_two(const char *s, size_t *i)
 {
-	size_t	i;
-	size_t	j;
 	char	quote;
-	char	*result;
 
-	result = malloc(ft_strlen(s) + 1);
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s[i])
+	while (s[*i] && !ft_isspace(s[*i]) && !is_metachar(s[*i]))
 	{
-		if ((s[i] == '\"') || (s[i] == '\''))
+		if ((s[*i] == '\"') || (s[*i] == '\''))
 		{
-			quote = s[i++];
-			while (s[i] && (s[i] != quote))
-				result[j++] = s[i++];
-			if (s[i])
-				i++;
+			quote = s[(*i)++];
+			while (s[*i] && (s[*i] != quote))
+				(*i)++;
+			if (s[*i])
+				(*i)++;
 		}
 		else
-			result[j++] = s[i++];
+			(*i)++;
 	}
-	result[j] = '\0';
-	free(s);
-	return (result);
 }
