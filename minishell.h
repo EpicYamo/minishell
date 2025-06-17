@@ -13,7 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stddef.h>
+# define EXIT_STATUS_TOKEN "__MINISHELL_EXIT_STATUS__"
+# include <stddef.h>
 
 typedef struct s_command
 {
@@ -42,7 +43,12 @@ void		gc_collect_all(t_gc *gc);
 char		**split_tokens(const char *input, t_gc *garbage_c);
 size_t		count_tokens(const char *s);
 int			has_unclosed_quotes(const char *s);
+char		*extract_token(const char *s, size_t *i);
 char		*strip_quotes(char *s);
+char		*expand_env_vars_if_applicable(const char *token);
+int			calculate_env_size(const char *token);
+void		env_token_exit_status(char *result, const char *token, size_t cursor);
+void		env_token_digit(char *result, const char *token, size_t cursor);
 
 t_command	*parse_tokens(char **tokens, t_gc *garbage_c);
 t_command	*new_command(t_gc *gc);
@@ -55,6 +61,11 @@ char		*ft_strndup(const char *s, size_t n);
 int			ft_isspace(char c);
 int			is_metachar(char c);
 int			ft_strcmp(const char *s1, const char *s2);
+char		*ft_strchr(const char *s, int c);
+char		*ft_strdup(const char *s1);
+int			ft_isalnum(int v);
+int			is_env_char(char c);
+int			ft_isdigit(int v);
 
 void		print_commands(t_command *cmd);
 

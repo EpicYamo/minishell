@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 static void	count_tokens_pt_two(const char *s, size_t *i);
+static void	extract_token_pt_two(const char *s, size_t *i);
 
 int	has_unclosed_quotes(const char *s)
 {
@@ -31,35 +32,6 @@ int	has_unclosed_quotes(const char *s)
 		i++;
 	}
 	return (quote != 0);
-}
-
-char	*strip_quotes(char *s)
-{
-	size_t	i;
-	size_t	j;
-	char	quote;
-	char	*result;
-
-	result = malloc(ft_strlen(s) + 1);
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s[i])
-	{
-		if ((s[i] == '\"') || (s[i] == '\''))
-		{
-			quote = s[i++];
-			while (s[i] && (s[i] != quote))
-				result[j++] = s[i++];
-			if (s[i])
-				i++;
-		}
-		else
-			result[j++] = s[i++];
-	}
-	result[j] = '\0';
-	return (result);
 }
 
 size_t	count_tokens(const char *s)
@@ -98,6 +70,45 @@ static void	count_tokens_pt_two(const char *s, size_t *i)
 			while (s[(*i)] && (s[(*i)] != quote))
 				(*i)++;
 			if (s[*(i)])
+				(*i)++;
+		}
+		else
+			(*i)++;
+	}
+}
+
+char	*extract_token(const char *s, size_t *i)
+{
+	size_t	start;
+	char	*token;
+
+	while (ft_isspace(s[*i]))
+		(*i)++;
+	start = *i;
+	if (((s[*i] == '<') && (s[*i + 1] == '<')) || ((s[*i] == '>') && (s[*i + 1] == '>')))
+		(*i) += 2;
+	else if (is_metachar(s[*i]))
+		(*i)++;
+	else
+		extract_token_pt_two(s, i);
+	token = ft_strndup(s + start, *i - start);
+	if (!token)
+		return (NULL);
+	return (token);
+}
+
+static void	extract_token_pt_two(const char *s, size_t *i)
+{
+	char	quote;
+
+	while (s[*i] && !ft_isspace(s[*i]) && !is_metachar(s[*i]))
+	{
+		if ((s[*i] == '\"') || (s[*i] == '\''))
+		{
+			quote = s[(*i)++];
+			while (s[*i] && (s[*i] != quote))
+				(*i)++;
+			if (s[*i])
 				(*i)++;
 		}
 		else

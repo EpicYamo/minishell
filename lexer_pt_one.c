@@ -15,8 +15,8 @@
 #include <stdio.h>
 
 static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_count, t_gc *garbage_c);
-static char	*extract_token(const char *s, size_t *i);
-static void	extract_token_pt_two(const char *s, size_t *i);
+static int	check_dollar_sign_existance(char *token);
+static void	check_dollar_sign_pt_two(size_t *valid_sign, char c, size_t *i);
 
 char	**split_tokens(const char *input, t_gc *garbage_c)
 {
@@ -56,6 +56,13 @@ static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_co
 		if (!tokens[i])
 			return (1);
 		gc_add(garbage_c, tokens[i]);
+		while (check_dollar_sign_existance(tokens[i]))
+		{
+			tokens[i] = expand_env_vars_if_applicable(tokens[i]);
+			if (!tokens[i])
+				return (1);
+			gc_add(garbage_c, tokens[i]);
+		}
 		tokens[i] = strip_quotes(tokens[i]);
 		if (!tokens[i])
 			return (1);
@@ -65,41 +72,38 @@ static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_co
 	return (0);
 }
 
-static char	*extract_token(const char *s, size_t *i)
+static int	check_dollar_sign_existance(char *token)
 {
-	size_t	start;
-	char	*token;
-
-	while (ft_isspace(s[*i]))
-		(*i)++;
-	start = *i;
-	if (((s[*i] == '<') && (s[*i + 1] == '<')) || ((s[*i] == '>') && (s[*i + 1] == '>')))
-		(*i) += 2;
-	else if (is_metachar(s[*i]))
-		(*i)++;
-	else
-		extract_token_pt_two(s, i);
-	token = ft_strndup(s + start, *i - start);
-	if (!token)
-		return (NULL);
-	return (token);
-}
-
-static void	extract_token_pt_two(const char *s, size_t *i)
-{
+	size_t	i;
+	size_t	valid_sign;
 	char	quote;
 
-	while (s[*i] && !ft_isspace(s[*i]) && !is_metachar(s[*i]))
+	i = 0;
+	valid_sign = 0;
+	quote = 0;
+	while (token[i])
 	{
-		if ((s[*i] == '\"') || (s[*i] == '\''))
-		{
-			quote = s[(*i)++];
-			while (s[*i] && (s[*i] != quote))
-				(*i)++;
-			if (s[*i])
-				(*i)++;
+		if ((token[i] == '\"') || (token[i] == '\''))
+		{	
+			quote = token[i++];
+			while (token[i] && (token[i] != quote))
+			{
+				if ((token[i] == '$') && (quote == '\"'))
+					valid_sign += 1;
+				i++;
+			}
+			if (token[i])
+				i++;
 		}
 		else
-			(*i)++;
+			check_dollar_sign_pt_two(&valid_sign, token[i], &i);
 	}
+	return (valid_sign);
+}
+
+static void	check_dollar_sign_pt_two(size_t *valid_sign, char c, size_t *i)
+{
+	if (c == '$')
+		(*valid_sign) += 1;
+	(*i) += 1;
 }

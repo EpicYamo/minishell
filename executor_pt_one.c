@@ -22,11 +22,21 @@ static int	is_builtin(const char *cmd);
 
 void	command_executor(t_command *cmd, t_gc *gc, char *line)
 {
-	if (!cmd || !cmd->argv || !cmd->argv[0])
-		return;
-	if (is_builtin(cmd->argv[0]))
-		execute_built_in_commands(cmd, gc, line);
-	// execve processos will be made right here...
+	while (cmd)
+	{
+		if (!cmd->argv || !cmd->argv[0])
+		{
+			cmd = cmd->next;
+			continue;
+		}
+		if (is_builtin(cmd->argv[0]))
+			execute_built_in_commands(cmd, gc, line);
+		else
+		{
+			// execve logic here later
+		}
+		cmd = cmd->next;
+	}
 }
 
 static int	is_builtin(const char *cmd)
