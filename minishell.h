@@ -45,7 +45,7 @@ size_t		count_tokens(const char *s);
 int			has_unclosed_quotes(const char *s);
 char		*extract_token(const char *s, size_t *i);
 char		*strip_quotes(char *s);
-char		*expand_env_vars_if_applicable(const char *token);
+char		*expand_env_vars_if_applicable(const char *token, size_t loc);
 int			calculate_env_size(const char *token);
 void		env_token_exit_status(char *result, const char *token, size_t cursor);
 void		env_token_digit(char *result, const char *token, size_t cursor);

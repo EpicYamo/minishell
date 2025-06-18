@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static char	*build_expanded_string(const char *token);
+static char	*build_expanded_string(const char *token, size_t loc);
 static void	build_expanded_string_pt_two(char *result, const char *token, size_t cursor);
 static void	env_token_default(char *result, const char *token, size_t cursor, size_t key_size);
 
@@ -47,19 +47,19 @@ char	*strip_quotes(char *s)
 	return (result);
 }
 
-char	*expand_env_vars_if_applicable(const char *token)
+char	*expand_env_vars_if_applicable(const char *token, size_t loc)
 {
 	char	*new_token;
 
 	if (!token)
 		return (NULL);
-	new_token = build_expanded_string(token);
+	new_token = build_expanded_string(token, loc);
 	if (!new_token)
 		return (NULL);
 	return (new_token);
 }
 
-static char	*build_expanded_string(const char *token)
+static char	*build_expanded_string(const char *token, size_t loc)
 {
 	size_t	result_size;
 	char	*result;
@@ -70,7 +70,7 @@ static char	*build_expanded_string(const char *token)
 	if (!result)
 		return (NULL);
 	i = 0;
-	while (token[i] != '$')
+	while (i < loc)
 	{
 		result[i] = token[i];
 		i++;

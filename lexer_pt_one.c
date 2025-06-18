@@ -14,9 +14,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_count, t_gc *garbage_c);
-static int	check_dollar_sign_existance(char *token);
-static void	check_dollar_sign_pt_two(size_t *valid_sign, char c, size_t *i);
+static int		split_tokens_pt_two(const char *input, char **tokens, size_t token_count, t_gc *garbage_c);
+static size_t	check_dollar_sign_existance(char *token);
+static void		check_dollar_sign_pt_two(size_t *valid_sign, char *token, size_t *i, size_t *loc);
 
 char	**split_tokens(const char *input, t_gc *garbage_c)
 {
@@ -58,7 +58,7 @@ static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_co
 		gc_add(garbage_c, tokens[i]);
 		while (check_dollar_sign_existance(tokens[i]))
 		{
-			tokens[i] = expand_env_vars_if_applicable(tokens[i]);
+			tokens[i] = expand_env_vars_if_applicable(tokens[i], (check_dollar_sign_existance(tokens[i]) - 1));
 			if (!tokens[i])
 				return (1);
 			gc_add(garbage_c, tokens[i]);
@@ -72,11 +72,12 @@ static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_co
 	return (0);
 }
 
-static int	check_dollar_sign_existance(char *token)
+static size_t	check_dollar_sign_existance(char *token)
 {
 	size_t	i;
 	size_t	valid_sign;
 	char	quote;
+	size_t	loc;
 
 	i = 0;
 	valid_sign = 0;
@@ -89,21 +90,33 @@ static int	check_dollar_sign_existance(char *token)
 			while (token[i] && (token[i] != quote))
 			{
 				if ((token[i] == '$') && (quote == '\"'))
-					valid_sign += 1;
+				{
+					while ((token[i + 1]) && (token[i + 1] == '$'))
+						i++;
+					valid_sign++;
+					loc = i;
+				}
 				i++;
 			}
 			if (token[i])
 				i++;
 		}
 		else
-			check_dollar_sign_pt_two(&valid_sign, token[i], &i);
+			check_dollar_sign_pt_two(&valid_sign, token, &i, &loc);
 	}
+	if (valid_sign)
+		return (loc + 1);
 	return (valid_sign);
 }
 
-static void	check_dollar_sign_pt_two(size_t *valid_sign, char c, size_t *i)
+static void	check_dollar_sign_pt_two(size_t *valid_sign, char *token, size_t *i, size_t *loc)
 {
-	if (c == '$')
-		(*valid_sign) += 1;
+	if (token[(*i)] == '$')
+	{
+		while (token[(*i) + 1] && (token[(*i) + 1] == '$'))
+			(*i)++;
+		(*valid_sign) = 1;
+		(*loc) = (*i);
+	}
 	(*i) += 1;
 }
