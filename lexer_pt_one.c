@@ -13,10 +13,11 @@
 #include "minishell.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 
 static int		split_tokens_pt_two(const char *input, char **tokens, size_t token_count, t_gc *garbage_c);
-static size_t	check_dollar_sign_existance(char *token);
-static void		check_dollar_sign_pt_two(size_t *valid_sign, char *token, size_t *i, size_t *loc);
+static size_t	check_dollar_sign_existance(char *token, size_t *last_sign);
+static void		check_dollar_sign_pt_two(size_t *valid_sign, char *token, size_t *i, size_t *loc, size_t *last_sign);
 
 char	**split_tokens(const char *input, t_gc *garbage_c)
 {
@@ -47,22 +48,26 @@ static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_co
 {
 	size_t	i;
 	size_t	j;
+	size_t	last_sign;
+	size_t	sign_loc;
 
 	i = -1;
 	j = 0;
 	while (++i < token_count)
 	{
+		last_sign = LONG_MAX;
 		tokens[i] = extract_token(input, &j);
 		if (!tokens[i])
 			return (1);
 		gc_add(garbage_c, tokens[i]);
-		while (check_dollar_sign_existance(tokens[i]))
+		sign_loc = check_dollar_sign_existance(tokens[i], &last_sign);
+		while (sign_loc)
 		{
-			tokens[i] = expand_env_vars_if_applicable(tokens[i], (check_dollar_sign_existance(tokens[i]) - 1));
+			tokens[i] = expand_env_vars_if_applicable(tokens[i], (sign_loc - 1));
 			if (!tokens[i])
 				return (1);
-			printf("token %s\n", tokens[i]);
 			gc_add(garbage_c, tokens[i]);
+			sign_loc = check_dollar_sign_existance(tokens[i], &last_sign);
 		}
 		tokens[i] = strip_quotes(tokens[i]);
 		if (!tokens[i])
@@ -73,7 +78,7 @@ static int	split_tokens_pt_two(const char *input, char **tokens, size_t token_co
 	return (0);
 }
 
-static size_t	check_dollar_sign_existance(char *token)
+static size_t	check_dollar_sign_existance(char *token, size_t *last_sign)
 {
 	size_t	i;
 	size_t	valid_sign;
@@ -83,6 +88,20 @@ static size_t	check_dollar_sign_existance(char *token)
 	i = 0;
 	valid_sign = 0;
 	quote = 0;
+	if (((*last_sign) != LLONG_MAX))
+	{
+		while (token[i])
+		{
+			if ((token[i] == '$') && (i == ((*last_sign ) - 1)))
+			{
+				(*last_sign) = i;
+				i = 0;
+			}
+			else
+				i++;
+		}
+	}
+	i = 0;
 	while (token[i])
 	{
 		if ((token[i] == '\"') || (token[i] == '\''))
@@ -90,11 +109,11 @@ static size_t	check_dollar_sign_existance(char *token)
 			quote = token[i++];
 			while (token[i] && (token[i] != quote))
 			{
-				if ((token[i] == '$') && (quote == '\"'))
+				if ((token[i] == '$') && (quote == '\"') && (i < (*last_sign)))
 				{
 					while ((token[i + 1]) && (token[i + 1] == '$'))
 						i++;
-					valid_sign++;
+					valid_sign += 1;
 					loc = i;
 				}
 				i++;
@@ -103,20 +122,23 @@ static size_t	check_dollar_sign_existance(char *token)
 				i++;
 		}
 		else
-			check_dollar_sign_pt_two(&valid_sign, token, &i, &loc);
+			check_dollar_sign_pt_two(&valid_sign, token, &i, &loc, last_sign);
 	}
 	if (valid_sign)
+	{
+		(*last_sign) = loc;
 		return (loc + 1);
+	}
 	return (valid_sign);
 }
 
-static void	check_dollar_sign_pt_two(size_t *valid_sign, char *token, size_t *i, size_t *loc)
+static void	check_dollar_sign_pt_two(size_t *valid_sign, char *token, size_t *i, size_t *loc, size_t *last_sign)
 {
-	if (token[(*i)] == '$')
+	if ((token[(*i)] == '$') && ((*i) < (*last_sign)))
 	{
 		while (token[(*i) + 1] && (token[(*i) + 1] == '$'))
 			(*i)++;
-		(*valid_sign) = 1;
+		(*valid_sign) += 1;
 		(*loc) = (*i);
 	}
 	(*i) += 1;
