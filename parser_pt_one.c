@@ -28,7 +28,7 @@ t_command	*parse_tokens(char **tokens, t_gc *gc)
 	int			status;
 
 	init_variables(&i, &argc, &cmd, &head);
-	while (tokens[++i])
+	while (tokens[i])
 	{
 		if (!initialize_command_if_needed(&cmd, &head, &argc, gc))
 			return (NULL);
@@ -44,13 +44,14 @@ t_command	*parse_tokens(char **tokens, t_gc *gc)
 			continue;
 		if (!append_token_to_argv(cmd, tokens[i], &argc, gc))
 			return (NULL);
+		i++;
 	}
 	return (head);
 }
 
 static void	init_variables(size_t *i, size_t *argc, t_command **head, t_command **cmd)
 {
-	*i = (size_t)-1;
+	*i = 0;
 	*argc = 0;
 	*head = NULL;
 	*cmd = NULL;

@@ -16,6 +16,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <readline/readline.h>
 
 static void	execute_built_in_commands(t_command *cmd, t_gc *gc, char *line);
 static int	is_builtin(const char *cmd);
@@ -71,11 +72,11 @@ static void	execute_built_in_commands(t_command *cmd, t_gc *gc, char *line)
 {
 	if (!cmd || !cmd->argv || !cmd->argv[0])
 		return;
-	if (strcmp(cmd->argv[0], "echo") == 0)
+	if (ft_strcmp(cmd->argv[0], "echo") == 0)
 	{
 		int i = 1;
 		int newline = 1;
-		if (cmd->argv[1] && strcmp(cmd->argv[1], "-n") == 0)
+		if (cmd->argv[1] && (ft_strcmp(cmd->argv[1], "-n") == 0))
 		{
 			newline = 0;
 			i++;
@@ -90,13 +91,13 @@ static void	execute_built_in_commands(t_command *cmd, t_gc *gc, char *line)
 		if (newline)
 			printf("\n");
 	}
-	else if (strcmp(cmd->argv[0], "pwd") == 0)
+	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
 	{
 		char	cwd[1024];
 		if (getcwd(cwd, sizeof(cwd)))
 			printf("%s\n", cwd);
 	}
-	else if (strcmp(cmd->argv[0], "cd") == 0)
+	else if (ft_strcmp(cmd->argv[0], "cd") == 0)
 	{
 		if (cmd->argv[1])
 		{
@@ -114,11 +115,12 @@ static void	execute_built_in_commands(t_command *cmd, t_gc *gc, char *line)
 				perror("cd");
 		}
 	}
-	else if (strcmp(cmd->argv[0], "exit") == 0)
+	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
 	{
 		int exit_code = 0;
 		if (cmd->argv[1])
 			exit_code = atoi(cmd->argv[1]);
+		rl_clear_history();
 		gc_collect_all(gc);
 		free(line);
 		exit(0);
