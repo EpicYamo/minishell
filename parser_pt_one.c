@@ -41,7 +41,10 @@ t_command	*parse_tokens(char **tokens, t_gc *gc)
 		if (status == -1)
 			return (NULL);
 		else if (status == 1)
+		{
+			i++;
 			continue;
+		}
 		if (!append_token_to_argv(cmd, tokens[i], &argc, gc))
 			return (NULL);
 		i++;

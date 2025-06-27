@@ -65,7 +65,7 @@ static void	shell_loop_pt_two(char *line)
 		cmd = parse_tokens(tokens, garbage_c);
 		if (cmd != NULL)
 		{
-			//print_commands(cmd);
+			print_commands(cmd);
 			command_executor(cmd, garbage_c, line);
 		}
 	}
