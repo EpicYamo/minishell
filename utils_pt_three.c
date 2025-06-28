@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   utils_pt_three.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/28 03:25:16 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 03:25:17 by aaycan           ###   ########.fr       */
+/*   Created: 2025/06/28 03:22:07 by aaycan            #+#    #+#             */
+/*   Updated: 2025/06/28 03:22:16 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
-#include <signal.h>
-#include <readline/readline.h>
+#include <stddef.h>
 
-void	handle_sigint(int signum)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	if (signum == SIGINT)
+	size_t	i;
+
+	i = 0;
+	while (((unsigned char)s1[i] || (unsigned char)s2[i]) && i < n)
 	{
-		rl_replace_line("", 0);
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_redisplay();
+		if (!(s1[i] == s2[i]))
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+		i++;
 	}
+	return (0);
 }

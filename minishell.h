@@ -1,14 +1,14 @@
-/* ************************************************************************************** */
-/*                                                                                        */
-/*                                                                   :::      ::::::::    */
-/*   minishell.h                                                   :+:      :+:    :+:    */
-/*                                                               +:+ +:+         +:+      */
-/*   By: aaycan <aaycan@student.42kocaeli.com.tr>              +#+  +:+       +#+         */
-/*                                                           +#+#+#+#+#+   +#+            */
-/*   Created: 2025/05/25 18:08:25 by aaycan                       #+#    #+#              */
-/*   Updated: 2025/05/25 18:08:25 by aaycan                      ###   ########.tr        */
-/*                                                                                        */
-/* ************************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
+/*   Updated: 2025/06/28 03:27:04 by aaycan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -42,6 +42,7 @@ char		*ft_strdup(const char *s1);
 int			ft_isalnum(int v);
 int			is_env_char(char c);
 int			ft_isdigit(int v);
+int			ft_strncmp(const char *s1, const char *s2, size_t n);
 
 void		print_banner(void);
 void		handle_sigint(int signum);
@@ -63,7 +64,8 @@ void		env_token_digit(char *result, const char *token, size_t cursor);
 
 t_command	*parse_tokens(char **tokens, t_gc *garbage_c);
 t_command	*new_command(t_gc *gc);
-int			handle_redirection_token(char **tokens, size_t *i, t_command *cmd);
+int			handle_redirection_token(char **tokens, size_t *i, t_command *cmd, t_gc *gc);
+int			handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc);
 
 void		command_executor(t_command *cmd, t_gc *gc, char *line);
 void		execute_built_in_commands(t_command *cmd, t_gc *gc, char *line);

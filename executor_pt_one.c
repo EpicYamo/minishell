@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/27 19:09:48 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/27 19:40:52 by aaycan           ###   ########.fr       */
+/*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
+/*   Updated: 2025/06/28 03:46:41 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	command_executor(t_command *cmd, t_gc *gc, char *line)
 		}
 		if (is_builtin(cmd->argv[0]))
 			execute_built_in_commands(cmd, gc, line);
+		if (cmd->heredoc == 1)
+			unlink(cmd->infile);
 		cmd = cmd->next;
 	}
 }

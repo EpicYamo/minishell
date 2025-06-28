@@ -1,14 +1,14 @@
-/* ************************************************************************************** */
-/*                                                                                        */
-/*                                                                   :::      ::::::::    */
-/*   parser_pt_one.c                                               :+:      :+:    :+:    */
-/*                                                               +:+ +:+         +:+      */
-/*   By: aaycan <aaycan@student.42kocaeli.com.tr>              +#+  +:+       +#+         */
-/*                                                           +#+#+#+#+#+   +#+            */
-/*   Created: 2025/06/16 01:58:05 by aaycan                       #+#    #+#              */
-/*   Updated: 2025/06/16 01:58:05 by aaycan                      ###   ########.tr        */
-/*                                                                                        */
-/* ************************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser_pt_one.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
+/*   Updated: 2025/06/28 03:20:18 by aaycan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
@@ -37,7 +37,7 @@ t_command	*parse_tokens(char **tokens, t_gc *gc)
 			continue;
 		else if (status == -1)
 			return (NULL);
-		status = handle_redirection_token(tokens, &i, cmd);
+		status = handle_redirection_token(tokens, &i, cmd, gc);
 		if (status == -1)
 			return (NULL);
 		else if (status == 1)
