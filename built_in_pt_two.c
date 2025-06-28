@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:48:24 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/27 20:12:12 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 13:09:53 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,17 +105,4 @@ void	cd_command(t_command *cmd)
 		if (chdir(home) != 0)
 			perror("cd");
 	}
-}
-
-void	exit_command(t_command *cmd, t_gc *gc, char *line)
-{
-	int	exit_code;
-
-	exit_code = 0;
-	if (cmd->argv[1])
-		exit_code = atoi(cmd->argv[1]);
-	rl_clear_history();
-	gc_collect_all(gc);
-	free(line);
-	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 03:27:04 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 12:59:06 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int			ft_isalnum(int v);
 int			is_env_char(char c);
 int			ft_isdigit(int v);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
+int			ft_atoi(const char *str);
 
 void		print_banner(void);
 void		handle_sigint(int signum);

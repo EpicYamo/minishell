@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:44 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 03:25:47 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 13:20:43 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	shell_loop_pt_two(char *line)
 		cmd = parse_tokens(tokens, garbage_c);
 		if (cmd != NULL)
 		{
-			print_commands(cmd);
+			//print_commands(cmd);
 			command_executor(cmd, garbage_c, line);
 		}
 	}

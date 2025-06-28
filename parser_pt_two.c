@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:51 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 03:20:05 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 13:20:11 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ static int	validate_redirection_syntax(char **tokens, size_t *i)
 	{
 		if (tokens[*i + 1] == NULL)
 		{
-			printf("bash: syntax error near unexpected token `newline'\n");
+			printf("Y-Shell: syntax error near unexpected token `newline'\n");
 			return (-1);
 		}
 		else if (ft_strcmp(tokens[*i + 1], "<") == 0 || ft_strcmp(tokens[*i + 1], ">") == 0 ||
 				 ft_strcmp(tokens[*i + 1], "<<") == 0 || ft_strcmp(tokens[*i + 1], ">>") == 0 ||
 				 ft_strcmp(tokens[*i + 1], "|") == 0)
 		{
-			printf("bash: syntax error near unexpected token `%s'\n", tokens[*i + 1]);
+			printf("Y-Shell: syntax error near unexpected token `%s'\n", tokens[*i + 1]);
 			return (-1);
 		}
 	}
