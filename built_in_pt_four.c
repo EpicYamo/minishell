@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 21:58:23 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 22:21:55 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 23:19:28 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	export_command(t_command *cmd, t_env **env_list)
 	if (!cmd->argv[1])
 	{
     	print_export_list(*env_list);
-    	return;
+    	return ;
 	}
 	while (cmd->argv[i])
 	{

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:46:31 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 22:06:52 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 23:18:37 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ t_env	*create_env_list(char **envp)
 		else if (err == ENV_ALLOC_ERROR)
 		{
 			free_env_list(env_list);
+			printf("ENV_ALLOCATION_ERROR\n");
 			exit(EXIT_FAILURE);
 		}
 		i++;

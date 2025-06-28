@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 22:26:09 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 22:47:19 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 23:32:07 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,9 +52,30 @@ static t_env	*copy_env_list(t_env *env)
 	{
 		node = malloc(sizeof(t_env));
 		if (!node)
+		{
+			
+			printf("ALLOCATION ERROR for Export Command\n");
 			return (NULL);
+		}
 		node->key = ft_strdup(env->key);
-		node->value = env->value ? ft_strdup(env->value) : NULL;
+		if (!node->key)
+		{
+
+			printf("ALLOCATION ERROR for Export Command\n");
+			return (NULL);
+		}
+		if (env->value)
+		{
+			node->value = ft_strdup(env->value);
+			if (!node->value)
+			{
+				
+				printf("ALLOCATION ERROR for Export Command\n");
+				return (NULL);
+			}
+		}
+		else
+			node->value = NULL;
 		node->next = NULL;
 		*last = node;
 		last = &node->next;
