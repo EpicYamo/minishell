@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:18 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 03:26:18 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 21:28:20 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-t_gc	*init_garbage_collector(void)
+t_gc	*init_garbage_collector(char *line)
 {
 	t_gc	*gc;
 
@@ -24,7 +24,7 @@ t_gc	*init_garbage_collector(void)
 		printf("\033[0;31mGarbage collector initialization failed\033[0m\n");
 		return (NULL);
 	}
-	gc->ptrs = malloc(sizeof(void *) * 1024);
+	gc->ptrs = malloc(sizeof(void *) * (1024 + (4 * count_tokens(line))));
 	if (!gc->ptrs)
 	{
 		printf("\033[0;31mGarbage collector initialization failed\033[0m\n");

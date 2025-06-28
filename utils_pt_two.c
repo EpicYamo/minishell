@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:23:46 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 03:23:46 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 21:37:23 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*ft_strdup(const char *s1)
 		copy[i] = s1[i];
 		i++;
 	}
-	copy[i] = 0;
+	copy[i] = '\0';
 	return (copy);
 }
 

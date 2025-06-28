@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 17:23:39 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 22:38:05 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define EXIT_STATUS_TOKEN "__MINISHELL_EXIT_STATUS__"
 # include <stddef.h>
 
-typedef struct s_command
+typedef struct	s_command
 {
 	char				**argv;
 	char				*infile;
@@ -26,11 +26,25 @@ typedef struct s_command
 	struct s_command	*next;
 }t_command;
 
-typedef struct s_garbage_collector
+typedef struct	s_garbage_collector
 {
 	void	**ptrs;
 	size_t	g_index;
 }t_gc;
+
+typedef struct	s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}t_env;
+
+typedef enum	e_env_error
+{
+	ENV_OK,
+	ENV_SKIP,
+	ENV_ALLOC_ERROR
+}t_env_error;
 
 size_t		ft_strlen(const char *s);
 char		*ft_strndup(const char *s, size_t n);
@@ -44,11 +58,15 @@ int			is_env_char(char c);
 int			ft_isdigit(int v);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_atoi(const char *str);
+int			ft_isalpha(int v);
 
 void		print_banner(void);
 void		handle_sigint(int signum);
+t_env		*create_env_list(char **envp);
+void		free_env_list(t_env *list);
+void		append_env_node(t_env **list, t_env *new_node);
 
-t_gc		*init_garbage_collector(void);
+t_gc		*init_garbage_collector(char *line);
 void		*gc_malloc(t_gc *gc, size_t size);
 void		gc_add(t_gc *gc, void *ptr);
 void		gc_collect_all(t_gc *gc);
@@ -68,13 +86,16 @@ t_command	*new_command(t_gc *gc);
 int			handle_redirection_token(char **tokens, size_t *i, t_command *cmd, t_gc *gc);
 int			handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc);
 
-void		command_executor(t_command *cmd, t_gc *gc, char *line);
+void		command_executor(t_command *cmd, t_gc *gc, char *line, t_env *env_list);
 int			is_builtin(const char *cmd);
-void		execute_built_in_commands(t_command *cmd, t_gc *gc, char *line);
+void		execute_built_in_commands(t_command *cmd, t_gc *gc, char *line, t_env *env_list);
 void		echo_command(t_command *cmd);
 void		pwd_command(void);
 void		cd_command(t_command *cmd);
-void		exit_command(t_command *cmd, t_gc *gc, char *line);
+void		exit_command(t_command *cmd, t_gc *gc, char *line, t_env *env_list);
+void		env_command(t_command *cmd, t_env *env);
+void		export_command(t_command *cmd, t_env **env_list);
+void		print_export_list(t_env *env);
 
 void		print_commands(t_command *cmd);
 

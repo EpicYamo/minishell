@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:22:07 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 12:58:48 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 22:08:52 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,11 @@ static int	ft_isspacemod(int *i, const char *strwosp)
 		(*i)++;
 	}
 	return (*i);
+}
+
+int	ft_isalpha(int v)
+{
+	if ((v >= 'A' && v <= 'Z') || (v >= 'a' && v <= 'z'))
+		return (1);
+	return (0);
 }

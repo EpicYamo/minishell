@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:48:24 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 13:09:53 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 22:40:45 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	execute_echo_outfile(t_command *cmd, int i, int newline)
 	if (fd == -1)
 	{
         perror("Error opening file");
-        return;
+        return ;
 	}
 	while (cmd->argv[i])
 	{
