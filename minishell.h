@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 12:59:06 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 17:23:39 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int			handle_redirection_token(char **tokens, size_t *i, t_command *cmd, t_gc *g
 int			handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc);
 
 void		command_executor(t_command *cmd, t_gc *gc, char *line);
+int			is_builtin(const char *cmd);
 void		execute_built_in_commands(t_command *cmd, t_gc *gc, char *line);
 void		echo_command(t_command *cmd);
 void		pwd_command(void);

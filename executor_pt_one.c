@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 03:46:41 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/06/28 17:23:26 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
-
-static int	is_builtin(const char *cmd);
 
 void	command_executor(t_command *cmd, t_gc *gc, char *line)
 {
@@ -34,32 +32,4 @@ void	command_executor(t_command *cmd, t_gc *gc, char *line)
 			unlink(cmd->infile);
 		cmd = cmd->next;
 	}
-}
-
-static int	is_builtin(const char *cmd)
-{
-	int	flag;
-
-	flag = ft_strcmp(cmd, "echo");
-	if (flag == 0)
-		return (1);
-	flag = ft_strcmp(cmd, "cd");
-	if (flag == 0)
-		return (1);
-	flag = ft_strcmp(cmd, "pwd");
-	if (flag == 0)
-		return (1);
-	flag = ft_strcmp(cmd, "export");
-	if (flag == 0)
-		return (1);
-	flag = ft_strcmp(cmd, "unset");
-	if (flag == 0)
-		return (1);
-	flag = ft_strcmp(cmd, "env");
-	if (flag == 0)
-		return (1);
-	flag = ft_strcmp(cmd, "exit");
-	if (flag == 0)
-		return (1);
-	return (0);
 }
