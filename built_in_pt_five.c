@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 22:26:09 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 23:32:07 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/06 22:12:03 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static t_env	*copy_env_list(t_env *env);
-static void		sort_env_list(t_env *head);
-static void		swap_env_nodes(t_env *a, t_env *b);
+static int	split_key_value_pt_two(char *arg, char **key, char **value);
 
-void	print_export_list(t_env *env)
+int	split_key_value(char *arg, char **key, char **value)
 {
-	t_env	*sorted;
-	t_env	*tmp;
+	char	*eq;
 
-	sorted = copy_env_list(env);
-	if (!sorted)
-		return ;
-	sort_env_list(sorted);
-	tmp = sorted;
-	while (tmp)
+	eq = ft_strchr(arg, '=');
+	if (eq)
 	{
-		if (tmp->key)
+		*key = ft_strndup(arg, eq - arg);
+		if (!(*key))
 		{
-			printf("declare -x %s", tmp->key);
-			if (tmp->value)
-				printf("=\"%s\"", tmp->value);
-			printf("\n");
+			printf("ALLOCATION_ERROR for Export Command\n");
+			return (1);
 		}
 		tmp = tmp->next;
 	}
@@ -66,55 +58,27 @@ static t_env	*copy_env_list(t_env *env)
 		}
 		if (env->value)
 		{
-			node->value = ft_strdup(env->value);
-			if (!node->value)
-			{
-				
-				printf("ALLOCATION ERROR for Export Command\n");
-				return (NULL);
-			}
+			free(key);
+			printf("ALLOCATION_ERROR for Export Command\n");
+			return (1);
 		}
-		else
-			node->value = NULL;
-		node->next = NULL;
-		*last = node;
-		last = &node->next;
-		env = env->next;
 	}
-	return (copy);
-}
-
-static void	sort_env_list(t_env *head)
-{
-	t_env	*cur;
-	int		swapped;
-
-	if (!head)
-		return;
-	swapped = 1;
-	while (swapped)
+	else
 	{
-		swapped = 0;
-		cur = head;
-		while (cur && cur->next)
-		{
-			if (ft_strcmp(cur->key, cur->next->key) > 0)
-			{
-				swap_env_nodes(cur, cur->next);
-				swapped = 1;
-			}
-			cur = cur->next;
-		}
+		if (split_key_value_pt_two(arg, key, value) != 0)
+			return (1);
 	}
+	return (0);
 }
 
-static void	swap_env_nodes(t_env *a, t_env *b)
+static int	split_key_value_pt_two(char *arg, char **key, char **value)
 {
-	char *tmp_key = a->key;
-	char *tmp_val = a->value;
-
-	a->key = b->key;
-	a->value = b->value;
-	b->key = tmp_key;
-	b->value = tmp_val;
+	*value = NULL;
+	*key = ft_strdup(arg);
+	if (!(*key))
+	{
+		printf("ALLOCATION_ERROR for Export Command\n");
+		return (1);
+	}
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 21:58:23 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 23:19:28 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/06 22:11:41 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static void		split_key_value(char *arg, char **key, char **value);
+static int		export_command_pt_two(t_env **env_list, char *key, char *value);
+static int		export_command_pt_three(t_env **env_list, char *key, char *value);
 static t_env	*find_env_node(t_env *env, const char *key);
 static int		is_valid_identifier(const char *s);
 
@@ -22,70 +23,71 @@ void	export_command(t_command *cmd, t_env **env_list)
 {
 	char	*key;
 	char	*value;
-	t_env	*existing;
-	t_env	*new_node;
 	int		i;
 
-	i = 1;
 	if (!cmd->argv[1])
 	{
     	print_export_list(*env_list);
     	return ;
 	}
+	i = 1;
 	while (cmd->argv[i])
 	{
-		split_key_value(cmd->argv[i], &key, &value);
 		if (!is_valid_identifier(cmd->argv[i]))
 		{
 			printf("export: `%s`: not a valid identifier\n", cmd->argv[i]);
-			free(key);
-			free(value);
 			i++;
 			continue;
 		}
-		existing = find_env_node(*env_list, key);
-		if (existing)
-		{
-			if (value)
-			{
-				free(existing->value);
-				existing->value = value;
-			}
-			else if (!existing->value)
-				existing->value = NULL;
-			free(key);
-		}
-		else
-		{
-			new_node = malloc(sizeof(t_env));
-			if (!new_node)
-			{
-				free(key);
-				free(value);
-				return ;
-			}
-			new_node->key = key;
-			new_node->value = value;
-			new_node->next = NULL;
-			append_env_node(env_list, new_node);
-		}
+		if (split_key_value(cmd->argv[i], &key, &value) != 0)
+			continue;
+		if (export_command_pt_two(env_list, key, value) != 0)
+			continue;
 		i++;
 	}
 }
 
-static void	split_key_value(char *arg, char **key, char **value)
+static int	export_command_pt_two(t_env **env_list, char *key, char *value)
 {
-	char	*eq;
+	t_env	*existing;
 
-	eq = ft_strchr(arg, '=');
-	if (!eq)
+	existing = find_env_node(*env_list, key);
+	if (existing)
 	{
-		*key = NULL;
-		*value = NULL;
-		return ;
+		if (value)
+		{
+			free(existing->value);
+			existing->value = value;
+		}
+		else if (!existing->value)
+			existing->value = NULL;
+		free(key);
 	}
-	*key = ft_strndup(arg, eq - arg);
-	*value = ft_strdup(eq + 1);
+	else
+	{
+		if (export_command_pt_three(env_list, key, value) != 0)
+			return (1);
+	}
+	return (0);
+}
+
+static int	export_command_pt_three(t_env **env_list, char *key, char *value)
+{
+	t_env	*new_node;
+
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+	{
+		free(key);
+		free(value);
+		printf("ALLOCATION_ERROR for Export Command\n");
+		return (1);
+	}
+	new_node->key = key;
+	new_node->value = value;
+	new_node->next = NULL;
+	append_env_node(env_list, new_node);
+	return (0);
 }
 
 static t_env	*find_env_node(t_env *env, const char *key)
@@ -105,12 +107,12 @@ static int	is_valid_identifier(const char *s)
 
 	if (!s || !s[0])
 		return (0);
-	if (!ft_isalpha(s[0]) && s[0] != '_')
+	if (!ft_isalpha(s[0]) && (s[0] != '_'))
 		return (0);
 	i = 1;
-	while (s[i] && s[i] != '=')
+	while (s[i] && (s[i] != '='))
 	{
-		if (!ft_isalnum(s[i]) && s[i] != '_')
+		if (!ft_isalnum(s[i]) && (s[i] != '_'))
 			return (0);
 		i++;
 	}

@@ -6,12 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:46:31 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 23:18:37 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/06 20:06:29 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 static t_env	*create_env_node(char *entry, t_env_error *err);
 
@@ -46,6 +47,8 @@ void	free_env_list(t_env *list)
 {
 	t_env	*next;
 
+	if (!list)
+		return ;
 	while (list)
 	{
 		next = list->next;
