@@ -29,34 +29,8 @@ int	split_key_value(char *arg, char **key, char **value)
 			printf("ALLOCATION_ERROR for Export Command\n");
 			return (1);
 		}
-		tmp = tmp->next;
-	}
-	free_env_list(sorted);
-}
-
-static t_env	*copy_env_list(t_env *env)
-{
-	t_env	*copy = NULL;
-	t_env	*node;
-	t_env	**last = &copy;
-
-	while (env)
-	{
-		node = malloc(sizeof(t_env));
-		if (!node)
-		{
-			
-			printf("ALLOCATION ERROR for Export Command\n");
-			return (NULL);
-		}
-		node->key = ft_strdup(env->key);
-		if (!node->key)
-		{
-
-			printf("ALLOCATION ERROR for Export Command\n");
-			return (NULL);
-		}
-		if (env->value)
+		*value = ft_strdup(eq + 1);
+		if (!(*value))
 		{
 			free(key);
 			printf("ALLOCATION_ERROR for Export Command\n");
