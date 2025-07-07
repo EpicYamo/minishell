@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:44 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 21:39:33 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 02:45:25 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int	main(int argc, char **argv, char **envp)
 static void	shell_loop(t_env *env_list)
 {
 	char	*line;
+	char	**formatted_line;
 
 	while (1)
     {
@@ -51,6 +52,7 @@ static void	shell_loop(t_env *env_list)
 		}
         else if (line != NULL)
 			add_history(line);
+		formatted_line = ft_split(line, '\n');
 		shell_loop_pt_two(line, env_list);
 		free(line);
     }

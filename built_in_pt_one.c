@@ -29,8 +29,8 @@ void	execute_built_in_commands(t_command *cmd, t_gc *gc, char *line, t_env *env_
 		env_command(cmd, env_list);
 	else if (ft_strcmp(cmd->argv[0], "export") == 0)
 		export_command(cmd, &env_list);
-	//else if (ft_strcmp(cmd->argv[0], "unset") == 0)
-	//	unset_command(env_list);
+	else if (ft_strcmp(cmd->argv[0], "unset") == 0)
+		unset_command(cmd, &env_list);
 }
 
 int	is_builtin(const char *cmd)

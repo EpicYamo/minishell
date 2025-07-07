@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/06 22:12:28 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 02:42:59 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int			ft_isdigit(int v);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_atoi(const char *str);
 int			ft_isalpha(int v);
+char		**ft_split(char const *s, char c);
+void		*ft_calloc(size_t count, size_t size);
 
 void		print_banner(void);
 void		handle_sigint(int signum);
@@ -99,6 +101,7 @@ void		print_export_list(t_env *env);
 int			split_key_value(char *arg, char **key, char **value);
 void		swap_env_nodes(t_env *a, t_env *b);
 void		export_malloc_fail_handler(t_env *copy, t_env *node, int option);
+void		unset_command(t_command *cmd, t_env **env_list);
 
 void		print_commands(t_command *cmd);
 
