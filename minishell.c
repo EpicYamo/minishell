@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:44 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 02:45:25 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 17:34:31 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int argc, char **argv, char **envp)
 static void	shell_loop(t_env *env_list)
 {
 	char	*line;
-	char	**formatted_line;
+	//char	**formatted_line;
 
 	while (1)
     {
@@ -52,7 +52,7 @@ static void	shell_loop(t_env *env_list)
 		}
         else if (line != NULL)
 			add_history(line);
-		formatted_line = ft_split(line, '\n');
+		//formatted_line = ft_split(line, '\n');
 		shell_loop_pt_two(line, env_list);
 		free(line);
     }
@@ -68,7 +68,7 @@ static void	shell_loop_pt_two(char *line, t_env *env_list)
 	garbage_c = init_garbage_collector(line);
 	if (!garbage_c)
 		return ;
-	tokens = split_tokens(line, garbage_c);
+	tokens = split_tokens(line, garbage_c, env_list);
 	if (tokens != NULL)
 	{
 		cmd = parse_tokens(tokens, garbage_c);

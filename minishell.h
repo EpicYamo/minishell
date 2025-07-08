@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 02:42:59 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 17:31:37 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ int			ft_atoi(const char *str);
 int			ft_isalpha(int v);
 char		**ft_split(char const *s, char c);
 void		*ft_calloc(size_t count, size_t size);
+char		*get_minishell_env(char *key, t_env *env_list);
 
 void		print_banner(void);
 void		handle_sigint(int signum);
@@ -73,13 +74,13 @@ void		*gc_malloc(t_gc *gc, size_t size);
 void		gc_add(t_gc *gc, void *ptr);
 void		gc_collect_all(t_gc *gc);
 
-char		**split_tokens(const char *input, t_gc *garbage_c);
+char		**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list);
 size_t		count_tokens(const char *s);
 int			has_unclosed_quotes(const char *s);
 char		*extract_token(const char *s, size_t *i);
 char		*strip_quotes(char *s);
-char		*expand_env_vars_if_applicable(const char *token, size_t loc);
-int			calculate_env_size(const char *token);
+char		*expand_env_vars_if_applicable(const char *token, size_t loc, t_env *env_list);
+int			calculate_env_size(const char *token, t_env *env_list);
 void		env_token_exit_status(char *result, const char *token, size_t cursor);
 void		env_token_digit(char *result, const char *token, size_t cursor);
 

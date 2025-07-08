@@ -6,10 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 02:38:08 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 02:38:16 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 17:34:09 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
 #include <stdlib.h>
 
 void	*ft_calloc(size_t count, size_t size)
@@ -27,4 +28,15 @@ void	*ft_calloc(size_t count, size_t size)
 		i++;
 	}
 	return (tmp);
+}
+
+char	*get_minishell_env(char *key, t_env *env_list)
+{
+	while (env_list)
+	{
+		if (env_list->key && ft_strcmp(env_list->key, key) == 0)
+			return (env_list->value);
+		env_list = env_list->next;
+	}
+	return (NULL);
 }
