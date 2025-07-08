@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 02:38:08 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 17:34:09 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 21:54:23 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,14 @@ char	*get_minishell_env(char *key, t_env *env_list)
 		env_list = env_list->next;
 	}
 	return (NULL);
+}
+
+void	free_string_array(char **str_arr)
+{
+	int	i;
+
+	i = -1;
+	while (str_arr[++i])
+		free(str_arr[i]);
+	free(str_arr);
 }

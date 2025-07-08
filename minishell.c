@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:44 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 17:34:31 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 21:59:34 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <readline/history.h>
 
 static void	shell_loop(t_env *env_list);
-static void	shell_loop_pt_two(char *line, t_env *env_list);
+static void	shell_loop_pt_two(char *line, t_env *env_list, char	**formatted_line);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -39,7 +39,8 @@ int	main(int argc, char **argv, char **envp)
 static void	shell_loop(t_env *env_list)
 {
 	char	*line;
-	//char	**formatted_line;
+	char	**formatted_line;
+	int		i;
 
 	while (1)
     {
@@ -50,20 +51,27 @@ static void	shell_loop(t_env *env_list)
 			rl_clear_history();
 			break;
 		}
-        else if (line != NULL)
-			add_history(line);
-		//formatted_line = ft_split(line, '\n');
-		shell_loop_pt_two(line, env_list);
+		formatted_line = ft_split(line, '\n');
 		free(line);
+		if (!formatted_line)
+		{
+			perror("Allocation Error, Skipping the command...");
+			continue;
+		}
+		i = -1;
+		while (formatted_line[++i])
+			shell_loop_pt_two(formatted_line[i], env_list, formatted_line);
+		free_string_array(formatted_line);
     }
 }
 
-static void	shell_loop_pt_two(char *line, t_env *env_list)
+static void	shell_loop_pt_two(char *line, t_env *env_list, char	**formatted_line)
 {
 	char		**tokens;
 	t_command	*cmd;
 	t_gc		*garbage_c;
 
+	add_history(line);
 	tokens = NULL;
 	garbage_c = init_garbage_collector(line);
 	if (!garbage_c)
@@ -75,7 +83,7 @@ static void	shell_loop_pt_two(char *line, t_env *env_list)
 		if (cmd != NULL)
 		{
 			//print_commands(cmd);
-			command_executor(cmd, garbage_c, line, env_list);
+			command_executor(cmd, garbage_c, formatted_line, env_list);
 		}
 	}
 	gc_collect_all(garbage_c);

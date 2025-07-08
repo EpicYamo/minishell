@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 13:09:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 22:43:54 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 22:01:14 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 static void	exit_command_pt_two(t_command *cmd, int *arg_err_flag, int *exit_code);
 static void	execute_env_outfile(t_command *cmd, t_env *env);
 
-void	exit_command(t_command *cmd, t_gc *gc, char *line, t_env *env_list)
+void	exit_command(t_command *cmd, t_gc *gc, char **formatted_line, t_env *env_list)
 {
 	int	exit_code;
 	int	arg_err_flag;
@@ -31,7 +31,7 @@ void	exit_command(t_command *cmd, t_gc *gc, char *line, t_env *env_list)
 	exit_command_pt_two(cmd, &arg_err_flag, &exit_code);
 	rl_clear_history();
 	gc_collect_all(gc);
-	free(line);
+	free_string_array(formatted_line);
 	free_env_list(env_list);
 	exit(exit_code);
 }

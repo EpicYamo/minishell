@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 17:31:37 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/08 22:00:58 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int			ft_isalpha(int v);
 char		**ft_split(char const *s, char c);
 void		*ft_calloc(size_t count, size_t size);
 char		*get_minishell_env(char *key, t_env *env_list);
+void		free_string_array(char **str_arr);
 
 void		print_banner(void);
 void		handle_sigint(int signum);
@@ -89,13 +90,13 @@ t_command	*new_command(t_gc *gc);
 int			handle_redirection_token(char **tokens, size_t *i, t_command *cmd, t_gc *gc);
 int			handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc);
 
-void		command_executor(t_command *cmd, t_gc *gc, char *line, t_env *env_list);
+void		command_executor(t_command *cmd, t_gc *gc, char	**formatted_line, t_env *env_list);
 int			is_builtin(const char *cmd);
-void		execute_built_in_commands(t_command *cmd, t_gc *gc, char *line, t_env *env_list);
+void		execute_built_in_commands(t_command *cmd, t_gc *gc, char **formatted_line, t_env *env_list);
 void		echo_command(t_command *cmd);
 void		pwd_command(void);
 void		cd_command(t_command *cmd);
-void		exit_command(t_command *cmd, t_gc *gc, char *line, t_env *env_list);
+void		exit_command(t_command *cmd, t_gc *gc, char **formatted_line, t_env *env_list);
 void		env_command(t_command *cmd, t_env *env);
 void		export_command(t_command *cmd, t_env **env_list);
 void		print_export_list(t_env *env);
