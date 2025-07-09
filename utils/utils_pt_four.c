@@ -6,11 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 02:36:18 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 02:36:55 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 19:13:22 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdlib.h>
 
 static int	countofwords(const char *str, char c);

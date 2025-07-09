@@ -6,11 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:48:24 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 22:40:45 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 20:16:59 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -27,7 +27,7 @@ void	echo_command(t_command *cmd)
 	int	newline;
 
 	i = 1;
-	newline = 1;	
+	newline = 1;
 	if (cmd->argv[1] && (ft_strcmp(cmd->argv[1], "-n") == 0))
 	{
 		newline = 0;
@@ -59,8 +59,8 @@ static void	execute_echo_outfile(t_command *cmd, int i, int newline)
 		fd = open(cmd->outfile, O_WRONLY | O_APPEND, 0644);
 	if (fd == -1)
 	{
-        perror("Error opening file");
-        return ;
+		perror("Error opening file");
+		return ;
 	}
 	while (cmd->argv[i])
 	{
@@ -85,7 +85,7 @@ void	pwd_command(void)
 	{
 		printf("%s\n", cwd);
 		free(cwd);
-	}	
+	}
 }
 
 void	cd_command(t_command *cmd)

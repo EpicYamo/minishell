@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_pt_four.c                                    :+:      :+:    :+:   */
+/*   lexer_pt_six.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:14 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 17:31:00 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 21:39:05 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdlib.h>
 
-static int	calculate_env_size_pt_two(const char *token, size_t start, size_t env_var_size, t_env *env_list);
+static int	calculate_env_size_pt_two(const char *token, size_t start,
+				size_t env_var_size, t_env *env_list);
 
 int	calculate_env_size(const char *token, t_env *env_list)
 {
@@ -25,7 +26,7 @@ int	calculate_env_size(const char *token, t_env *env_list)
 	while (token[i])
 	{
 		if (token[i] == '$')
-			break;
+			break ;
 		i++;
 	}
 	env_var_size = 0;
@@ -36,11 +37,13 @@ int	calculate_env_size(const char *token, t_env *env_list)
 		i++;
 		env_var_size++;
 	}
-	env_var_size = calculate_env_size_pt_two(token, start, env_var_size, env_list);
+	env_var_size = calculate_env_size_pt_two(token, start,
+			env_var_size, env_list);
 	return (env_var_size);
 }
 
-static int	calculate_env_size_pt_two(const char *token, size_t start, size_t env_var_size, t_env *env_list)
+static int	calculate_env_size_pt_two(const char *token, size_t start,
+	size_t env_var_size, t_env *env_list)
 {
 	char	key[env_var_size + 1];
 	size_t	i;

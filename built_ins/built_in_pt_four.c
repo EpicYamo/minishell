@@ -6,16 +6,17 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 21:58:23 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/06 22:11:41 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 20:20:39 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
 
 static int		export_command_pt_two(t_env **env_list, char *key, char *value);
-static int		export_command_pt_three(t_env **env_list, char *key, char *value);
+static int		export_command_pt_three(t_env **env_list,
+					char *key, char *value);
 static t_env	*find_env_node(t_env *env, const char *key);
 static int		is_valid_identifier(const char *s);
 
@@ -27,8 +28,8 @@ void	export_command(t_command *cmd, t_env **env_list)
 
 	if (!cmd->argv[1])
 	{
-    	print_export_list(*env_list);
-    	return ;
+		print_export_list(*env_list);
+		return ;
 	}
 	i = 1;
 	while (cmd->argv[i])
@@ -37,12 +38,12 @@ void	export_command(t_command *cmd, t_env **env_list)
 		{
 			printf("export: `%s`: not a valid identifier\n", cmd->argv[i]);
 			i++;
-			continue;
+			continue ;
 		}
 		if (split_key_value(cmd->argv[i], &key, &value) != 0)
-			continue;
+			continue ;
 		if (export_command_pt_two(env_list, key, value) != 0)
-			continue;
+			continue ;
 		i++;
 	}
 }

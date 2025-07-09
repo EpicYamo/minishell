@@ -6,11 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 22:26:09 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/06 22:12:03 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 18:53:50 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_pt_two.c                                     :+:      :+:    :+:   */
+/*   lexer_pt_three.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/28 03:25:53 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 03:25:53 by aaycan           ###   ########.fr       */
+/*   Created: 2025/07/09 21:23:02 by aaycan            #+#    #+#             */
+/*   Updated: 2025/07/09 21:26:18 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdlib.h>
 
 static void	count_tokens_pt_two(const char *s, size_t *i);
@@ -46,8 +46,9 @@ size_t	count_tokens(const char *s)
 		while (ft_isspace(s[i]))
 			i++;
 		if (!s[i])
-			break;
-		if (((s[i] == '<') && (s[i + 1] == '<')) || ((s[i] == '>') && (s[i + 1] == '>')))
+			break ;
+		if (((s[i] == '<') && (s[i + 1] == '<'))
+			|| ((s[i] == '>') && (s[i + 1] == '>')))
 			i += 2;
 		else if (is_metachar(s[i]))
 			i++;
@@ -85,7 +86,8 @@ char	*extract_token(const char *s, size_t *i)
 	while (ft_isspace(s[*i]))
 		(*i)++;
 	start = *i;
-	if (((s[*i] == '<') && (s[*i + 1] == '<')) || ((s[*i] == '>') && (s[*i + 1] == '>')))
+	if (((s[*i] == '<') && (s[*i + 1] == '<'))
+		|| ((s[*i] == '>') && (s[*i + 1] == '>')))
 		(*i) += 2;
 	else if (is_metachar(s[*i]))
 		(*i)++;

@@ -6,11 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:23:46 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 21:37:23 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 18:54:31 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include "stdlib.h"
 
 char	*ft_strchr(const char *s, int c)

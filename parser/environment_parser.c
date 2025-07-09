@@ -6,15 +6,16 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:46:31 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/06 20:06:29 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 19:16:46 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 static t_env	*create_env_node(char *entry, t_env_error *err);
+static void		create_env_node_pt_two(t_env *node, t_env_error *err);
 
 t_env	*create_env_list(char **envp)
 {
@@ -81,14 +82,19 @@ static t_env	*create_env_node(char *entry, t_env_error *err)
 	node->next = NULL;
 	if (!node->key || !node->value)
 	{
-		free(node->key);
-		free(node->value);
-		free(node);
-		*err = ENV_ALLOC_ERROR;
+		create_env_node_pt_two(node, err);
 		return (NULL);
 	}
 	*err = ENV_OK;
 	return (node);
+}
+
+static void	create_env_node_pt_two(t_env *node, t_env_error *err)
+{
+	free(node->key);
+	free(node->value);
+	free(node);
+	*err = ENV_ALLOC_ERROR;
 }
 
 void	append_env_node(t_env **list, t_env *new_node)

@@ -6,11 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 22:10:13 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/06 22:10:29 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 20:19:08 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -19,8 +19,8 @@ static void	unset_command_pt_three(t_env **env_list, t_env **prev_env_node);
 
 void	swap_env_nodes(t_env *a, t_env *b)
 {
-	char *tmp_key;
-	char *tmp_val;
+	char	*tmp_key;
+	char	*tmp_val;
 
 	tmp_key = a->key;
 	tmp_val = a->value;
@@ -46,7 +46,6 @@ void	export_malloc_fail_handler(t_env *copy, t_env *node, int option)
 		free_env_list(copy);
 	}
 	printf("ALLOCATION_ERROR for Export Command\n");
-	
 }
 
 void	unset_command(t_command *cmd, t_env **env_list)
@@ -65,7 +64,8 @@ void	unset_command(t_command *cmd, t_env **env_list)
 		(*env_list) = head_env_node;
 		while (*(env_list))
 		{
-			if ((*env_list)->key && ft_strcmp((*env_list)->key, cmd->argv[i]) == 0)
+			if ((*env_list)->key
+				&& ft_strcmp((*env_list)->key, cmd->argv[i]) == 0)
 			{
 				unset_command_pt_two(env_list, &prev_env_node);
 				break ;
@@ -74,7 +74,7 @@ void	unset_command(t_command *cmd, t_env **env_list)
 				prev_env_node = (*env_list);
 			(*env_list) = (*env_list)->next;
 		}
-	} 
+	}
 }
 
 static void	unset_command_pt_two(t_env **env_list, t_env **prev_env_node)

@@ -6,11 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:18 by aaycan            #+#    #+#             */
-/*   Updated: 2025/06/28 21:28:20 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 19:13:13 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -56,7 +56,7 @@ void	gc_collect_all(t_gc *gc)
 	size_t	i;
 
 	if (!gc)
-		return;
+		return ;
 	i = gc->g_index;
 	while (i > 0)
 	{

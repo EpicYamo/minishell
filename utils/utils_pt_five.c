@@ -6,11 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 02:38:08 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 21:54:23 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 18:54:23 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdlib.h>
 
 void	*ft_calloc(size_t count, size_t size)

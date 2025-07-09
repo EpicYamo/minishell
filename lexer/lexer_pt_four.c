@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_pt_three.c                                   :+:      :+:    :+:   */
+/*   lexer_pt_four.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:59 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/08 17:30:54 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 21:57:58 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-static char	*build_expanded_string(const char *token, size_t loc, t_env *env_list);
-static void	build_expanded_string_pt_two(char *result, const char *token, size_t cursor, t_env *env_list);
-static void	env_token_default(char *result, const char *token, size_t cursor, size_t key_size, t_env *env_list);
+static char	*build_expanded_string(const char *token, size_t loc,
+				t_env *env_list);
+static void	build_expanded_string_pt_two(char *result, const char *token,
+				size_t cursor, t_env *env_list);
 
 char	*strip_quotes(char *s)
 {
@@ -47,7 +48,8 @@ char	*strip_quotes(char *s)
 	return (result);
 }
 
-char	*expand_env_vars_if_applicable(const char *token, size_t loc, t_env *env_list)
+char	*expand_env_vars_if_applicable(const char *token, size_t loc,
+	t_env *env_list)
 {
 	char	*new_token;
 
@@ -59,7 +61,8 @@ char	*expand_env_vars_if_applicable(const char *token, size_t loc, t_env *env_li
 	return (new_token);
 }
 
-static char	*build_expanded_string(const char *token, size_t loc, t_env *env_list)
+static char	*build_expanded_string(const char *token, size_t loc,
+	t_env *env_list)
 {
 	size_t	result_size;
 	char	*result;
@@ -79,10 +82,12 @@ static char	*build_expanded_string(const char *token, size_t loc, t_env *env_lis
 	return (result);
 }
 
-static void	build_expanded_string_pt_two(char *result, const char *token, size_t cursor, t_env *env_list)
+static void	build_expanded_string_pt_two(char *result, const char *token,
+	size_t cursor, t_env *env_list)
 {
-	size_t	i;
-	size_t	key_size;
+	size_t			i;
+	size_t			key_size;
+	t_lexer_data	data;
 
 	i = cursor + 1;
 	if (token[i] && (token[i] == '?'))
@@ -97,42 +102,8 @@ static void	build_expanded_string_pt_two(char *result, const char *token, size_t
 			i++;
 			key_size++;
 		}
-		env_token_default(result, token, cursor, key_size, env_list);
+		data.cursor = cursor;
+		data.key_size = key_size;
+		env_token_default(result, token, env_list, data);
 	}
-}
-
-static void	env_token_default(char *result, const char *token, size_t cursor, size_t key_size, t_env *env_list)
-{
-	char	key[key_size + 1];
-	char	*env_ptr;
-	size_t	i;
-	size_t	j;
-
-	i = cursor + 1;
-	j = 0;
-	while (is_env_char(token[i]))
-	{
-		key[j] = token[i];
-		i++;
-		j++;
-	}
-	key[j] = '\0';
-	env_ptr = get_minishell_env(key, env_list);
-	if (env_ptr)
-	{
-		j = 0;
-		while (env_ptr[j])
-		{
-			result[cursor] = env_ptr[j];
-			cursor++;
-			j++;
-		}
-	}
-	while (token[i])
-	{
-		result[cursor] = token[i];
-		cursor++;
-		i++;
-	}
-	result[cursor] = '\0';
 }

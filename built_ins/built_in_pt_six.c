@@ -6,11 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 20:33:03 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/06 22:10:42 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 20:18:28 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -97,7 +97,7 @@ static void	sort_env_list(t_env *head)
 	int		swapped;
 
 	if (!head)
-		return;
+		return ;
 	swapped = 1;
 	while (swapped)
 	{

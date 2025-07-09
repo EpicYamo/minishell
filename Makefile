@@ -1,24 +1,48 @@
-SRCS 	= minishell.c banner.c signals.c garbage_collector.c lexer_pt_one.c lexer_pt_two.c lexer_pt_three.c \
-			lexer_pt_four.c parser_pt_one.c parser_pt_two.c parser_pt_three.c utils_pt_one.c utils_pt_two.c \
-			utils_pt_three.c utils_pt_four.c utils_pt_five.c executor_pt_one.c built_in_pt_one.c built_in_pt_two.c \
-			built_in_pt_three.c built_in_pt_four.c built_in_pt_five.c built_in_pt_six.c built_in_pt_seven.c environment_parser.c \
+SRC		:= minishell.c banner.c signals.c \
+			lexer/lexer_pt_one.c lexer/lexer_pt_two.c lexer/lexer_pt_three.c lexer/lexer_pt_four.c \
+			lexer/lexer_pt_five.c lexer/lexer_pt_six.c \
+			parser/parser_pt_one.c parser/parser_pt_two.c parser/parser_pt_three.c \
+			parser/environment_parser.c \
+			utils/utils_pt_one.c utils/utils_pt_two.c utils/utils_pt_three.c \
+			utils/utils_pt_four.c utils/utils_pt_five.c utils/garbage_collector.c \
+			built_ins/built_in_pt_one.c built_ins/built_in_pt_two.c built_ins/built_in_pt_three.c \
+			built_ins/built_in_pt_four.c built_ins/built_in_pt_five.c built_ins/built_in_pt_six.c \
+			built_ins/built_in_pt_seven.c \
+			executor_pt_one.c \
 			z_temp_funcs.c
-LIBS	= -lreadline
-NAME	=	minishell
-CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror
-RM		=	rm -rf
+LIBS	:= -lreadline
+NAME	:=	minishell
+CC		:=	cc
+CFLAGS	:=	-Wall -Wextra -Werror
+RM		:=	rm -rf
+OBJ_DIR := objects
+OBJ		:= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
+GREEN	:= \033[0;32m
+BLUE	:= \033[0;34m
+CYAN	:= \033[0;36m
+RESET	:= \033[0m
+BOLD	:= \033[1m
 
 all: $(NAME)
 
-$(NAME): $(SRCS)
-	${CC} ${CFLAGS} -o $(NAME) $(SRCS) $(LIBS)
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
+	@printf "$(CYAN)Compiling:$(RESET) %-20s → $(GREEN)%s$(RESET)\n" "$<" "$@"
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(NAME): $(OBJ)
+	@printf "$(BOLD)Linking...$(RESET)\n"
+	@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(LIBS)
+	@printf "$(GREEN)✔ Build complete: $(NAME)$(RESET)\n"
 
 clean:
-	$(RM) $(NAME)
+	@$(RM) $(OBJ_DIR)
+	@printf "$(BLUE)🧹 Cleaned object files$(RESET)\n"
 
-fclean:	clean
+fclean: clean
+	@$(RM) $(NAME)
+	@printf "$(BLUE)🧹 Removed binary $(NAME)$(RESET)\n"
 
-re:		clean all
+re: fclean all
 
-.PHONY:	all clean fclean re
+.PHONY: all clean fclean re
