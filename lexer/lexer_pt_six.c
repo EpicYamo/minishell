@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:14 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 21:39:05 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 22:28:46 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,14 @@ int	calculate_env_size(const char *token, t_env *env_list)
 static int	calculate_env_size_pt_two(const char *token, size_t start,
 	size_t env_var_size, t_env *env_list)
 {
-	char	key[env_var_size + 1];
+	char	*key;
 	size_t	i;
 	size_t	j;
 	size_t	size_of_env;
 
+	key = malloc(sizeof(char) * (env_var_size + 1));
+	if (!key)
+		return (-42);
 	i = start;
 	j = 0;
 	while (i < (start + env_var_size))

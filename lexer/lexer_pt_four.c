@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:59 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 21:57:58 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 22:27:19 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 static char	*build_expanded_string(const char *token, size_t loc,
 				t_env *env_list);
-static void	build_expanded_string_pt_two(char *result, const char *token,
+static int	build_expanded_string_pt_two(char *result, const char *token,
 				size_t cursor, t_env *env_list);
 
 char	*strip_quotes(char *s)
@@ -67,8 +67,12 @@ static char	*build_expanded_string(const char *token, size_t loc,
 	size_t	result_size;
 	char	*result;
 	size_t	i;
+	int		env_size;
 
-	result_size = (calculate_env_size(token, env_list) + ft_strlen(token) + 30);
+	env_size = calculate_env_size(token, env_list);
+	if (env_size == -42)
+		return (NULL);
+	result_size = (env_size + ft_strlen(token) + 30);
 	result = malloc(sizeof(char) * result_size);
 	if (!result)
 		return (NULL);
@@ -78,11 +82,15 @@ static char	*build_expanded_string(const char *token, size_t loc,
 		result[i] = token[i];
 		i++;
 	}
-	build_expanded_string_pt_two(result, token, i, env_list);
+	if (build_expanded_string_pt_two(result, token, i, env_list) != 0)
+	{
+		free(result);
+		return (NULL);
+	}
 	return (result);
 }
 
-static void	build_expanded_string_pt_two(char *result, const char *token,
+static int	build_expanded_string_pt_two(char *result, const char *token,
 	size_t cursor, t_env *env_list)
 {
 	size_t			i;
@@ -104,6 +112,8 @@ static void	build_expanded_string_pt_two(char *result, const char *token,
 		}
 		data.cursor = cursor;
 		data.key_size = key_size;
-		env_token_default(result, token, env_list, data);
+		if (env_token_default(result, token, env_list, data) != 0)
+			return (1);
 	}
+	return (0);
 }

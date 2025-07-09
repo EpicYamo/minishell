@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 21:58:29 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/09 22:17:47 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ char		*expand_env_vars_if_applicable(const char *token, size_t loc,
 				t_env *env_list);
 int			calculate_env_size(const char *token, t_env *env_list);
 size_t		check_dollar_sign_existance(char *token, size_t *last_sign);
-void		env_token_default(char *result, const char *token, t_env *env_list,
+int			env_token_default(char *result, const char *token, t_env *env_list,
 				t_lexer_data data);
 void		env_token_exit_status(char *result, const char *token,
 				size_t cursor);
