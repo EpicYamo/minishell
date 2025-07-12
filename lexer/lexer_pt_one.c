@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 21:33:37 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/12 22:17:21 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,5 +91,8 @@ static int	split_tokens_pt_three(char **tokens, t_gc *garbage_c,
 		gc_add(garbage_c, tokens[(*i)]);
 		sign_loc = check_dollar_sign_existance(tokens[(*i)], &last_sign);
 	}
+	tokens[(*i)] = replace_dollar_signs(tokens[(*i)], garbage_c);
+	if (!tokens[(*i)])
+		return (1);
 	return (0);
 }

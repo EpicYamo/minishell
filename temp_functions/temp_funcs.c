@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   z_temp_funcs.c                                     :+:      :+:    :+:   */
+/*   temp_funcs.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:07:31 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 22:10:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/12 22:16:12 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <stdio.h>
 
 void	print_commands(t_command *cmd)

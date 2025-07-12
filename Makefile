@@ -1,15 +1,15 @@
-SRC		:= minishell.c banner.c signals.c \
+SRC		:= minishell.c signals.c \
 			lexer/lexer_pt_one.c lexer/lexer_pt_two.c lexer/lexer_pt_three.c lexer/lexer_pt_four.c \
-			lexer/lexer_pt_five.c lexer/lexer_pt_six.c \
+			lexer/lexer_pt_five.c lexer/lexer_pt_six.c lexer/lexer_pt_seven.c \
 			parser/parser_pt_one.c parser/parser_pt_two.c parser/parser_pt_three.c \
 			parser/environment_parser.c \
-			utils/utils_pt_one.c utils/utils_pt_two.c utils/utils_pt_three.c \
-			utils/utils_pt_four.c utils/utils_pt_five.c utils/garbage_collector.c \
+			utils/utils_pt_one.c utils/utils_pt_two.c utils/utils_pt_three.c utils/utils_pt_four.c\
+			utils/utils_pt_five.c utils/garbage_collector.c utils/banner.c\
 			built_ins/built_in_pt_one.c built_ins/built_in_pt_two.c built_ins/built_in_pt_three.c \
 			built_ins/built_in_pt_four.c built_ins/built_in_pt_five.c built_ins/built_in_pt_six.c \
 			built_ins/built_in_pt_seven.c \
 			executor_pt_one.c \
-			z_temp_funcs.c
+			temp_functions/temp_funcs.c
 LIBS	:= -lreadline
 NAME	:=	minishell
 CC		:=	cc

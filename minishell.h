@@ -6,14 +6,15 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 22:17:47 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/12 21:56:57 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define EXIT_STATUS_TOKEN "__MINISHELL_EXIT_STATUS__"
+# define EXIT_STATUS_TOKEN "__ENCP0MAClAKDJV_MINISHELL_EXIT_STATUS_ENC__"
+# define DOLLAR_SIGN_TOKEN "__ENCP0MAClAKDJV_DOLLAR_SIGN_ENC__"
 # include <stddef.h>
 
 typedef struct s_command
@@ -77,6 +78,7 @@ int			ft_isdigit(int v);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_atoi(const char *str);
 int			ft_isalpha(int v);
+int			search_str_in_str(const char *haystack, const char *needle);
 char		**ft_split(char const *s, char c);
 void		*ft_calloc(size_t count, size_t size);
 char		*get_minishell_env(char *key, t_env *env_list);
@@ -97,13 +99,15 @@ char		*extract_token(const char *s, size_t *i);
 char		*strip_quotes(char *s);
 char		*expand_env_vars_if_applicable(const char *token, size_t loc,
 				t_env *env_list);
-int			calculate_env_size(const char *token, t_env *env_list);
+int			calculate_env_size(const char *token, t_env *env_list, size_t loc);
 size_t		check_dollar_sign_existance(char *token, size_t *last_sign);
 int			env_token_default(char *result, const char *token, t_env *env_list,
 				t_lexer_data data);
 void		env_token_exit_status(char *result, const char *token,
 				size_t cursor);
 void		env_token_digit(char *result, const char *token, size_t cursor);
+void		no_valid_env_token(char *result, const char *token, size_t cursor);
+char		*replace_dollar_signs(char *token, t_gc *gc);
 t_command	*parse_tokens(char **tokens, t_gc *garbage_c);
 t_command	*new_command(t_gc *gc);
 int			handle_redirection_token(char **tokens, t_command *cmd, t_gc *gc,

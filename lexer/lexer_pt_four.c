@@ -6,13 +6,12 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:59 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 22:27:19 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/12 19:31:53 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 static char	*build_expanded_string(const char *token, size_t loc,
 				t_env *env_list);
@@ -69,10 +68,10 @@ static char	*build_expanded_string(const char *token, size_t loc,
 	size_t	i;
 	int		env_size;
 
-	env_size = calculate_env_size(token, env_list);
+	env_size = calculate_env_size(token, env_list, loc);
 	if (env_size == -42)
 		return (NULL);
-	result_size = (env_size + ft_strlen(token) + 30);
+	result_size = (env_size + ft_strlen(token) + 60);
 	result = malloc(sizeof(char) * result_size);
 	if (!result)
 		return (NULL);
@@ -102,7 +101,7 @@ static int	build_expanded_string_pt_two(char *result, const char *token,
 		env_token_exit_status(result, token, cursor);
 	else if (token[i] && ft_isdigit(token[i]))
 		env_token_digit(result, token, cursor);
-	else
+	else if (token[i] && is_env_char(token[i]))
 	{
 		key_size = 0;
 		while (is_env_char(token[i]))
@@ -115,5 +114,7 @@ static int	build_expanded_string_pt_two(char *result, const char *token,
 		if (env_token_default(result, token, env_list, data) != 0)
 			return (1);
 	}
+	else
+		no_valid_env_token(result, token, cursor);
 	return (0);
 }
