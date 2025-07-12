@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/12 21:56:57 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/13 00:11:00 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_atoi(const char *str);
 int			ft_isalpha(int v);
 int			search_str_in_str(const char *haystack, const char *needle);
+char		*ft_strjoin(char const *s1, char const *s2);
 char		**ft_split(char const *s, char c);
 void		*ft_calloc(size_t count, size_t size);
 char		*get_minishell_env(char *key, t_env *env_list);
