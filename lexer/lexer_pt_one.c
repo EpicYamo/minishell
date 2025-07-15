@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/12 22:17:21 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/15 15:46:31 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,11 @@ static int	split_tokens_pt_two(const char *input, char **tokens,
 		if (!tokens[i])
 			return (1);
 		gc_add(garbage_c, tokens[i]);
-		if (split_tokens_pt_three(tokens, garbage_c, env_list, &i) != 0)
-			return (1);
+		if (!((i > 0) && (!(ft_strcmp(tokens[i - 1], "<<")))))
+		{
+			if (split_tokens_pt_three(tokens, garbage_c, env_list, &i) != 0)
+				return (1);
+		}
 		tokens[i] = strip_quotes(tokens[i]);
 		if (!tokens[i])
 			return (1);
