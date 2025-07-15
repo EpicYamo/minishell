@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/13 00:09:43 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/15 16:32:50 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static void	setup_redirects(t_command *cmd)
 {
 	int	fd;
 
-	if (cmd->infile)
+	if (cmd->infile && cmd->heredoc == 0)
 	{
 		fd = open(cmd->infile, O_RDONLY);
 		if (fd == -1)
