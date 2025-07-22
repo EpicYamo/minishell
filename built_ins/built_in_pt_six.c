@@ -6,19 +6,18 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 20:33:03 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 20:18:28 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/22 17:21:52 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdio.h>
 #include <stdlib.h>
 
 static t_env	*copy_env_list(t_env *env);
 static int		copy_env_list_pt_two(t_env *env, t_env *node, t_env *copy);
 static void		sort_env_list(t_env *head);
 
-void	print_export_list(t_env *env)
+void	print_export_list(t_command *cmd, t_env *env)
 {
 	t_env	*sorted;
 	t_env	*tmp;
@@ -28,17 +27,10 @@ void	print_export_list(t_env *env)
 		return ;
 	sort_env_list(sorted);
 	tmp = sorted;
-	while (tmp)
-	{
-		if (tmp->key)
-		{
-			printf("declare -x %s", tmp->key);
-			if (tmp->value)
-				printf("=\"%s\"", tmp->value);
-			printf("\n");
-		}
-		tmp = tmp->next;
-	}
+	if (cmd->outfile)
+		print_export_list_to_outfile(cmd, tmp);
+	else
+		print_export_list_to_stdout(tmp);
 	free_env_list(sorted);
 }
 

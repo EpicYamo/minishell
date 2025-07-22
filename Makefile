@@ -1,13 +1,13 @@
-SRC		:= minishell.c signals.c \
+SRC		:= minishell.c \
 			lexer/lexer_pt_one.c lexer/lexer_pt_two.c lexer/lexer_pt_three.c lexer/lexer_pt_four.c \
 			lexer/lexer_pt_five.c lexer/lexer_pt_six.c lexer/lexer_pt_seven.c \
 			parser/parser_pt_one.c parser/parser_pt_two.c parser/parser_pt_three.c \
 			parser/environment_parser.c \
 			utils/utils_pt_one.c utils/utils_pt_two.c utils/utils_pt_three.c utils/utils_pt_four.c\
-			utils/utils_pt_five.c utils/garbage_collector.c utils/banner.c\
+			utils/utils_pt_five.c utils/garbage_collector.c utils/banner.c utils/signals.c \
 			built_ins/built_in_pt_one.c built_ins/built_in_pt_two.c built_ins/built_in_pt_three.c \
 			built_ins/built_in_pt_four.c built_ins/built_in_pt_five.c built_ins/built_in_pt_six.c \
-			built_ins/built_in_pt_seven.c \
+			built_ins/built_in_pt_seven.c built_ins/built_in_pt_eight.c \
 			executor/executor_pt_one.c \
 			temp_functions/temp_funcs.c
 LIBS	:= -lreadline

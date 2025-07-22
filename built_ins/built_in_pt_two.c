@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:48:24 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 20:16:59 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/22 17:01:44 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 #include <readline/readline.h>
 
 static void	execute_echo_outfile(t_command *cmd, int i, int newline);
+static void	execute_pwd_outfile(t_command *cmd, char *output_line);
 
 void	echo_command(t_command *cmd)
 {
@@ -74,7 +75,7 @@ static void	execute_echo_outfile(t_command *cmd, int i, int newline)
 	close(fd);
 }
 
-void	pwd_command(void)
+void	pwd_command(t_command *cmd)
 {
 	char	*cwd;
 
@@ -83,26 +84,28 @@ void	pwd_command(void)
 		perror(cwd);
 	else
 	{
-		printf("%s\n", cwd);
+		if (cmd->outfile)
+			execute_pwd_outfile(cmd, cwd);
+		else
+			printf("%s\n", cwd);
 		free(cwd);
 	}
 }
 
-void	cd_command(t_command *cmd)
+static void	execute_pwd_outfile(t_command *cmd, char *output_line)
 {
-	char	*home;
+	int	fd;
 
-	if (cmd->argv[1])
-	{
-		if (chdir(cmd->argv[1]) != 0)
-			perror("cd");
-	}
+	if (cmd->append == 0)
+		fd = open(cmd->outfile, O_WRONLY, 0644);
 	else
+		fd = open(cmd->outfile, O_WRONLY | O_APPEND, 0644);
+	if (fd == -1)
 	{
-		home = getenv("HOME");
-		if (!home)
-			printf("cd: HOME not set\n");
-		if (chdir(home) != 0)
-			perror("cd");
+		perror("Error opening file");
+		return ;
 	}
+	write(fd, output_line, ft_strlen(output_line));
+	write(fd, "\n", 1);
+	close(fd);
 }

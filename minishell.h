@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/13 00:11:00 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/22 17:21:29 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,13 +120,15 @@ int			is_builtin(const char *cmd);
 void		execute_built_in_commands(t_command *cmd, t_gc *gc,
 				char **formatted_line, t_env *env_list);
 void		echo_command(t_command *cmd);
-void		pwd_command(void);
+void		pwd_command(t_command *cmd);
 void		cd_command(t_command *cmd);
 void		exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 				t_env *env_list);
 void		env_command(t_command *cmd, t_env *env);
 void		export_command(t_command *cmd, t_env **env_list);
-void		print_export_list(t_env *env);
+void		print_export_list(t_command *cmd, t_env *env);
+void		print_export_list_to_stdout(t_env *tmp);
+void		print_export_list_to_outfile(t_command *cmd, t_env *tmp);
 int			split_key_value(char *arg, char **key, char **value);
 void		swap_env_nodes(t_env *a, t_env *b);
 void		export_malloc_fail_handler(t_env *copy, t_env *node, int option);

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:09:38 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 20:19:25 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/22 16:44:58 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	execute_built_in_commands(t_command *cmd, t_gc *gc,
 	if (ft_strcmp(cmd->argv[0], "echo") == 0)
 		echo_command(cmd);
 	else if (ft_strcmp(cmd->argv[0], "pwd") == 0)
-		pwd_command();
+		pwd_command(cmd);
 	else if (ft_strcmp(cmd->argv[0], "cd") == 0)
 		cd_command(cmd);
 	else if (ft_strcmp(cmd->argv[0], "exit") == 0)
