@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/22 18:24:06 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/22 18:51:08 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 	t_fds	fds;
 	pid_t	proc_pid;
 	int		status;
+	int		saved_stdout;
 
 	fds.prev_fd = -1;
 	while (cmd)
@@ -49,7 +50,15 @@ void	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 			return ;
 		}
 		if (is_builtin(cmd->argv[0]))
+		{
+			if (cmd->next)
+			{
+				saved_stdout = dup(STDOUT_FILENO);
+				dup2(fds.pipe_fd[1], STDOUT_FILENO);
+			}
 			execute_built_in_commands(cmd, gc, formatted_line, env_list);
+			dup2(saved_stdout, STDOUT_FILENO);
+		}
 		else
 		{
 			proc_pid = fork();
