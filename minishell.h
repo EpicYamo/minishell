@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/22 17:21:29 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/22 18:06:26 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,5 +134,11 @@ void		swap_env_nodes(t_env *a, t_env *b);
 void		export_malloc_fail_handler(t_env *copy, t_env *node, int option);
 void		unset_command(t_command *cmd, t_env **env_list);
 void		print_commands(t_command *cmd);
+
+int			env_list_size(t_env *env);
+char		**get_envp(t_env *env_list);
+void		ft_free_split(char **split);
+char		*get_env_value(t_env *env_list, const char *key);
+char		*resolve_path(const char *cmd, t_env *env_list);
 
 #endif
