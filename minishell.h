@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/22 18:06:26 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/28 22:28:11 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # define EXIT_STATUS_TOKEN "__ENCP0MAClAKDJV_MINISHELL_EXIT_STATUS_ENC__"
 # define DOLLAR_SIGN_TOKEN "__ENCP0MAClAKDJV_DOLLAR_SIGN_ENC__"
 # include <stddef.h>
+# include "executor/executor.h"
 
 typedef struct s_command
 {
@@ -84,6 +85,9 @@ char		**ft_split(char const *s, char c);
 void		*ft_calloc(size_t count, size_t size);
 char		*get_minishell_env(char *key, t_env *env_list);
 void		free_string_array(char **str_arr);
+int			env_list_size(t_env *env);
+char		**get_envp(t_env *env_list);
+char		*resolve_path(const char *cmd, t_env *env_list);
 void		print_banner(void);
 void		handle_sigint(int signum);
 t_env		*create_env_list(char **envp);
@@ -134,11 +138,6 @@ void		swap_env_nodes(t_env *a, t_env *b);
 void		export_malloc_fail_handler(t_env *copy, t_env *node, int option);
 void		unset_command(t_command *cmd, t_env **env_list);
 void		print_commands(t_command *cmd);
-
-int			env_list_size(t_env *env);
-char		**get_envp(t_env *env_list);
-void		ft_free_split(char **split);
-char		*get_env_value(t_env *env_list, const char *key);
-char		*resolve_path(const char *cmd, t_env *env_list);
+void		execute_non_built_in_command(t_command *cmd, t_env *env_list, t_io *io);
 
 #endif

@@ -6,140 +6,80 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/22 18:51:08 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/28 22:28:02 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include "executor.h"
 #include <unistd.h>
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <sys/wait.h>
-#include <fcntl.h>
 
-typedef struct s_file_descriptors
-{
-	int	pipe_fd[2];
-	int	prev_fd;
-}	t_fds;
-
-static void	setup_redirects(t_command *cmd);
-static void	execute_command_in_child_process(t_command *cmd, t_gc *gc, t_env *env_list, t_fds *fds);
+static int	skip_command(t_command *cmd);
+static int	apply_pipe(t_io *io);
+static void	setup_built_in_redirects(t_command *cmd, t_io *io);
 
 void	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 				t_env *env_list)
 {
-	t_fds	fds;
-	pid_t	proc_pid;
-	int		status;
-	int		saved_stdout;
+	t_io	io;
 
-	fds.prev_fd = -1;
+	io.prev_fd = -1;
+	io.built_in_io_flag = 0;
+	io.original_stdout = dup(STDOUT_FILENO);
+	io.original_stdout = dup(STDIN_FILENO);
 	while (cmd)
 	{
-		if (!cmd->argv || !cmd->argv[0])
-		{
-			cmd = cmd->next;
+		if (skip_command(cmd) != 0)
 			continue ;
-		}
-		if (cmd->next && (pipe(fds.pipe_fd) == -1))
-		{
-			perror("pipe");
+		if (apply_pipe(&io) != 0)
 			return ;
-		}
 		if (is_builtin(cmd->argv[0]))
 		{
-			if (cmd->next)
-			{
-				saved_stdout = dup(STDOUT_FILENO);
-				dup2(fds.pipe_fd[1], STDOUT_FILENO);
-			}
+			setup_built_in_redirects(cmd, &io);
 			execute_built_in_commands(cmd, gc, formatted_line, env_list);
-			dup2(saved_stdout, STDOUT_FILENO);
 		}
 		else
-		{
-			proc_pid = fork();
-			if (proc_pid == 0)
-				execute_command_in_child_process(cmd, gc, env_list, &fds);
-			else if (proc_pid < 0)
-			{
-				perror("fork");
-				return ;
-			}
-			if (waitpid(proc_pid, &status, 0) == -1)
-			{
-				perror("waitpid");
-				return ;
-			}
-			if (fds.prev_fd != -1)
-				close(fds.prev_fd);
-			if (cmd->next)
-			{
-				close(fds.pipe_fd[1]);
-				fds.prev_fd = fds.pipe_fd[0];
-			}
-		}
-		if (cmd->heredoc == 1)
-			unlink(cmd->infile);
+			execute_non_built_in_command(cmd, env_list, &io);
 		cmd = cmd->next;
 	}
+	if (cmd->heredoc == 1)
+		unlink(cmd->infile);
 }
 
-static void	setup_redirects(t_command *cmd)
+static int	skip_command(t_command *cmd)
 {
-	int	fd;
-
-	if (cmd->infile)
+	if (!cmd->argv || !cmd->argv[0])
 	{
-		fd = open(cmd->infile, O_RDONLY);
-		if (fd == -1)
-			perror("infile");
-		else
-		{
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
+		cmd = cmd->next;
+		return (1);
 	}
-	if (cmd->outfile)
-	{
-		if (cmd->append == 1)
-			fd = open(cmd->outfile, O_WRONLY | O_APPEND, 0644);
-		else
-			fd = open(cmd->outfile, O_WRONLY, 0644);
-		if (fd == -1)
-			perror("outfile");
-		else
-		{
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-	}
+	return (0);
 }
 
-static void	execute_command_in_child_process(t_command *cmd, t_gc *gc, t_env *env_list, t_fds *fds)
+static int	apply_pipe(t_io *io)
 {
-	char	*path;
-
-	(void)gc;
-	setup_redirects(cmd);
-	if (fds->prev_fd != -1)
+	if (pipe((*io).pipe_fd) == -1)
 	{
-		dup2(fds->prev_fd, STDIN_FILENO);
-		close(fds->prev_fd);
+		perror("pipe");
+		return (1);
 	}
+	return (0);
+}
+
+static void	setup_built_in_redirects(t_command *cmd, t_io *io)
+{
 	if (cmd->next)
 	{
-		close(fds->pipe_fd[0]);
-		dup2(fds->pipe_fd[1], STDOUT_FILENO);
-		close(fds->pipe_fd[1]);
+		dup2((*io).pipe_fd[1], STDOUT_FILENO);
+		(*io).built_in_io_flag = 1;
 	}
-	path = resolve_path(cmd->argv[0], env_list);
-	if (execve(path, cmd->argv, get_envp(env_list)) == -1)
+	else
 	{
-		perror("execve");
-		exit(127);
-	}
+		if ((*io).built_in_io_flag == 1)
+		{
+			dup2((*io).original_stdout, STDOUT_FILENO);
+			(*io).built_in_io_flag = 0;
+		}
+	}	
 }
