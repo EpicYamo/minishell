@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/28 22:28:02 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/29 19:26:24 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,15 +36,16 @@ void	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 			return ;
 		if (is_builtin(cmd->argv[0]))
 		{
+			write(io.original_stdout, "reached\n", 8);
 			setup_built_in_redirects(cmd, &io);
 			execute_built_in_commands(cmd, gc, formatted_line, env_list);
 		}
 		else
 			execute_non_built_in_command(cmd, env_list, &io);
+		if (cmd->heredoc == 1)
+			unlink(cmd->infile);
 		cmd = cmd->next;
 	}
-	if (cmd->heredoc == 1)
-		unlink(cmd->infile);
 }
 
 static int	skip_command(t_command *cmd)
