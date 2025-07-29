@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 20:47:06 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/28 21:18:23 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/29 21:23:51 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@
 typedef struct s_io
 {
 	int	pipe_fd[2];
-	int	prev_fd;
-	int	original_stdout;
-	int	original_stdin;
-	int	built_in_io_flag;
+	int	input_redir_flag;
+	int	std_out;
+	int	std_input;
 	int	exit_status;
 }	t_io;
 

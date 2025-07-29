@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/29 19:27:56 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/29 22:02:45 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-static int	skip_command(t_command *cmd);
+static int	skip_command(t_command **cmd);
 static int	apply_pipe(t_io *io);
 static void	setup_built_in_redirects(t_command *cmd, t_io *io);
 
@@ -24,16 +24,15 @@ void	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 {
 	t_io	io;
 
-	io.prev_fd = -1;
-	io.built_in_io_flag = 0;
-	io.original_stdout = dup(STDOUT_FILENO);
-	io.original_stdout = dup(STDIN_FILENO);
+	io.input_redir_flag = 0;
+	io.std_input = dup(STDIN_FILENO);
+	io.std_out = dup(STDOUT_FILENO);
+	if (apply_pipe(&io) != 0)
+		return ;
 	while (cmd)
 	{
-		if (skip_command(cmd) != 0)
+		if (skip_command(&cmd) != 0)
 			continue ;
-		if (apply_pipe(&io) != 0)
-			return ;
 		if (is_builtin(cmd->argv[0]))
 		{
 			setup_built_in_redirects(cmd, &io);
@@ -45,13 +44,16 @@ void	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 			unlink(cmd->infile);
 		cmd = cmd->next;
 	}
+	//dup2(io.std_input, STDIN_FILENO);
+	dup2(io.std_out, STDOUT_FILENO);
+	write(STDOUT_FILENO, "reached\n", 8);
 }
 
-static int	skip_command(t_command *cmd)
+static int	skip_command(t_command **cmd)
 {
-	if (!cmd->argv || !cmd->argv[0])
+	if (((*cmd)->argv == NULL) || ((*cmd)->argv[0] == NULL))
 	{
-		cmd = cmd->next;
+		(*cmd) = (*cmd)->next;
 		return (1);
 	}
 	return (0);
@@ -72,14 +74,11 @@ static void	setup_built_in_redirects(t_command *cmd, t_io *io)
 	if (cmd->next)
 	{
 		dup2((*io).pipe_fd[1], STDOUT_FILENO);
-		(*io).built_in_io_flag = 1;
+		(*io).input_redir_flag = 1;
 	}
 	else
 	{
-		if ((*io).built_in_io_flag == 1)
-		{
-			dup2((*io).original_stdout, STDOUT_FILENO);
-			(*io).built_in_io_flag = 0;
-		}
+		(*io).input_redir_flag = 0;
+		dup2((*io).std_out, STDOUT_FILENO);
 	}	
 }

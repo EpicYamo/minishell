@@ -14,7 +14,7 @@ SRC		:= minishell.c \
 LIBS	:= -lreadline
 NAME	:=	minishell
 CC		:=	cc
-CFLAGS	:=	#-Wall -Wextra -Werror
+CFLAGS	:=	-Wall -Wextra -Werror
 RM		:=	rm -rf
 OBJ_DIR := objects
 OBJ		:= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

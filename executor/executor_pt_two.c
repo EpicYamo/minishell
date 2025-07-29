@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/28 22:28:42 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/29 22:03:07 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 static void	execute_command_in_child_process(t_command *cmd, t_env *env_list, t_io *io);
-static void	setup_child_proc_redirects(t_command *cmd, t_io *io);
+static void	setup_child_proc_redirects(t_command *cmd);
 
 void	execute_non_built_in_command(t_command *cmd, t_env *env_list, t_io *io)
 {
@@ -36,18 +36,13 @@ void	execute_non_built_in_command(t_command *cmd, t_env *env_list, t_io *io)
 		perror("fork");
 		return ;
 	}
-	if (waitpid(proc_pid, &(*io).exit_status, 0) == -1)
+	if (waitpid(proc_pid, &io->exit_status, 0) == -1)
 	{
 		perror("waitpid");
 		return ;
 	}
-	if ((*io).prev_fd != -1)
-		close((*io).prev_fd);
-	if (cmd->next)
-	{
-		close((*io).pipe_fd[1]);
-		(*io).prev_fd = (*io).pipe_fd[0];
-	}
+	if (((*io).input_redir_flag == 1) && (cmd->next == NULL))
+		(*io).input_redir_flag = 0;
 }
 
 static void	execute_command_in_child_process(t_command *cmd, t_env *env_list, t_io *io)
@@ -55,18 +50,15 @@ static void	execute_command_in_child_process(t_command *cmd, t_env *env_list, t_
 	char	*path;
 
 	signal(SIGINT, handle_sigint);
-	setup_child_proc_redirects(cmd, io);
-	if (io->prev_fd != -1)
-	{
-		dup2(io->prev_fd, STDIN_FILENO);
-		close(io->prev_fd);
-	}
+	if ((*io).input_redir_flag == 1)
+		dup2((*io).pipe_fd[0], STDIN_FILENO);
+	else
+		dup2((*io).std_input, STDIN_FILENO);
 	if (cmd->next)
-	{
-		close(io->pipe_fd[0]);
 		dup2(io->pipe_fd[1], STDOUT_FILENO);
-		close(io->pipe_fd[1]);
-	}
+	else
+		dup2((*io).std_out, STDOUT_FILENO);
+	setup_child_proc_redirects(cmd);
 	path = resolve_path(cmd->argv[0], env_list);
 	if (execve(path, cmd->argv, get_envp(env_list)) == -1)
 	{
@@ -75,7 +67,7 @@ static void	execute_command_in_child_process(t_command *cmd, t_env *env_list, t_
 	}
 }
 
-static void	setup_child_proc_redirects(t_command *cmd, t_io *io)
+static void	setup_child_proc_redirects(t_command *cmd)
 {
 	int	fd;
 
@@ -89,11 +81,6 @@ static void	setup_child_proc_redirects(t_command *cmd, t_io *io)
 			dup2(fd, STDIN_FILENO);
 			close(fd);
 		}
-	}
-	else if (io->built_in_io_flag == 1)
-	{
-		dup2((*io).pipe_fd[0], STDIN_FILENO);
-		close((*io).pipe_fd[0]);
 	}
 	if (cmd->outfile)
 	{
