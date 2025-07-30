@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/28 22:28:11 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/30 17:57:50 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,15 @@
 # define EXIT_STATUS_TOKEN "__ENCP0MAClAKDJV_MINISHELL_EXIT_STATUS_ENC__"
 # define DOLLAR_SIGN_TOKEN "__ENCP0MAClAKDJV_DOLLAR_SIGN_ENC__"
 # include <stddef.h>
-# include "executor/executor.h"
+
+typedef struct s_io
+{
+	int	pipe_fd[2];
+	int	prev_fd;
+	int	original_stdin;
+	int	original_stdout;
+	int	exit_status;
+}	t_io;
 
 typedef struct s_command
 {
@@ -25,6 +33,7 @@ typedef struct s_command
 	char				*outfile;
 	int					append;
 	int					heredoc;
+	t_io				*io;
 	struct s_command	*next;
 }	t_command;
 
@@ -137,7 +146,8 @@ int			split_key_value(char *arg, char **key, char **value);
 void		swap_env_nodes(t_env *a, t_env *b);
 void		export_malloc_fail_handler(t_env *copy, t_env *node, int option);
 void		unset_command(t_command *cmd, t_env **env_list);
-void		print_commands(t_command *cmd);
-void		execute_non_built_in_command(t_command *cmd, t_env *env_list, t_io *io);
+void		execute_non_built_in_command(t_command *cmd, t_env *env_list);
+void		exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
+				char **formatted_line, t_env *env_list);
 
 #endif

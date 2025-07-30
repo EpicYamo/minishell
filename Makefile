@@ -9,8 +9,7 @@ SRC		:= minishell.c \
 			built_ins/built_in_pt_one.c built_ins/built_in_pt_two.c built_ins/built_in_pt_three.c \
 			built_ins/built_in_pt_four.c built_ins/built_in_pt_five.c built_ins/built_in_pt_six.c \
 			built_ins/built_in_pt_seven.c built_ins/built_in_pt_eight.c \
-			executor/executor_pt_one.c executor/executor_pt_two.c \
-			temp_functions/temp_funcs.c
+			executor/executor_pt_one.c executor/executor_pt_two.c executor/executor_pt_three.c
 LIBS	:= -lreadline
 NAME	:=	minishell
 CC		:=	cc
