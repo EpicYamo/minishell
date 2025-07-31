@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/30 17:57:50 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/31 15:42:52 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,5 +149,7 @@ void		unset_command(t_command *cmd, t_env **env_list);
 void		execute_non_built_in_command(t_command *cmd, t_env *env_list);
 void		exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
 				char **formatted_line, t_env *env_list);
+void		setup_infile_redirect(t_command *cmd);
+void		setup_outfile_redirect(t_command *cmd);
 
 #endif

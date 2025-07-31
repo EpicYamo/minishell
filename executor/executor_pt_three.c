@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/30 17:51:07 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/31 15:46:06 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,12 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 static void	exec_non_built_in_com_in_child_proc(t_command *cmd,
 				t_env *env_list);
-static void	setup_infile_redirect(t_command *cmd);
-static void	setup_outfile_redirect(t_command *cmd);
+static void	replace_process_with_execution(t_command *cmd, t_env *env_list);
 
 void	execute_non_built_in_command(t_command *cmd, t_env *env_list)
 {
@@ -51,8 +49,6 @@ void	execute_non_built_in_command(t_command *cmd, t_env *env_list)
 
 static void	exec_non_built_in_com_in_child_proc(t_command *cmd, t_env *env_list)
 {
-	char	*path;
-
 	signal(SIGINT, handle_sigint);
 	if (cmd->next)
 		dup2(cmd->io->pipe_fd[1], STDOUT_FILENO);
@@ -65,47 +61,34 @@ static void	exec_non_built_in_com_in_child_proc(t_command *cmd, t_env *env_list)
 	}
 	setup_infile_redirect(cmd);
 	setup_outfile_redirect(cmd);
+	replace_process_with_execution(cmd, env_list);
+}
+
+static void	replace_process_with_execution(t_command *cmd, t_env *env_list)
+{
+	char	**envp;
+	char	*path;
+
 	path = resolve_path(cmd->argv[0], env_list);
-	if (execve(path, cmd->argv, get_envp(env_list)) == -1)
+	if (!path)
 	{
+		perror("malloc");
+		exit(127);
+	}
+	envp = get_envp(env_list);
+	if (!envp)
+	{
+		free(path);
+		perror("malloc");
+		exit(127);
+	}
+	if (execve(path, cmd->argv, envp) == -1)
+	{
+		free(path);
+		free_string_array(envp);
 		perror("execve");
 		exit(127);
 	}
-}
-
-static void	setup_infile_redirect(t_command *cmd)
-{
-	int	fd;
-
-	if (cmd->infile)
-	{
-		fd = open(cmd->infile, O_RDONLY);
-		if (fd == -1)
-			perror("infile");
-		else
-		{
-			dup2(fd, STDIN_FILENO);
-			close(fd);
-		}
-	}
-}
-
-static void	setup_outfile_redirect(t_command *cmd)
-{
-	int	fd;
-
-	if (cmd->outfile)
-	{
-		if (cmd->append == 1)
-			fd = open(cmd->outfile, O_WRONLY | O_APPEND, 0644);
-		else
-			fd = open(cmd->outfile, O_WRONLY, 0644);
-		if (fd == -1)
-			perror("outfile");
-		else
-		{
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-		}
-	}
+	free(path);
+	free_string_array(envp);
 }

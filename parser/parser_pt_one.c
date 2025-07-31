@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 22:07:48 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/31 15:18:56 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,16 @@ static int	initialize_command_if_needed(t_command **cmd, t_command **head,
 static int	handle_pipe_token(char **tokens, t_command **cmd,
 	t_gc *gc, t_parser_cursor *cursor)
 {
+	if (((tokens[cursor->i][0] == '|') && (tokens[cursor->i][1] == '\0'))
+		&& (tokens[(cursor->i) + 1] != NULL))
+	{
+		if (((tokens[(cursor->i) + 1][0] == '|')
+			&& (tokens[(cursor->i) + 1][1] == '\0')))
+		{
+			printf("Y-Shell: syntax error near unexpected token `|'\n");
+			return (-1);
+		}
+	}
 	if (tokens[cursor->i][0] == '|' && tokens[cursor->i][1] == '\0')
 	{
 		(*cmd)->argv[cursor->argc] = NULL;
