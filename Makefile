@@ -3,14 +3,14 @@ SRC		:= minishell.c \
 			lexer/lexer_pt_five.c lexer/lexer_pt_six.c lexer/lexer_pt_seven.c \
 			parser/parser_pt_one.c parser/parser_pt_two.c parser/parser_pt_three.c \
 			parser/environment_parser.c \
-			utils/utils_pt_one.c utils/utils_pt_two.c utils/utils_pt_three.c utils/utils_pt_four.c\
-			utils/utils_pt_five.c utils/utils_pt_six.c utils/utils_pt_seven.c utils/garbage_collector.c \
-			utils/banner.c utils/signals.c \
+			utils/utils_pt_one.c utils/utils_pt_two.c utils/utils_pt_three.c utils/utils_pt_four.c \
+			utils/utils_pt_five.c utils/utils_pt_six.c utils/utils_pt_seven.c utils/utils_pt_eight.c \
+			utils/garbage_collector.c utils/banner.c utils/signals.c \
 			built_ins/built_in_pt_one.c built_ins/built_in_pt_two.c built_ins/built_in_pt_three.c \
 			built_ins/built_in_pt_four.c built_ins/built_in_pt_five.c built_ins/built_in_pt_six.c \
 			built_ins/built_in_pt_seven.c built_ins/built_in_pt_eight.c \
 			executor/executor_pt_one.c executor/executor_pt_two.c executor/executor_pt_three.c \
-			executor/executor_pt_four.c
+			executor/executor_pt_four.c executor/executor_pt_five.c
 LIBS	:= -lreadline
 NAME	:=	minishell
 CC		:=	cc

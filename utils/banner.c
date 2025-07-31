@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:37 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/30 18:00:10 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/01 01:09:56 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	print_banner_pt_two(void)
 	printf("    \033[0;30m█");
 	printf("                                              █\033[0m\n");
 	printf("    \033[0;30m█                 \033[0;31mY-");
-	printf("Shell V1.4\033[0m                 \033[0;30m█\033[0m\n");
+	printf("Shell V1.6\033[0m                 \033[0;30m█\033[0m\n");
 	printf("    \033[0;30m█          \033[0;31mgithub.com/");
 	printf("epicyamo — Arda\033[0m          \033[0;30m█\033[0m\n");
 	printf("    \033[0;31m█▄▄▄▄▄▄▄▄▄");

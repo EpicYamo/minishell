@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/30 17:56:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/01 01:07:51 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,17 @@ static void	close_fds_for_child_proc(t_command *cmd)
 	close(cmd->io->pipe_fd[0]);
 	if (cmd->io->prev_fd != -1)
 		close(cmd->io->prev_fd);
+}
+
+int	execute_single_built_in_command(t_command **cmd, t_gc *gc,
+	char **formatted_line, t_env *env_list)
+{
+	if ((*cmd) && ((*cmd)->next == NULL) && (is_builtin((*cmd)->argv[0])))
+	{
+		if (apply_exit_status_token((*cmd), gc) != 0)
+			return (1);
+		execute_built_in_commands((*cmd), gc, formatted_line, env_list);
+		(*cmd) = (*cmd)->next;
+	}
+	return (0);
 }
