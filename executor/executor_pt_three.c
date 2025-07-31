@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/31 15:46:06 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/07/31 16:04:31 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,14 @@ static void	replace_process_with_execution(t_command *cmd, t_env *env_list)
 	path = resolve_path(cmd->argv[0], env_list);
 	if (!path)
 	{
-		perror("malloc");
+		perror("path");
 		exit(127);
 	}
 	envp = get_envp(env_list);
 	if (!envp)
 	{
 		free(path);
-		perror("malloc");
+		perror("envp");
 		exit(127);
 	}
 	if (execve(path, cmd->argv, envp) == -1)
