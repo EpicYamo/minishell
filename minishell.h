@@ -6,15 +6,15 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 01:09:22 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/01 03:38:43 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define EXIT_STATUS_TOKEN "__MINISHELL_EXIT_STATUS_ENC__"
-# define DOLLAR_SIGN_TOKEN "__ENCP0MAClAKDJV_DOLLAR_SIGN_ENC__"
+# define EXIT_STATUS_TOKEN "--ENCP0MAClAKDJV_MINISHELL_EXIT_STATUS_ENC--"
+# define DOLLAR_SIGN_TOKEN "--ENCP0MAClAKDJV_DOLLAR_SIGN_ENC--"
 # include <stddef.h>
 
 typedef struct s_io
@@ -150,10 +150,14 @@ void		unset_command(t_command *cmd, t_env **env_list);
 void		execute_non_built_in_command(t_command *cmd, t_env *env_list);
 void		exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
 				char **formatted_line, t_env *env_list);
-void		setup_infile_redirect(t_command *cmd);
+void		setup_infile_redirect(t_command *cmd, t_env *env_list);
 void		setup_outfile_redirect(t_command *cmd);
 int			apply_exit_status_token(t_command *cmd, t_gc *gc);
 int			execute_single_built_in_command(t_command **cmd, t_gc *gc,
 				char **formatted_line, t_env *env_list);
-
+int			expand_dollar_sign_in_heredoc(t_command *cmd, t_env *env_list);
+int			modify_apply_heredoc_file(t_command *cmd, char *infile,
+				t_env *env_list);
+int			apply_status_sign(char **argv, t_command *cmd, t_gc *gc);
+int			check_status_sign_existance(char *argv);
 #endif

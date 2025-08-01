@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 23:23:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 00:56:42 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/01 03:12:44 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static int	apply_status_sign(char **argv, t_command *cmd, t_gc *gc);
 static int	apply_status_token(char *replacement, t_command *cmd,
 				t_parser_cursor *cursor);
-static int	check_status_sign_existance(char *argv);
 static void	replace_argv(char **argv, char *replacement,
 				t_parser_cursor cursor);
 
@@ -38,7 +36,7 @@ int	apply_exit_status_token(t_command *cmd, t_gc *gc)
 	return (0);
 }
 
-static int	apply_status_sign(char **argv, t_command *cmd, t_gc *gc)
+int	apply_status_sign(char **argv, t_command *cmd, t_gc *gc)
 {
 	char			*replacement;
 	t_parser_cursor	cursor;
@@ -97,7 +95,7 @@ static int	apply_status_token(char *replacement, t_command *cmd,
 	return (0);
 }
 
-static int	check_status_sign_existance(char *argv)
+int	check_status_sign_existance(char *argv)
 {
 	int	status_sign_count;
 	int	i;
