@@ -6,13 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:18 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 02:56:46 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:45:02 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include <unistd.h>
 
 static int	count_dollar_signs(char *line);
 
@@ -23,14 +23,14 @@ t_gc	*init_garbage_collector(char *line)
 	gc = malloc(sizeof(t_gc));
 	if (!gc)
 	{
-		printf("\033[0;31mGarbage collector initialization failed\033[0m\n");
+		write(2, "Garbage collector initialization failed\n", 40);
 		return (NULL);
 	}
 	gc->ptrs = malloc(sizeof(void *) * (1024 + (count_dollar_signs(line))
 				+ (10 * count_tokens(line))));
 	if (!gc->ptrs)
 	{
-		printf("\033[0;31mGarbage collector initialization failed\033[0m\n");
+		write(2, "Garbage collector initialization failed\n", 40);
 		free(gc);
 		return (NULL);
 	}

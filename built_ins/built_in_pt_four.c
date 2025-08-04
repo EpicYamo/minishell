@@ -6,12 +6,12 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 21:58:23 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 18:06:51 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:08:00 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 
 static int		export_command_pt_two(t_env **env_list, char *key, char *value);
@@ -36,7 +36,7 @@ void	export_command(t_command *cmd, t_env **env_list)
 	{
 		if (!is_valid_identifier(cmd->argv[i]))
 		{
-			printf("export: `%s`: not a valid identifier\n", cmd->argv[i]);
+			write_identifier_error(cmd->argv[i]);
 			(*cmd->io->exit_stat_ptr) = 1;
 			i++;
 			continue ;
@@ -82,7 +82,7 @@ static int	export_command_pt_three(t_env **env_list, char *key, char *value)
 	{
 		free(key);
 		free(value);
-		printf("ALLOCATION_ERROR for Export Command\n");
+		write(2, "ALLOCATION_ERROR for Export Command\n", 36);
 		return (1);
 	}
 	new_node->key = key;

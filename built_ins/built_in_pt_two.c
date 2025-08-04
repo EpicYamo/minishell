@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:48:24 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 18:18:13 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:14:02 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,13 @@ void	echo_command(t_command *cmd)
 	{
 		while (cmd->argv[i])
 		{
-			printf("%s", cmd->argv[i]);
+			write(1, cmd->argv[i], ft_strlen(cmd->argv[i]));
 			if (cmd->argv[i + 1])
-				printf(" ");
+				write(1, " ", 1);
 			i++;
 		}
 		if (newline)
-			printf("\n");
+			write(1, "\n", 1);
 	}
 }
 

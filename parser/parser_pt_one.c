@@ -6,13 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/31 15:18:56 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:50:49 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include <unistd.h>
 
 static void	init_variables(t_parser_cursor *cursor, t_command **head,
 				t_command **cmd);
@@ -84,7 +84,7 @@ static int	handle_pipe_token(char **tokens, t_command **cmd,
 		if (((tokens[(cursor->i) + 1][0] == '|')
 			&& (tokens[(cursor->i) + 1][1] == '\0')))
 		{
-			printf("Y-Shell: syntax error near unexpected token `|'\n");
+			write(2, "Y-Shell: syntax error near unexpected token `|'\n", 48);
 			return (-1);
 		}
 	}

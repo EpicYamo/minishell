@@ -6,13 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/15 15:46:31 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:49:39 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include <unistd.h>
 #include <limits.h>
 
 static int	split_tokens_pt_two(const char *input, char **tokens,
@@ -27,21 +27,19 @@ char	**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list)
 
 	if (has_unclosed_quotes(input))
 	{
-		printf("\033[0;31mSyntax error: unclosed quote\033[0m\n");
+		write(2, "Syntax error: unclosed quote\n", 29);
 		return (NULL);
 	}
 	token_count = count_tokens(input);
 	tokens = gc_malloc(garbage_c, (sizeof(char *) * (token_count + 1)));
 	if (!tokens)
 	{
-		printf("\033[0;31mSystem error: memory allocation ");
-		printf("failed in \"split_tokens\" function\033[0m\n");
+		write(2, "Malloc: tokenization failed\n", 28);
 		return (NULL);
 	}
 	if (split_tokens_pt_two(input, tokens, garbage_c, env_list) != 0)
 	{
-		printf("\033[0;31mSystem error: memory allocation ");
-		printf("failed in \"split_tokens\" function\033[0m\n");
+		write(2, "Malloc: tokenization failed\n", 28);
 		return (NULL);
 	}
 	return (tokens);

@@ -6,11 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 01:08:37 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 01:08:38 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:20:14 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../minishell.h"
 #include <stdlib.h>
+#include <unistd.h>
 
 static char	*ft_char(char *s, unsigned int number, long len)
 {
@@ -59,4 +61,12 @@ char	*ft_itoa(int n)
 		number = n;
 	s = ft_char(s, number, len);
 	return (s);
+}
+
+void	write_identifier_error(char *argv)
+{
+	write(2, "export: `", 9);
+	if (argv != NULL)
+		write(2, argv, ft_strlen(argv));
+	write(2, "`: not a valid identifier\n", 26);
 }

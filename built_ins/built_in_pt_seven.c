@@ -6,12 +6,12 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 22:10:13 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 20:19:08 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:10:08 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdio.h>
+#include <unistd.h>
 #include <stdlib.h>
 
 static void	unset_command_pt_two(t_env **env_list, t_env **prev_env_node);
@@ -45,7 +45,7 @@ void	export_malloc_fail_handler(t_env *copy, t_env *node, int option)
 		free(node);
 		free_env_list(copy);
 	}
-	printf("ALLOCATION_ERROR for Export Command\n");
+	write(2, "ALLOCATION_ERROR for Export Command\n", 36);
 }
 
 void	unset_command(t_command *cmd, t_env **env_list)

@@ -6,13 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:46:31 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 19:16:46 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:15:25 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdlib.h>
-#include <stdio.h>
+#include <unistd.h>
 
 static t_env	*create_env_node(char *entry, t_env_error *err);
 static void		create_env_node_pt_two(t_env *node, t_env_error *err);
@@ -36,7 +36,7 @@ t_env	*create_env_list(char **envp)
 		else if (err == ENV_ALLOC_ERROR)
 		{
 			free_env_list(env_list);
-			printf("ENV_ALLOCATION_ERROR\n");
+			write(2, "ENV_ALLOCATION_ERROR\n", 21);
 			exit(EXIT_FAILURE);
 		}
 		i++;

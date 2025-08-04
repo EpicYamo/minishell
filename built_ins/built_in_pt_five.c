@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 22:26:09 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 17:58:43 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:04:37 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ int	split_key_value(char *arg, char **key, char **value)
 		*key = ft_strndup(arg, eq - arg);
 		if (!(*key))
 		{
-			printf("ALLOCATION_ERROR for Export Command\n");
+			write(2, "ALLOCATION_ERROR for Export Command\n", 36);
 			return (1);
 		}
 		*value = ft_strdup(eq + 1);
 		if (!(*value))
 		{
 			free(key);
-			printf("ALLOCATION_ERROR for Export Command\n");
+			write(2, "ALLOCATION_ERROR for Export Command\n", 36);
 			return (1);
 		}
 	}
@@ -52,7 +52,7 @@ static int	split_key_value_pt_two(char *arg, char **key, char **value)
 	*key = ft_strdup(arg);
 	if (!(*key))
 	{
-		printf("ALLOCATION_ERROR for Export Command\n");
+		write(2, "ALLOCATION_ERROR for Export Command\n", 36);
 		return (1);
 	}
 	return (0);
@@ -74,7 +74,7 @@ void	cd_command(t_command *cmd, t_env *env_list)
 	{
 		home = get_minishell_env("HOME", env_list);
 		if (!home)
-			printf("cd: HOME not set\n");
+			write(2, "cd: HOME not set\n", 17);
 		if ((home != NULL) && (chdir(home) != 0))
 			perror("cd");
 		else if (home != NULL)

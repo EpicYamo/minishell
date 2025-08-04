@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 17:55:02 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:40:57 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ t_command	*new_command(t_gc *gc);
 int			handle_redirection_token(char **tokens, t_command *cmd, t_gc *gc,
 				t_parser_cursor *cursor);
 int			handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc);
-void		command_executor(t_command *cmd, t_gc *gc, char	**formatted_line,
+int			command_executor(t_command *cmd, t_gc *gc, char	**formatted_line,
 				t_env *env_list);
 int			is_builtin(const char *cmd);
 void		execute_built_in_commands(t_command *cmd, t_gc *gc,
@@ -166,5 +166,6 @@ int			apply_status_sign(char **argv, t_command *cmd, t_gc *gc);
 int			check_status_sign_existance(char *argv);
 int			skip_command(t_command **cmd);
 int			apply_pipe(t_io *io);
+void		write_identifier_error(char *argv);
 
 #endif

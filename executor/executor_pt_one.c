@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 18:27:47 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 19:01:49 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ static int	init_io(t_io *io, t_command *cmd, t_gc *gc);
 static void	init_io_stack_vars(t_io *io, t_command *cmd, int *i);
 static void	return_to_original_state(t_io io);
 
-void	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
+int	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 	t_env *env_list)
 {
 	t_io	io_local;
 
 	if (init_io(&io_local, cmd, gc) != 0)
-		return ;
+		return (2);
 	if (execute_single_built_in_command(&cmd, gc,
 			formatted_line, env_list) != 0)
-		return ;
+		return (2);
 	signal(SIGINT, SIG_IGN);
 	while (cmd)
 	{
@@ -48,6 +48,7 @@ void	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 		cmd = cmd->next;
 	}
 	return_to_original_state(io_local);
+	return (io_local.exit_status);
 }
 
 static int	init_io(t_io *io, t_command *cmd, t_gc *gc)
@@ -55,8 +56,8 @@ static int	init_io(t_io *io, t_command *cmd, t_gc *gc)
 	int	*pids_arr;
 	int	i;
 
-	(*io).exit_status = *(cmd->io->exit_stat_ptr);
-	(*io).exit_stat_ptr = cmd->io->exit_stat_ptr;
+	(*io).exit_status = cmd->io->exit_status;
+	(*io).exit_stat_ptr = (&(*io).exit_status);
 	init_io_stack_vars(io, cmd, &i);
 	pids_arr = gc_malloc(gc, (sizeof(int) * i));
 	if (!pids_arr)
@@ -95,7 +96,10 @@ static void	return_to_original_state(t_io io)
 	while (i < io.proc_count)
 	{
 		if (waitpid(io.pids[i], io.exit_stat_ptr, 0) == -1)
+		{
 			perror("waitpid");
+			(*io.exit_stat_ptr) = 2;
+		}
 		else if (WIFEXITED(*io.exit_stat_ptr))
 			(*io.exit_stat_ptr) = WEXITSTATUS(*io.exit_stat_ptr);
 		i++;
