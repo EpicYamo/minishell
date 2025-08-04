@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 22:11:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:28:40 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,15 @@ static void	shell_loop(t_env *env_list)
 static void	shell_loop_pt_two(char *line, t_env *env_list,
 	char	**formatted_line)
 {
+	static int	exit_status = 0;
+	t_io		shell_io;
 	char		**tokens;
 	t_command	*cmd;
 	t_gc		*garbage_c;
 
 	add_history(line);
 	tokens = NULL;
+	shell_io.exit_stat_ptr = &exit_status;
 	garbage_c = init_garbage_collector(line);
 	if (!garbage_c)
 		return ;
@@ -83,7 +86,10 @@ static void	shell_loop_pt_two(char *line, t_env *env_list,
 	{
 		cmd = parse_tokens(tokens, garbage_c);
 		if (cmd != NULL)
+		{
+			cmd->io = &shell_io;
 			command_executor(cmd, garbage_c, formatted_line, env_list);
+		}
 	}
 	gc_collect_all(garbage_c);
 }
