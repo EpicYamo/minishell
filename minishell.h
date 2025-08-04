@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 03:38:43 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 17:55:02 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,15 @@
 
 typedef struct s_io
 {
-	int	pipe_fd[2];
-	int	prev_fd;
-	int	original_stdin;
-	int	original_stdout;
-	int	exit_status;
+	int		pipe_fd[2];
+	int		prev_fd;
+	int		original_stdin;
+	int		original_stdout;
+	int		exit_status;
+	int		*pids;
+	int		proc_count;
+	int		*exit_stat_ptr;
+	char	*heredoc_path;
 }	t_io;
 
 typedef struct s_command
@@ -135,7 +139,7 @@ void		execute_built_in_commands(t_command *cmd, t_gc *gc,
 				char **formatted_line, t_env *env_list);
 void		echo_command(t_command *cmd);
 void		pwd_command(t_command *cmd);
-void		cd_command(t_command *cmd);
+void		cd_command(t_command *cmd, t_env *env_list);
 void		exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 				t_env *env_list);
 void		env_command(t_command *cmd, t_env *env);
@@ -160,4 +164,7 @@ int			modify_apply_heredoc_file(t_command *cmd, char *infile,
 				t_env *env_list);
 int			apply_status_sign(char **argv, t_command *cmd, t_gc *gc);
 int			check_status_sign_existance(char *argv);
+int			skip_command(t_command **cmd);
+int			apply_pipe(t_io *io);
+
 #endif

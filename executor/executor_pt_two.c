@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 03:29:05 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:00:49 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,15 @@ void	exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
 			dup2(cmd->io->pipe_fd[1], STDOUT_FILENO);
 		close_fds_for_child_proc(cmd);
 		execute_built_in_commands(cmd, gc, formatted_line, env_list);
-		exit(EXIT_SUCCESS);
+		exit((*cmd->io->exit_stat_ptr));
 	}
 	if (proc_pid < 0)
 	{
 		perror("fork");
 		return ;
 	}
-	if (waitpid(proc_pid, &cmd->io->exit_status, 0) == -1)
-	{
-		perror("waitpid");
-		return ;
-	}
+	cmd->io->pids[cmd->io->proc_count] = proc_pid;
+	cmd->io->proc_count += 1;
 	close(cmd->io->pipe_fd[1]);
 }
 

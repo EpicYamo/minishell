@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 02:20:01 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 03:19:34 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 16:27:23 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdio.h>
 
 static int	modify_apply_heredoc_file_pt_two(t_command *cmd, char *infile,
 				t_gc *gc);
@@ -84,5 +85,25 @@ static int	apply_changes_to_heredoc_file(t_command *cmd, char *infile,
 	}
 	write(fd, infile, ft_strlen(infile));
 	gc_collect_all(gc);
+	return (0);
+}
+
+int	skip_command(t_command **cmd)
+{
+	if (((*cmd)->argv == NULL) || ((*cmd)->argv[0] == NULL))
+	{
+		(*cmd) = (*cmd)->next;
+		return (1);
+	}
+	return (0);
+}
+
+int	apply_pipe(t_io *io)
+{
+	if (pipe((*io).pipe_fd) == -1)
+	{
+		perror("pipe");
+		return (1);
+	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 02:39:25 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 16:29:49 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,8 @@ void	execute_non_built_in_command(t_command *cmd, t_env *env_list)
 		perror("fork");
 		return ;
 	}
-	if (waitpid(proc_pid, &cmd->io->exit_status, 0) == -1)
-	{
-		perror("waitpid");
-		return ;
-	}
+	cmd->io->pids[cmd->io->proc_count] = proc_pid;
+	cmd->io->proc_count += 1;
 	free(path);
 	free_string_array(envp);
 	close_fds(cmd);

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 22:26:09 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/22 17:00:14 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 17:58:43 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,26 @@ static int	split_key_value_pt_two(char *arg, char **key, char **value)
 	return (0);
 }
 
-void	cd_command(t_command *cmd)
+void	cd_command(t_command *cmd, t_env *env_list)
 {
 	char	*home;
 
+	(*cmd->io->exit_stat_ptr) = 1;
 	if (cmd->argv[1])
 	{
 		if (chdir(cmd->argv[1]) != 0)
 			perror("cd");
+		else
+			(*cmd->io->exit_stat_ptr) = 0;
 	}
 	else
 	{
-		home = getenv("HOME");
+		home = get_minishell_env("HOME", env_list);
 		if (!home)
 			printf("cd: HOME not set\n");
-		if (chdir(home) != 0)
+		if ((home != NULL) && (chdir(home) != 0))
 			perror("cd");
+		else if (home != NULL)
+			(*cmd->io->exit_stat_ptr) = 0;
 	}
 }

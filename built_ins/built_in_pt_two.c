@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:48:24 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/22 17:01:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:18:13 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,10 @@ void	pwd_command(t_command *cmd)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
+	{
 		perror(cwd);
+		(*cmd->io->exit_stat_ptr) = 1;
+	}
 	else
 	{
 		if (cmd->outfile)

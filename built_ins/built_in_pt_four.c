@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 21:58:23 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/22 17:11:11 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 18:06:51 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	export_command(t_command *cmd, t_env **env_list)
 		if (!is_valid_identifier(cmd->argv[i]))
 		{
 			printf("export: `%s`: not a valid identifier\n", cmd->argv[i]);
+			(*cmd->io->exit_stat_ptr) = 1;
 			i++;
 			continue ;
 		}
