@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:51 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 19:25:14 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 20:28:46 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,30 @@ t_command	*new_command(t_gc *gc)
 int	handle_redirection_token(char **tokens, t_command *cmd,
 	t_gc *gc, t_parser_cursor *cursor)
 {
+	int	val;
+
 	if (validate_redirection_syntax(tokens, &cursor->i) == -1)
 		return (-1);
 	if (ft_strcmp(tokens[(*cursor).i], "<") == 0)
-		return (assign_redirection(cmd, tokens, &cursor->i, 0));
+	{
+		val = assign_redirection(cmd, tokens, &cursor->i, 0);
+		return (val);
+	}
 	else if (ft_strcmp(tokens[(*cursor).i], ">") == 0)
-		return (assign_redirection(cmd, tokens, &cursor->i, 1));
+	{
+		val = assign_redirection(cmd, tokens, &cursor->i, 1);
+		return (val);
+	}
 	else if (ft_strcmp(tokens[(*cursor).i], ">>") == 0)
-		return (assign_redirection(cmd, tokens, &cursor->i, 2));
+	{
+		val = assign_redirection(cmd, tokens, &cursor->i, 2);
+		return (val);
+	}
 	else if (ft_strcmp(tokens[(*cursor).i], "<<") == 0)
-		return (handle_heredoc(cmd, tokens, &cursor->i, gc));
+	{
+		val = handle_heredoc(cmd, tokens, &cursor->i, gc);
+		return (val);
+	}
 	return (0);
 }
 
