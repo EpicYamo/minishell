@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 19:33:52 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 21:13:34 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static void	shell_loop_pt_two(char *line, t_env *env_list,
 	tokens = split_tokens(line, garbage_c, env_list);
 	if (tokens != NULL)
 	{
-		cmd = parse_tokens(tokens, garbage_c);
+		cmd = parse_tokens(tokens, garbage_c, &shell_io);
 		if (cmd != NULL)
 		{
 			cmd->io = &shell_io;

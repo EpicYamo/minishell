@@ -6,13 +6,12 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 23:23:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 03:12:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 21:13:01 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 static int	apply_status_token(char *replacement, t_command *cmd,
 				t_parser_cursor *cursor);

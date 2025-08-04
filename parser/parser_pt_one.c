@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 18:50:49 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 21:17:40 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include <unistd.h>
 
 static void	init_variables(t_parser_cursor *cursor, t_command **head,
-				t_command **cmd);
+				t_command **cmd, t_io *io);
 static int	initialize_command_if_needed(t_command **cmd, t_command **head,
 				t_parser_cursor *cursor, t_gc *gc);
 static int	handle_pipe_token(char **tokens, t_command **cmd, t_gc *gc,
@@ -23,14 +23,14 @@ static int	handle_pipe_token(char **tokens, t_command **cmd, t_gc *gc,
 static int	append_token_to_argv(t_command *cmd, char *token, t_gc *gc,
 				t_parser_cursor *cursor);
 
-t_command	*parse_tokens(char **tokens, t_gc *gc)
+t_command	*parse_tokens(char **tokens, t_gc *gc, t_io *io)
 {
 	t_command		*head;
 	t_command		*cmd;
 	t_parser_cursor	cursor;
 	int				status;
 
-	init_variables(&cursor, &cmd, &head);
+	init_variables(&cursor, &cmd, &head, io);
 	while (tokens[cursor.i])
 	{
 		if (!initialize_command_if_needed(&cmd, &head, &cursor, gc))
@@ -53,10 +53,11 @@ t_command	*parse_tokens(char **tokens, t_gc *gc)
 }
 
 static void	init_variables(t_parser_cursor *cursor,
-	t_command **head, t_command **cmd)
+	t_command **head, t_command **cmd, t_io *io)
 {
 	cursor->i = 0;
 	cursor->argc = 0;
+	cursor->io = io;
 	*head = NULL;
 	*cmd = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 20:09:16 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/04 21:25:20 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,23 @@ static void	handle_heredoc_pt_two(t_command *cmd, char *delimiter, int fd,
 	close(fd);
 	cmd->infile = tempfile;
 	cmd->heredoc = 1;
+}
+
+t_command	*new_command(t_gc *gc)
+{
+	t_command	*cmd;
+
+	cmd = gc_malloc(gc, sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->argv = gc_malloc(gc, (sizeof(char *) * 1));
+	if (!cmd->argv)
+		return (NULL);
+	cmd->argv[0] = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->append = 0;
+	cmd->heredoc = 0;
+	cmd->next = NULL;
+	return (cmd);
 }
