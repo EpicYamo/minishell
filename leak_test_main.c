@@ -1,0 +1,119 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
+/*   Updated: 2025/08/04 19:55:43 by aaycan           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+static void	shell_loop(t_env *env_list, int *exit_status, char *line);
+static void	shell_loop_pt_two(char *line, t_env *env_list,
+				char **formatted_line, int *exit_status);
+static void	process_formatted_line(char **formatted_line, t_env *env_list,
+				int *exit_status);
+static int	init_garbage_collector_safe(t_gc **garbage_c, char *line,
+				int *exit_status);
+
+int	main(int argc, char **argv, char **envp)
+{
+	static int	exit_status = 0;
+	t_env		*env_list;
+
+	if (argc != 2)
+	{
+		write(2, "put command as a secondary argument only !\n", 43);
+		return (1);
+	}
+	if (!argv[1])
+	{
+		write(2, "argv was invalid\n", 17);
+		return (1);
+	}
+	env_list = create_env_list(envp);
+	//print_banner();
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+	shell_loop(env_list, &exit_status, argv[1]);
+	free_env_list(env_list);
+	return (0);
+}
+
+static void	shell_loop(t_env *env_list, int *exit_status, char *argv)
+{
+	char	**formatted_line;
+	char	*line;
+
+	line = ft_strdup(argv);
+	formatted_line = ft_split(line, '\n');
+	free(line);
+	if (!formatted_line)
+	{
+		write(2, "Allocation Error, Skipping the command...", 41);
+		(*exit_status) = 2;
+	}
+	process_formatted_line(formatted_line, env_list, exit_status);
+}
+
+static void	process_formatted_line(char **formatted_line, t_env *env_list,
+	int *exit_status)
+{
+	int	i;
+
+	i = -1;
+	while (formatted_line[++i])
+		shell_loop_pt_two(formatted_line[i], env_list, formatted_line,
+			exit_status);
+	free_string_array(formatted_line);
+}
+
+static void	shell_loop_pt_two(char *line, t_env *env_list,
+	char **formatted_line, int *exit_status)
+{
+	t_io		shell_io;
+	char		**tokens;
+	t_command	*cmd;
+	t_gc		*garbage_c;
+
+	shell_io.exit_status = (*exit_status);
+	if (init_garbage_collector_safe(&garbage_c, line, exit_status) != 0)
+		return ;
+	tokens = split_tokens(line, garbage_c, env_list);
+	if (tokens != NULL)
+	{
+		cmd = parse_tokens(tokens, garbage_c);
+		if (cmd != NULL)
+		{
+			cmd->io = &shell_io;
+			(*exit_status) = command_executor(cmd, garbage_c, formatted_line,
+					env_list);
+		}
+		else
+			(*exit_status) = 2;
+	}
+	else
+		(*exit_status) = 2;
+	gc_collect_all(garbage_c);
+}
+
+static int	init_garbage_collector_safe(t_gc **garbage_c, char *line,
+	int *exit_status)
+{
+	(*garbage_c) = init_garbage_collector(line);
+	if (!(*garbage_c))
+	{
+		(*exit_status) = 2;
+		return (1);
+	}
+	return (0);
+}
