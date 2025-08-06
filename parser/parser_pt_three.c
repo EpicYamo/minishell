@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 21:25:20 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/06 19:08:02 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 
 static void	handle_heredoc_pt_two(t_command *cmd, char *delimiter, int fd,
 				char *tempfile);
+static void	write_heredoc_error(char *delimiter);
 
 int	handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc)
 {
@@ -67,6 +68,8 @@ static void	handle_heredoc_pt_two(t_command *cmd, char *delimiter, int fd,
 		free(line);
 		line = readline("> ");
 	}
+	if (!line)
+		write_heredoc_error(delimiter);
 	close(fd);
 	cmd->infile = tempfile;
 	cmd->heredoc = 1;
@@ -89,4 +92,11 @@ t_command	*new_command(t_gc *gc)
 	cmd->heredoc = 0;
 	cmd->next = NULL;
 	return (cmd);
+}
+
+static void	write_heredoc_error(char *delimiter)
+{
+	write(2, "Y-Shell: warning: here-document delimited by end-of-file (wanted \'", 66);
+	write(2, delimiter, ft_strlen(delimiter));
+	write(2, "\')\n", 3); 
 }

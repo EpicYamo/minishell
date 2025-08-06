@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 18:08:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:18:53 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ static int	create_tokens_from_input(const char *input, char **tokens,
 static int	modify_token_and_apply(char **tokens, t_gc *gc, t_env *env_list,
 	size_t *i)
 {
-	int	token_c;
-
 	if (((*i) > 0) && (!(ft_strcmp(tokens[(*i) - 1], "<<"))))
 	{
 		if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)

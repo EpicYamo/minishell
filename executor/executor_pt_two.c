@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 16:38:42 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:24:38 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
 	proc_pid = fork();
 	if (proc_pid == 0)
 	{
-		signal(SIGINT, handle_sigint);
+		signal(SIGINT, handle_sigint_interactive);
 		if (cmd->next)
 			dup2(cmd->io->pipe_fd[1], STDOUT_FILENO);
 		close_fds_for_child_proc(cmd);

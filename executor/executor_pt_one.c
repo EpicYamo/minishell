@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 19:01:49 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:24:28 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ static void	return_to_original_state(t_io io)
 	close(io.original_stdout);
 	if (io.prev_fd != -1)
 		close(io.prev_fd);
-	signal(SIGINT, handle_sigint);
+	signal(SIGINT, handle_sigint_interactive);
 	if (io.heredoc_path != NULL)
 		unlink(io.heredoc_path);
 }

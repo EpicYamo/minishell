@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 14:54:07 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:36:55 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # define EXIT_STATUS_TOKEN "--ENCP0MAClAKDJV_MINISHELL_EXIT_STATUS_ENC--"
 # define DOLLAR_SIGN_TOKEN "--ENCP0MAClAKDJV_DOLLAR_SIGN_ENC--"
 # include <stddef.h>
+
+extern int g_signum;
 
 typedef struct s_io
 {
@@ -104,7 +106,7 @@ int			env_list_size(t_env *env);
 char		**get_envp(t_env *env_list);
 char		*resolve_path(const char *cmd, t_env *env_list);
 void		print_banner(void);
-void		handle_sigint(int signum);
+void		handle_sigint_interactive(int signum);
 t_env		*create_env_list(char **envp);
 void		free_env_list(t_env *list);
 void		append_env_node(t_env **list, t_env *new_node);
@@ -172,5 +174,6 @@ int			assign_redirection(t_command *cmd, char **tokens,
 				size_t *i, int type);
 int			validate_redirection_file(const char *filename, int type);
 int			strip_quotes_and_apply_token(t_gc *gc, char **token);
+void		handle_sigint_heredoc(int signum);
 
 #endif
