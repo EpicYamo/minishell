@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 17:25:33 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/06 18:08:44 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static int	create_tokens_from_input(const char *input, char **tokens,
 	size_t	i;
 	size_t	j;
 	size_t	token_count;
-	size_t	inc_token_c;
 
 	i = -1;
 	j = 0;
@@ -65,10 +64,8 @@ static int	create_tokens_from_input(const char *input, char **tokens,
 		if (!tokens[i])
 			return (1);
 		gc_add(gc, tokens[i]);
-		inc_token_c = modify_token_and_apply(tokens, gc, env_list, &i);
-		if (inc_token_c == 0)
+		if (modify_token_and_apply(tokens, gc, env_list, &i) != 0)
 			return (1);
-		token_count += (inc_token_c - 1);
 	}
 	tokens[i] = NULL;
 	return (0);
@@ -82,14 +79,14 @@ static int	modify_token_and_apply(char **tokens, t_gc *gc, t_env *env_list,
 	if (((*i) > 0) && (!(ft_strcmp(tokens[(*i) - 1], "<<"))))
 	{
 		if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)
-			return (0);
-		return (1);
+			return (1);
 	}
 	else
 	{
-		token_c = handle_env_vars_in_token(tokens, gc, env_list, i);
-		return (token_c);
+		if (handle_env_vars_in_token(tokens, gc, env_list, i) != 0)
+			return (1);
 	}
+	return (0);
 }
 
 static int	handle_env_vars_in_token(char **tokens, t_gc *gc,
@@ -105,14 +102,14 @@ static int	handle_env_vars_in_token(char **tokens, t_gc *gc,
 		tokens[(*i)] = expand_env_vars_if_applicable(tokens[(*i)],
 				(sign_loc - 1), env_list);
 		if (!tokens[(*i)])
-			return (0);
+			return (1);
 		gc_add(gc, tokens[(*i)]);
 		sign_loc = check_dollar_sign_existance(tokens[(*i)], &last_sign);
 	}
 	tokens[(*i)] = replace_dollar_signs(tokens[(*i)], gc);
 	if (!tokens[(*i)])
-		return (0);
+		return (1);
 	if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)
-		return (0);
-	return (1);
+		return (1);
+	return (0);
 }
