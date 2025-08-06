@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 18:49:39 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/06 17:25:33 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <limits.h>
+#include <stdio.h>
 
-static int	split_tokens_pt_two(const char *input, char **tokens,
-				t_gc *garbage_c, t_env *env_list);
-static int	split_tokens_pt_three(char **tokens, t_gc *garbage_c,
+static int	create_tokens_from_input(const char *input, char **tokens,
+				t_gc *gc, t_env *env_list);
+static int	modify_token_and_apply(char **token, t_gc *gc, t_env *env_list,
+				size_t *i);
+static int	handle_env_vars_in_token(char **tokens, t_gc *gc,
 				t_env *env_list, size_t *i);
 
 char	**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list)
@@ -31,13 +34,13 @@ char	**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list)
 		return (NULL);
 	}
 	token_count = count_tokens(input);
-	tokens = gc_malloc(garbage_c, (sizeof(char *) * (token_count + 1)));
+	tokens = gc_malloc(garbage_c, (sizeof(char *) * ((2 * token_count) + 1)));
 	if (!tokens)
 	{
 		write(2, "Malloc: tokenization failed\n", 28);
 		return (NULL);
 	}
-	if (split_tokens_pt_two(input, tokens, garbage_c, env_list) != 0)
+	if (create_tokens_from_input(input, tokens, garbage_c, env_list) != 0)
 	{
 		write(2, "Malloc: tokenization failed\n", 28);
 		return (NULL);
@@ -45,12 +48,13 @@ char	**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list)
 	return (tokens);
 }
 
-static int	split_tokens_pt_two(const char *input, char **tokens,
-	t_gc *garbage_c, t_env *env_list)
+static int	create_tokens_from_input(const char *input, char **tokens,
+	t_gc *gc, t_env *env_list)
 {
 	size_t	i;
 	size_t	j;
 	size_t	token_count;
+	size_t	inc_token_c;
 
 	i = -1;
 	j = 0;
@@ -60,22 +64,35 @@ static int	split_tokens_pt_two(const char *input, char **tokens,
 		tokens[i] = extract_token(input, &j);
 		if (!tokens[i])
 			return (1);
-		gc_add(garbage_c, tokens[i]);
-		if (!((i > 0) && (!(ft_strcmp(tokens[i - 1], "<<")))))
-		{
-			if (split_tokens_pt_three(tokens, garbage_c, env_list, &i) != 0)
-				return (1);
-		}
-		tokens[i] = strip_quotes(tokens[i]);
-		if (!tokens[i])
+		gc_add(gc, tokens[i]);
+		inc_token_c = modify_token_and_apply(tokens, gc, env_list, &i);
+		if (inc_token_c == 0)
 			return (1);
-		gc_add(garbage_c, tokens[i]);
+		token_count += (inc_token_c - 1);
 	}
 	tokens[i] = NULL;
 	return (0);
 }
 
-static int	split_tokens_pt_three(char **tokens, t_gc *garbage_c,
+static int	modify_token_and_apply(char **tokens, t_gc *gc, t_env *env_list,
+	size_t *i)
+{
+	int	token_c;
+
+	if (((*i) > 0) && (!(ft_strcmp(tokens[(*i) - 1], "<<"))))
+	{
+		if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)
+			return (0);
+		return (1);
+	}
+	else
+	{
+		token_c = handle_env_vars_in_token(tokens, gc, env_list, i);
+		return (token_c);
+	}
+}
+
+static int	handle_env_vars_in_token(char **tokens, t_gc *gc,
 	t_env *env_list, size_t *i)
 {
 	size_t	sign_loc;
@@ -88,12 +105,14 @@ static int	split_tokens_pt_three(char **tokens, t_gc *garbage_c,
 		tokens[(*i)] = expand_env_vars_if_applicable(tokens[(*i)],
 				(sign_loc - 1), env_list);
 		if (!tokens[(*i)])
-			return (1);
-		gc_add(garbage_c, tokens[(*i)]);
+			return (0);
+		gc_add(gc, tokens[(*i)]);
 		sign_loc = check_dollar_sign_existance(tokens[(*i)], &last_sign);
 	}
-	tokens[(*i)] = replace_dollar_signs(tokens[(*i)], garbage_c);
+	tokens[(*i)] = replace_dollar_signs(tokens[(*i)], gc);
 	if (!tokens[(*i)])
-		return (1);
-	return (0);
+		return (0);
+	if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)
+		return (0);
+	return (1);
 }

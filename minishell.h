@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 21:27:11 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/06 14:54:07 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,5 +171,6 @@ void		write_identifier_error(char *argv);
 int			assign_redirection(t_command *cmd, char **tokens,
 				size_t *i, int type);
 int			validate_redirection_file(const char *filename, int type);
+int			strip_quotes_and_apply_token(t_gc *gc, char **token);
 
 #endif
