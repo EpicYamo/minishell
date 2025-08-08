@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 02:20:01 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 15:27:38 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 15:42:29 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 #include <limits.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <stdlib.h>
 
 static int	modify_apply_heredoc_file_pt_two(t_command *cmd, char *infile,
 				t_gc *gc);
 static int	apply_changes_to_heredoc_file(t_command *cmd, char *infile,
 				t_gc *gc);
+static int	init_vars(t_gc **gc, char *infile, size_t *last_sign,
+				size_t *prev_sign);
 
 int	modify_apply_heredoc_file(t_command *cmd, char *infile, t_env *env_list)
 {
@@ -28,12 +30,8 @@ int	modify_apply_heredoc_file(t_command *cmd, char *infile, t_env *env_list)
 	size_t	prev_sign;
 	t_gc	*gc;
 
-	gc = init_garbage_collector(infile);
-	if (!gc)
+	if (init_vars(&gc, infile, &last_sign, &prev_sign) != 0)
 		return (1);
-	gc_add(gc, infile);
-	last_sign = LONG_MAX;
-	prev_sign = last_sign;
 	sign_loc = check_dollar_sign_existance(infile, &last_sign);
 	while (sign_loc)
 	{
@@ -91,22 +89,17 @@ static int	apply_changes_to_heredoc_file(t_command *cmd, char *infile,
 	return (0);
 }
 
-int	skip_command(t_command **cmd)
+static int	init_vars(t_gc **gc, char *infile, size_t *last_sign,
+	size_t *prev_sign)
 {
-	if (((*cmd)->argv == NULL) || ((*cmd)->argv[0] == NULL))
+	(*gc) = init_garbage_collector(infile);
+	if (!(*gc))
 	{
-		(*cmd) = (*cmd)->next;
+		free(infile);
 		return (1);
 	}
-	return (0);
-}
-
-int	apply_pipe(t_io *io)
-{
-	if (pipe((*io).pipe_fd) == -1)
-	{
-		perror("pipe");
-		return (1);
-	}
+	gc_add((*gc), infile);
+	(*last_sign) = LONG_MAX;
+	(*prev_sign) = (*last_sign);
 	return (0);
 }
