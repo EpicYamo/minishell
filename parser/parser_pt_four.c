@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 21:26:02 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 21:26:45 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 17:10:58 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,23 @@ int	validate_redirection_file(const char *filename, int type)
 	}
 	close(fd);
 	return (0);
+}
+
+t_command	*new_command(t_gc *gc)
+{
+	t_command	*cmd;
+
+	cmd = gc_malloc(gc, sizeof(t_command));
+	if (!cmd)
+		return (NULL);
+	cmd->argv = gc_malloc(gc, (sizeof(char *) * 1));
+	if (!cmd->argv)
+		return (NULL);
+	cmd->argv[0] = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	cmd->append = 0;
+	cmd->heredoc = 0;
+	cmd->next = NULL;
+	return (cmd);
 }

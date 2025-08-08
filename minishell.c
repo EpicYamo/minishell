@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 14:06:00 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 18:32:21 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	shell_loop_pt_two(char *line, t_env *env_list,
 static void	process_formatted_line(char **formatted_line, t_env *env_list,
 				int *exit_status);
 static int	init_garbage_collector_safe(t_gc **garbage_c, char *line,
-				int *exit_status);
+				int *exit_status, t_io *shell_io);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -87,21 +87,21 @@ static void	shell_loop_pt_two(char *line, t_env *env_list,
 	t_command	*cmd;
 	t_gc		*garbage_c;
 
-	add_history(line);
-	shell_io.exit_status = (*exit_status);
-	if (init_garbage_collector_safe(&garbage_c, line, exit_status) != 0)
+	if (init_garbage_collector_safe(&garbage_c, line, exit_status,
+			&shell_io) != 0)
 		return ;
 	tokens = split_tokens(line, garbage_c, env_list);
 	if (tokens != NULL)
 	{
 		cmd = parse_tokens(tokens, garbage_c, &shell_io);
+		signal(SIGINT, handle_sigint_interactive);
 		if (cmd != NULL)
 		{
 			cmd->io = &shell_io;
 			(*exit_status) = command_executor(cmd, garbage_c, formatted_line,
 					env_list);
 		}
-		else
+		else if ((*exit_status) != 130)
 			(*exit_status) = 2;
 	}
 	else
@@ -110,8 +110,11 @@ static void	shell_loop_pt_two(char *line, t_env *env_list,
 }
 
 static int	init_garbage_collector_safe(t_gc **garbage_c, char *line,
-	int *exit_status)
+	int *exit_status, t_io *shell_io)
 {
+	add_history(line);
+	(*shell_io).exit_status = (*exit_status);
+	(*shell_io).exit_stat_ptr = exit_status;
 	(*garbage_c) = init_garbage_collector(line);
 	if (!(*garbage_c))
 	{
