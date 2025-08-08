@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 18:24:53 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 16:12:32 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static void	exec_non_built_in_com_in_child_proc(t_command *cmd, char *path,
 	char **envp, t_env *env_list)
 {
 	signal(SIGINT, handle_sigint_interactive);
+	signal(SIGQUIT, SIG_DFL);
 	if (cmd->next)
 		dup2(cmd->io->pipe_fd[1], STDOUT_FILENO);
 	close(cmd->io->pipe_fd[1]);

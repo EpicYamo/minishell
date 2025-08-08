@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   environment_parser.c                               :+:      :+:    :+:   */
+/*   environment_parser_pt_one.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:46:31 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 19:15:25 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 16:52:22 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static t_env	*create_env_node(char *entry, t_env_error *err);
 static void		create_env_node_pt_two(t_env *node, t_env_error *err);
 
 t_env	*create_env_list(char **envp)
@@ -24,9 +23,8 @@ t_env	*create_env_list(char **envp)
 	t_env_error	err;
 	int			i;
 
-	if (!envp || !*envp)
-		return (NULL);
 	env_list = NULL;
+	create_pre_defined_env_nodes(&env_list, &node);
 	i = 0;
 	while (envp[i])
 	{
@@ -60,7 +58,7 @@ void	free_env_list(t_env *list)
 	}
 }
 
-static t_env	*create_env_node(char *entry, t_env_error *err)
+t_env	*create_env_node(char *entry, t_env_error *err)
 {
 	t_env	*node;
 	char	*eq;

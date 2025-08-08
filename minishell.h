@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 14:51:04 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 16:52:30 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,5 +180,7 @@ int			assign_redirection(t_command *cmd, char **tokens,
 int			validate_redirection_file(const char *filename, int type);
 int			strip_quotes_and_apply_token(t_gc *gc, char **token);
 void		quoted_env_token(char *result, const char *token, size_t cursor);
+void		create_pre_defined_env_nodes(t_env **env_list, t_env **node);
+t_env		*create_env_node(char *entry, t_env_error *err);
 
 #endif

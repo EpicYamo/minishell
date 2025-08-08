@@ -2,7 +2,7 @@ SRC		:= minishell.c \
 			lexer/lexer_pt_one.c lexer/lexer_pt_two.c lexer/lexer_pt_three.c lexer/lexer_pt_four.c \
 			lexer/lexer_pt_five.c lexer/lexer_pt_six.c lexer/lexer_pt_seven.c lexer/lexer_pt_eight.c \
 			parser/parser_pt_one.c parser/parser_pt_two.c parser/parser_pt_three.c \
-			parser/parser_pt_four.c parser/environment_parser.c \
+			parser/parser_pt_four.c parser/environment_parser_pt_one.c parser/environment_parser_pt_two.c\
 			utils/utils_pt_one.c utils/utils_pt_two.c utils/utils_pt_three.c utils/utils_pt_four.c \
 			utils/utils_pt_five.c utils/utils_pt_six.c utils/utils_pt_seven.c utils/utils_pt_eight.c \
 			utils/garbage_collector.c utils/banner.c utils/signals.c \
