@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 14:05:54 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 14:51:04 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,14 @@ typedef struct s_lexer_data
 {
 	size_t	cursor;
 	size_t	key_size;
+	size_t	end_loc;
 }	t_lexer_data;
+
+typedef struct s_env_var_bounds
+{
+	size_t	start_loc;
+	size_t	end_loc;
+}	t_env_bounds;
 
 size_t		ft_strlen(const char *s);
 char		*ft_strndup(const char *s, size_t n);
@@ -118,7 +125,7 @@ int			has_unclosed_quotes(const char *s);
 char		*extract_token(const char *s, size_t *i);
 char		*strip_quotes(char *s);
 char		*expand_env_vars_if_applicable(const char *token, size_t loc,
-				t_env *env_list);
+				t_env *env_list, size_t last_sign);
 int			calculate_env_size(const char *token, t_env *env_list, size_t loc);
 size_t		check_dollar_sign_existance(char *token, size_t *last_sign);
 int			env_token_default(char *result, const char *token, t_env *env_list,
@@ -172,6 +179,6 @@ int			assign_redirection(t_command *cmd, char **tokens,
 				size_t *i, int type);
 int			validate_redirection_file(const char *filename, int type);
 int			strip_quotes_and_apply_token(t_gc *gc, char **token);
-void		handle_sigint_heredoc(int signum);
+void		quoted_env_token(char *result, const char *token, size_t cursor);
 
 #endif

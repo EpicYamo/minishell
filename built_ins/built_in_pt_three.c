@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 13:09:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 19:12:25 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 14:21:03 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 static void	exit_command_pt_two(t_command *cmd, int *arg_err_flag,
 				int *exit_code);
 static void	execute_env_outfile(t_command *cmd, t_env *env);
+static int	check_exit_code_validity(char *argv);
 
 void	exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 				t_env *env_list)
@@ -41,23 +42,16 @@ void	exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 static void	exit_command_pt_two(t_command *cmd, int *arg_err_flag,
 				int *exit_code)
 {
-	int	i;
-
 	if (cmd->argv[1])
 	{
 		(*exit_code) = ft_atoi(cmd->argv[1]);
-		i = -1;
-		while (cmd->argv[1][++i])
+		if (check_exit_code_validity(cmd->argv[1]) != 0)
 		{
-			if (ft_isdigit(cmd->argv[1][i]) == 0)
-			{
-				write(2, "Y-Shell: exit: ", 15);
-				write(2, cmd->argv[1], ft_strlen(cmd->argv[1]));
-				write(2, ": numeric argument required\n", 28);
-				(*arg_err_flag) = 1;
-				(*exit_code) = 2;
-				break ;
-			}
+			write(2, "Y-Shell: exit: ", 15);
+			write(2, cmd->argv[1], ft_strlen(cmd->argv[1]));
+			write(2, ": numeric argument required\n", 28);
+			(*arg_err_flag) = 1;
+			(*exit_code) = 2;
 		}
 	}
 	if (((*arg_err_flag) == 0) && (cmd->argv[1] != NULL)
@@ -108,4 +102,19 @@ static void	execute_env_outfile(t_command *cmd, t_env *env)
 		env = env->next;
 	}
 	close(fd);
+}
+
+static int	check_exit_code_validity(char *argv)
+{
+	int	i;
+
+	i = -1;
+	if (argv[0] == '+' || argv[0] == '-')
+		i++;
+	while (argv[++i])
+	{
+		if (ft_isdigit(argv[i]) == 0)
+			return (1);
+	}
+	return (0);
 }

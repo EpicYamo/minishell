@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:39:14 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/12 19:39:54 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 15:16:55 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	env_token_default(char *result, const char *token,
 		return (1);
 	i = (data.cursor) + 1;
 	j = 0;
-	while (is_env_char(token[i]))
+	while (is_env_char(token[i]) && (i < data.end_loc))
 	{
 		key[j] = token[i];
 		i++;
@@ -86,6 +86,20 @@ void	no_valid_env_token(char *result, const char *token, size_t cursor)
 		cursor++;
 		j++;
 	}
+	while (token[i])
+	{
+		result[cursor] = token[i];
+		cursor++;
+		i++;
+	}
+	result[cursor] = '\0';
+}
+
+void	quoted_env_token(char *result, const char *token, size_t cursor)
+{
+	size_t	i;
+
+	i = cursor + 1;
 	while (token[i])
 	{
 		result[cursor] = token[i];

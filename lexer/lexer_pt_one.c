@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 18:18:53 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 15:16:20 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,19 @@ static int	handle_env_vars_in_token(char **tokens, t_gc *gc,
 {
 	size_t	sign_loc;
 	size_t	last_sign;
+	size_t	prev_sign;
 
 	last_sign = LONG_MAX;
+	prev_sign = last_sign;
 	sign_loc = check_dollar_sign_existance(tokens[(*i)], &last_sign);
 	while (sign_loc)
 	{
 		tokens[(*i)] = expand_env_vars_if_applicable(tokens[(*i)],
-				(sign_loc - 1), env_list);
+				(sign_loc - 1), env_list, prev_sign);
 		if (!tokens[(*i)])
 			return (1);
 		gc_add(gc, tokens[(*i)]);
+		prev_sign = last_sign;
 		sign_loc = check_dollar_sign_existance(tokens[(*i)], &last_sign);
 	}
 	tokens[(*i)] = replace_dollar_signs(tokens[(*i)], gc);
