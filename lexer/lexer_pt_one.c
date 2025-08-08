@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 15:16:20 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 21:32:21 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,13 @@ static int	create_tokens_from_input(const char *input, char **tokens,
 static int	modify_token_and_apply(char **tokens, t_gc *gc, t_env *env_list,
 	size_t *i)
 {
-	if (((*i) > 0) && (!(ft_strcmp(tokens[(*i) - 1], "<<"))))
-	{
-		if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)
-			return (1);
-	}
-	else
+	if (!(((*i) > 0) && (!(ft_strcmp(tokens[(*i) - 1], "<<")))))
 	{
 		if (handle_env_vars_in_token(tokens, gc, env_list, i) != 0)
 			return (1);
 	}
+	if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)
+		return (1);
 	return (0);
 }
 
@@ -109,8 +106,6 @@ static int	handle_env_vars_in_token(char **tokens, t_gc *gc,
 	}
 	tokens[(*i)] = replace_dollar_signs(tokens[(*i)], gc);
 	if (!tokens[(*i)])
-		return (1);
-	if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)
 		return (1);
 	return (0);
 }

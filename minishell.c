@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 18:32:21 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 21:37:28 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,12 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <readline/readline.h>
-#include <readline/history.h>
 
 static void	shell_loop(t_env *env_list, int *exit_status);
-static void	shell_loop_pt_two(char *line, t_env *env_list,
+static void	formatted_line_loop(char *line, t_env *env_list,
 				char **formatted_line, int *exit_status);
 static void	process_formatted_line(char **formatted_line, t_env *env_list,
 				int *exit_status);
-static int	init_garbage_collector_safe(t_gc **garbage_c, char *line,
-				int *exit_status, t_io *shell_io);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -74,12 +71,12 @@ static void	process_formatted_line(char **formatted_line, t_env *env_list,
 
 	i = -1;
 	while (formatted_line[++i])
-		shell_loop_pt_two(formatted_line[i], env_list, formatted_line,
+		formatted_line_loop(formatted_line[i], env_list, formatted_line,
 			exit_status);
 	free_string_array(formatted_line);
 }
 
-static void	shell_loop_pt_two(char *line, t_env *env_list,
+static void	formatted_line_loop(char *line, t_env *env_list,
 	char **formatted_line, int *exit_status)
 {
 	t_io		shell_io;
@@ -107,19 +104,4 @@ static void	shell_loop_pt_two(char *line, t_env *env_list,
 	else
 		(*exit_status) = 2;
 	gc_collect_all(garbage_c);
-}
-
-static int	init_garbage_collector_safe(t_gc **garbage_c, char *line,
-	int *exit_status, t_io *shell_io)
-{
-	add_history(line);
-	(*shell_io).exit_status = (*exit_status);
-	(*shell_io).exit_stat_ptr = exit_status;
-	(*garbage_c) = init_garbage_collector(line);
-	if (!(*garbage_c))
-	{
-		(*exit_status) = 2;
-		return (1);
-	}
-	return (0);
 }

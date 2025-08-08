@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 18:09:34 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 21:30:43 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,5 +183,7 @@ void		quoted_env_token(char *result, const char *token, size_t cursor);
 void		create_pre_defined_env_nodes(t_env **env_list, t_env **node);
 t_env		*create_env_node(char *entry, t_env_error *err);
 void		handle_sigint_heredoc(int signum);
+int			init_garbage_collector_safe(t_gc **garbage_c, char *line,
+				int *exit_status, t_io *shell_io);
 
 #endif
