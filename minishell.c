@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 18:32:54 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 14:06:00 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
-int	g_signum;
 
 static void	shell_loop(t_env *env_list, int *exit_status);
 static void	shell_loop_pt_two(char *line, t_env *env_list,

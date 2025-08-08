@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 18:36:55 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 14:05:54 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # define EXIT_STATUS_TOKEN "--ENCP0MAClAKDJV_MINISHELL_EXIT_STATUS_ENC--"
 # define DOLLAR_SIGN_TOKEN "--ENCP0MAClAKDJV_DOLLAR_SIGN_ENC--"
 # include <stddef.h>
-
-extern int	g_signum;
 
 typedef struct s_io
 {
