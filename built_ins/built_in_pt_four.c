@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 21:58:23 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 19:08:00 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 14:13:38 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,8 @@ void	export_command(t_command *cmd, t_env **env_list)
 			i++;
 			continue ;
 		}
-		if (split_key_value(cmd->argv[i], &key, &value) != 0)
-			continue ;
-		if (export_command_pt_two(env_list, key, value) != 0)
-			continue ;
+		if (split_key_value(cmd->argv[i], &key, &value) == 0)
+			export_command_pt_two(env_list, key, value);
 		i++;
 	}
 }
