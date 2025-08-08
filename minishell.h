@@ -17,7 +17,7 @@
 # define DOLLAR_SIGN_TOKEN "--ENCP0MAClAKDJV_DOLLAR_SIGN_ENC--"
 # include <stddef.h>
 
-extern int g_signum;
+extern int	g_signum;
 
 typedef struct s_io
 {

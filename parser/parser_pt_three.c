@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/06 19:08:02 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/08 13:56:02 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ t_command	*new_command(t_gc *gc)
 
 static void	write_heredoc_error(char *delimiter)
 {
-	write(2, "Y-Shell: warning: here-document delimited by end-of-file (wanted \'", 66);
+	write(2, "Y-Shell: warning: here-document", 31);
+	write(2, " delimited by end-of-file (wanted \'", 35);
 	write(2, delimiter, ft_strlen(delimiter));
-	write(2, "\')\n", 3); 
+	write(2, "\')\n", 3);
 }

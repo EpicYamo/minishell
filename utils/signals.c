@@ -25,4 +25,3 @@ void	handle_sigint_interactive(int signum)
 		rl_redisplay();
 	}
 }
-
