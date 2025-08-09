@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 21:37:28 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:57:49 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,26 +82,22 @@ static void	formatted_line_loop(char *line, t_env *env_list,
 	t_io		shell_io;
 	char		**tokens;
 	t_command	*cmd;
-	t_gc		*garbage_c;
+	t_gc		*gc;
 
-	if (init_garbage_collector_safe(&garbage_c, line, exit_status,
-			&shell_io) != 0)
+	if (init_garbage_collector_safe(&gc, line, exit_status, &shell_io) != 0)
 		return ;
-	tokens = split_tokens(line, garbage_c, env_list);
-	if (tokens != NULL)
-	{
-		cmd = parse_tokens(tokens, garbage_c, &shell_io);
-		signal(SIGINT, handle_sigint_interactive);
-		if (cmd != NULL)
-		{
-			cmd->io = &shell_io;
-			(*exit_status) = command_executor(cmd, garbage_c, formatted_line,
-					env_list);
-		}
-		else if ((*exit_status) != 130)
-			(*exit_status) = 2;
-	}
-	else
+	tokens = split_tokens(line, gc, env_list);
+	if (!tokens)
 		(*exit_status) = 2;
-	gc_collect_all(garbage_c);
+	else
+		cmd = parse_tokens(tokens, gc, &shell_io);
+	if (((*exit_status) != 2) && (!cmd) && ((*exit_status) != 130))
+		(*exit_status = 2);
+	else if ((*exit_status != 2) && (cmd != NULL))
+	{
+		cmd->io = &shell_io;
+		(*exit_status) = command_executor(cmd, gc, formatted_line, env_list);
+	}
+	signal(SIGINT, handle_sigint_interactive);
+	gc_collect_all(gc);
 }

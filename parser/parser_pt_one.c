@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 17:29:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:47:06 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static void	init_variables(t_parser_cursor *cursor,
 	cursor->i = 0;
 	cursor->argc = 0;
 	cursor->io = io;
+	(*cursor->io->exit_stat_ptr) = 0;
 	*head = NULL;
 	*cmd = NULL;
 }
