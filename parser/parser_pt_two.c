@@ -6,13 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:51 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 21:27:45 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:30:19 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdio.h>
-#include <fcntl.h>
 #include <unistd.h>
 
 static int	validate_redirection_syntax(char **tokens, size_t *i);

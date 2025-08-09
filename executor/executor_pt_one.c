@@ -6,14 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 16:16:12 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:29:12 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <unistd.h>
 #include <signal.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <sys/wait.h>
 

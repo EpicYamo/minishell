@@ -6,12 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 21:23:02 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/09 21:26:18 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:29:33 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdlib.h>
 
 static void	count_tokens_pt_two(const char *s, size_t *i);
 static void	extract_token_pt_two(const char *s, size_t *i);

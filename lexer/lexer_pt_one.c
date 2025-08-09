@@ -6,15 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 21:32:21 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:29:26 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdlib.h>
 #include <unistd.h>
 #include <limits.h>
-#include <stdio.h>
 
 static int	create_tokens_from_input(const char *input, char **tokens,
 				t_gc *gc, t_env *env_list);

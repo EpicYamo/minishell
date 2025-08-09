@@ -6,11 +6,10 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:16 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 18:23:00 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:30:32 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
 #include <unistd.h>
 #include <signal.h>
 #include <readline/readline.h>

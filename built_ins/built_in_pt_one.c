@@ -6,12 +6,11 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:09:38 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 18:18:14 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 17:28:35 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdio.h>
 
 void	execute_built_in_commands(t_command *cmd, t_gc *gc,
 	char **formatted_line, t_env *env_list)
