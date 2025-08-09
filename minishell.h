@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 19:46:00 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 20:05:47 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_command
 	char				*outfile;
 	int					append;
 	int					heredoc;
+	int					expand_heredoc;
 	t_io				*io;
 	struct s_command	*next;
 }	t_command;

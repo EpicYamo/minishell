@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/04 21:26:02 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 17:10:58 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 20:12:52 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ t_command	*new_command(t_gc *gc)
 	cmd->outfile = NULL;
 	cmd->append = 0;
 	cmd->heredoc = 0;
+	cmd->expand_heredoc = 1;
 	cmd->next = NULL;
 	return (cmd);
 }

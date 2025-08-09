@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:40:35 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/01 02:39:52 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 20:06:08 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	setup_infile_redirect(t_command *cmd, t_env *env_list)
 
 	if (cmd->infile)
 	{
-		if (cmd->heredoc == 1)
+		if ((cmd->heredoc == 1) && (cmd->expand_heredoc == 1))
 		{
 			if (expand_dollar_sign_in_heredoc(cmd, env_list) != 0)
 			{

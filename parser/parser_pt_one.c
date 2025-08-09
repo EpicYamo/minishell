@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 19:49:40 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 20:21:51 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ t_command	*parse_tokens(char **tokens, t_gc *gc, t_io *io,
 				continue ;
 			else if (status == -1)
 				return (NULL);
+			if ((!(ft_strcmp(tokens[cursor.i], "<<")))
+				&& (cursor.i < interpret_set.token_count)
+				&& (interpret_set.flag_set[cursor.i + 1] == 1))
+				cmd->expand_heredoc = 0;
 			status = handle_redirection_token(tokens, cmd, gc, &cursor);
 			if (status == -1)
 				return (NULL);
