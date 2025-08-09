@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 18:17:42 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 18:48:52 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,12 @@ typedef struct s_env_var_bounds
 	size_t	start_loc;
 	size_t	end_loc;
 }	t_env_bounds;
+
+typedef struct s_interpret_flag_set
+{
+	size_t	*flag_set;
+	size_t	token_count;
+}	t_interpret;
 
 size_t		ft_strlen(const char *s);
 char		*ft_strndup(const char *s, size_t n);
@@ -186,5 +192,7 @@ void		handle_sigint_heredoc(int signum);
 int			init_garbage_collector_safe(t_gc **garbage_c, char *line,
 				int *exit_status, t_io *shell_io);
 void		reinstate_shell(t_gc *gc);
+int			init_interpret_set(t_gc *gc, t_interpret *interpret_set,
+				char *line);
 
 #endif

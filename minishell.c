@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 18:17:27 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 18:45:46 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,11 @@ static void	formatted_line_loop(char *line, t_env *env_list,
 	char		**tokens;
 	t_command	*cmd;
 	t_gc		*gc;
+	t_interpret	interpret_set;
 
 	if (init_garbage_collector_safe(&gc, line, exit_status, &shell_io) != 0)
+		return ;
+	if (init_interpret_set(gc, &interpret_set, line) != 0)
 		return ;
 	tokens = split_tokens(line, gc, env_list);
 	if (!tokens)
