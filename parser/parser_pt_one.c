@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 18:09:42 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 19:49:40 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static int	handle_pipe_token(char **tokens, t_command **cmd, t_gc *gc,
 static int	append_token_to_argv(t_command *cmd, char *token, t_gc *gc,
 				t_parser_cursor *cursor);
 
-t_command	*parse_tokens(char **tokens, t_gc *gc, t_io *io)
+t_command	*parse_tokens(char **tokens, t_gc *gc, t_io *io,
+	t_interpret interpret_set)
 {
 	t_command		*head;
 	t_command		*cmd;
@@ -34,16 +35,19 @@ t_command	*parse_tokens(char **tokens, t_gc *gc, t_io *io)
 	{
 		if (!initialize_command_if_needed(&cmd, &head, &cursor, gc))
 			return (NULL);
-		status = handle_pipe_token(tokens, &cmd, gc, &cursor);
-		if (status == 1)
-			continue ;
-		else if (status == -1)
-			return (NULL);
-		status = handle_redirection_token(tokens, cmd, gc, &cursor);
-		if (status == -1)
-			return (NULL);
-		else if (status == 1)
-			continue ;
+		if ((interpret_set.flag_set[cursor.i] == 0))
+		{
+			status = handle_pipe_token(tokens, &cmd, gc, &cursor);
+			if (status == 1)
+				continue ;
+			else if (status == -1)
+				return (NULL);
+			status = handle_redirection_token(tokens, cmd, gc, &cursor);
+			if (status == -1)
+				return (NULL);
+			else if (status == 1)
+				continue ;
+		}
 		if (!append_token_to_argv(cmd, tokens[(cursor.i)], gc, &cursor))
 			return (NULL);
 		(cursor.i)++;

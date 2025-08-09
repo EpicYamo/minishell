@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 19:38:59 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 19:46:00 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,8 @@ void		env_token_exit_status(char *result, const char *token,
 void		env_token_digit(char *result, const char *token, size_t cursor);
 void		no_valid_env_token(char *result, const char *token, size_t cursor);
 char		*replace_dollar_signs(char *token, t_gc *gc);
-t_command	*parse_tokens(char **tokens, t_gc *garbage_c, t_io *io);
+t_command	*parse_tokens(char **tokens, t_gc *garbage_c, t_io *io,
+				t_interpret interpret_set);
 t_command	*new_command(t_gc *gc);
 int			handle_redirection_token(char **tokens, t_command *cmd, t_gc *gc,
 				t_parser_cursor *cursor);
