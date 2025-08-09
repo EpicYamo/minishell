@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:59 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 15:12:15 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 19:35:05 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,35 +17,6 @@ static char	*build_expanded_string(const char *token, size_t loc,
 				t_env *env_list, size_t last_sign);
 static int	build_expanded_string_pt_two(char *result, const char *token,
 				t_env_bounds bounds, t_env *env_list);
-
-char	*strip_quotes(char *s)
-{
-	size_t	i;
-	size_t	j;
-	char	quote;
-	char	*result;
-
-	result = malloc(ft_strlen(s) + 1);
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s[i])
-	{
-		if ((s[i] == '\"') || (s[i] == '\''))
-		{
-			quote = s[i++];
-			while (s[i] && (s[i] != quote))
-				result[j++] = s[i++];
-			if (s[i])
-				i++;
-		}
-		else
-			result[j++] = s[i++];
-	}
-	result[j] = '\0';
-	return (result);
-}
 
 char	*expand_env_vars_if_applicable(const char *token, size_t loc,
 	t_env *env_list, size_t last_sign)

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:05 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 17:29:26 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 19:31:22 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 #include <unistd.h>
 #include <limits.h>
 
-static int	create_tokens_from_input(const char *input, char **tokens,
-				t_gc *gc, t_env *env_list);
+static int	create_tokens_from_input(t_interpret_data_input token_set,
+				char **tokens, t_gc *gc, t_env *env_list);
 static int	modify_token_and_apply(char **token, t_gc *gc, t_env *env_list,
-				size_t *i);
+				t_interpret_data_cursor	data_and_cursor);
 static int	handle_env_vars_in_token(char **tokens, t_gc *gc,
 				t_env *env_list, size_t *i);
 
-char	**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list)
+char	**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list,
+	t_interpret interpret_set)
 {
-	char	**tokens;
-	size_t	token_count;
+	char					**tokens;
+	size_t					token_count;
+	t_interpret_data_input	token_set;
 
 	if (has_unclosed_quotes(input))
 	{
@@ -38,7 +40,9 @@ char	**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list)
 		write(2, "Malloc: tokenization failed\n", 28);
 		return (NULL);
 	}
-	if (create_tokens_from_input(input, tokens, garbage_c, env_list) != 0)
+	token_set.interpret_data = interpret_set;
+	token_set.line = input;
+	if (create_tokens_from_input(token_set, tokens, garbage_c, env_list) != 0)
 	{
 		write(2, "Malloc: tokenization failed\n", 28);
 		return (NULL);
@@ -46,23 +50,26 @@ char	**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list)
 	return (tokens);
 }
 
-static int	create_tokens_from_input(const char *input, char **tokens,
-	t_gc *gc, t_env *env_list)
+static int	create_tokens_from_input(t_interpret_data_input token_set,
+	char **tokens, t_gc *gc, t_env *env_list)
 {
-	size_t	i;
-	size_t	j;
-	size_t	token_count;
+	size_t					i;
+	size_t					j;
+	size_t					token_count;
+	t_interpret_data_cursor	data_and_cursor;
 
 	i = -1;
 	j = 0;
-	token_count = count_tokens(input);
+	token_count = count_tokens(token_set.line);
 	while (++i < token_count)
 	{
-		tokens[i] = extract_token(input, &j);
+		tokens[i] = extract_token(token_set.line, &j);
 		if (!tokens[i])
 			return (1);
 		gc_add(gc, tokens[i]);
-		if (modify_token_and_apply(tokens, gc, env_list, &i) != 0)
+		data_and_cursor.i = &i;
+		data_and_cursor.interpret_data = token_set.interpret_data;
+		if (modify_token_and_apply(tokens, gc, env_list, data_and_cursor) != 0)
 			return (1);
 	}
 	tokens[i] = NULL;
@@ -70,14 +77,17 @@ static int	create_tokens_from_input(const char *input, char **tokens,
 }
 
 static int	modify_token_and_apply(char **tokens, t_gc *gc, t_env *env_list,
-	size_t *i)
+	t_interpret_data_cursor	data_and_cursor)
 {
-	if (!(((*i) > 0) && (!(ft_strcmp(tokens[(*i) - 1], "<<")))))
+	if (!(((*data_and_cursor.i) > 0)
+			&& (!(ft_strcmp(tokens[(*data_and_cursor.i) - 1], "<<")))))
 	{
-		if (handle_env_vars_in_token(tokens, gc, env_list, i) != 0)
+		if (handle_env_vars_in_token(tokens, gc, env_list,
+				(data_and_cursor.i)) != 0)
 			return (1);
 	}
-	if (strip_quotes_and_apply_token(gc, &tokens[(*i)]) != 0)
+	if (strip_quotes_and_apply_token(gc, &tokens[(*data_and_cursor.i)],
+			data_and_cursor.interpret_data, (*data_and_cursor.i)) != 0)
 		return (1);
 	return (0);
 }

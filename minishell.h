@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 18:48:52 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 19:38:59 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,18 @@ typedef struct s_interpret_flag_set
 	size_t	token_count;
 }	t_interpret;
 
+typedef struct s_interpret_data_and_input
+{
+	t_interpret	interpret_data;
+	const char	*line;
+}	t_interpret_data_input;
+
+typedef struct s_interpret_data_and_cursor
+{
+	t_interpret	interpret_data;
+	size_t		*i;
+}	t_interpret_data_cursor;
+
 size_t		ft_strlen(const char *s);
 char		*ft_strndup(const char *s, size_t n);
 int			ft_isspace(char c);
@@ -125,11 +137,12 @@ t_gc		*init_garbage_collector(char *line);
 void		*gc_malloc(t_gc *gc, size_t size);
 void		gc_add(t_gc *gc, void *ptr);
 void		gc_collect_all(t_gc *gc);
-char		**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list);
+char		**split_tokens(const char *input, t_gc *garbage_c, t_env *env_list,
+				t_interpret interpret_set);
 size_t		count_tokens(const char *s);
 int			has_unclosed_quotes(const char *s);
 char		*extract_token(const char *s, size_t *i);
-char		*strip_quotes(char *s);
+char		*strip_quotes(char *s, t_interpret interpret_data, size_t index);
 char		*expand_env_vars_if_applicable(const char *token, size_t loc,
 				t_env *env_list, size_t last_sign);
 int			calculate_env_size(const char *token, t_env *env_list, size_t loc);
@@ -184,7 +197,8 @@ void		write_identifier_error(char *argv);
 int			assign_redirection(t_command *cmd, char **tokens,
 				size_t *i, int type);
 int			validate_redirection_file(const char *filename, int type);
-int			strip_quotes_and_apply_token(t_gc *gc, char **token);
+int			strip_quotes_and_apply_token(t_gc *gc, char **token,
+				t_interpret interpret_data, size_t i);
 void		quoted_env_token(char *result, const char *token, size_t cursor);
 void		create_pre_defined_env_nodes(t_env **env_list, t_env **node);
 t_env		*create_env_node(char *entry, t_env_error *err);
