@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 21:30:43 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 18:17:42 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,5 +185,6 @@ t_env		*create_env_node(char *entry, t_env_error *err);
 void		handle_sigint_heredoc(int signum);
 int			init_garbage_collector_safe(t_gc **garbage_c, char *line,
 				int *exit_status, t_io *shell_io);
+void		reinstate_shell(t_gc *gc);
 
 #endif
