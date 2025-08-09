@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 20:05:47 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 21:19:37 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,12 @@ typedef struct s_interpret_data_and_cursor
 	t_interpret	interpret_data;
 	size_t		*i;
 }	t_interpret_data_cursor;
+
+typedef struct s_interpret_data_and_tokens
+{
+	t_interpret	interpret_set;
+	char		**tokens;
+}	t_interpret_data_tokens;
 
 size_t		ft_strlen(const char *s);
 char		*ft_strndup(const char *s, size_t n);
@@ -210,5 +216,9 @@ int			init_garbage_collector_safe(t_gc **garbage_c, char *line,
 void		reinstate_shell(t_gc *gc);
 int			init_interpret_set(t_gc *gc, t_interpret *interpret_set,
 				char *line);
+int			handle_pipe_token(char **tokens, t_command **cmd, t_gc *gc,
+				t_parser_cursor *cursor);
+int			append_token_to_argv(t_command *cmd, char *token, t_gc *gc,
+				t_parser_cursor *cursor);
 
 #endif

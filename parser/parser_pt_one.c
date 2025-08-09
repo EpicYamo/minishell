@@ -6,51 +6,43 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 20:21:51 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 21:25:50 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <unistd.h>
 
 static void	init_variables(t_parser_cursor *cursor, t_command **head,
 				t_command **cmd, t_io *io);
 static int	initialize_command_if_needed(t_command **cmd, t_command **head,
 				t_parser_cursor *cursor, t_gc *gc);
-static int	handle_pipe_token(char **tokens, t_command **cmd, t_gc *gc,
-				t_parser_cursor *cursor);
-static int	append_token_to_argv(t_command *cmd, char *token, t_gc *gc,
-				t_parser_cursor *cursor);
+static int	parse_tokens_to_be_interpreted(t_interpret_data_tokens data,
+				t_gc *gc, t_command **cmd, t_parser_cursor *cursor);
+static void	combine_tokens_interpret_data(t_interpret_data_tokens *data,
+				char **tokens, t_interpret interpret_set);
 
 t_command	*parse_tokens(char **tokens, t_gc *gc, t_io *io,
 	t_interpret interpret_set)
 {
-	t_command		*head;
-	t_command		*cmd;
-	t_parser_cursor	cursor;
-	int				status;
+	t_command				*head;
+	t_command				*cmd;
+	t_parser_cursor			cursor;
+	int						status;
+	t_interpret_data_tokens	data;
 
 	init_variables(&cursor, &cmd, &head, io);
+	combine_tokens_interpret_data(&data, tokens, interpret_set);
 	while (tokens[cursor.i])
 	{
 		if (!initialize_command_if_needed(&cmd, &head, &cursor, gc))
 			return (NULL);
 		if ((interpret_set.flag_set[cursor.i] == 0))
 		{
-			status = handle_pipe_token(tokens, &cmd, gc, &cursor);
-			if (status == 1)
+			status = parse_tokens_to_be_interpreted(data, gc, &cmd, &cursor);
+			if (status == 0)
 				continue ;
 			else if (status == -1)
 				return (NULL);
-			if ((!(ft_strcmp(tokens[cursor.i], "<<")))
-				&& (cursor.i < interpret_set.token_count)
-				&& (interpret_set.flag_set[cursor.i + 1] == 1))
-				cmd->expand_heredoc = 0;
-			status = handle_redirection_token(tokens, cmd, gc, &cursor);
-			if (status == -1)
-				return (NULL);
-			else if (status == 1)
-				continue ;
 		}
 		if (!append_token_to_argv(cmd, tokens[(cursor.i)], gc, &cursor))
 			return (NULL);
@@ -84,51 +76,35 @@ static int	initialize_command_if_needed(t_command **cmd, t_command **head,
 	return (1);
 }
 
-static int	handle_pipe_token(char **tokens, t_command **cmd,
-	t_gc *gc, t_parser_cursor *cursor)
+static int	parse_tokens_to_be_interpreted(t_interpret_data_tokens data,
+	t_gc *gc, t_command **cmd, t_parser_cursor *cursor)
 {
-	if (((tokens[cursor->i][0] == '|') && (tokens[cursor->i][1] == '\0'))
-		&& (tokens[(cursor->i) + 1] != NULL))
-	{
-		if (((tokens[(cursor->i) + 1][0] == '|')
-			&& (tokens[(cursor->i) + 1][1] == '\0')))
-		{
-			write(2, "Y-Shell: syntax error near unexpected token `|'\n", 48);
-			return (-1);
-		}
-	}
-	if (tokens[cursor->i][0] == '|' && tokens[cursor->i][1] == '\0')
-	{
-		(*cmd)->argv[cursor->argc] = NULL;
-		(*cmd)->next = new_command(gc);
-		if (!(*cmd)->next)
-			return (-1);
-		*cmd = (*cmd)->next;
-		cursor->argc = 0;
-		(cursor->i)++;
-		return (1);
-	}
-	return (0);
+	int			status;
+	char		**tokens;
+	t_interpret	interpret_set;
+
+	tokens = data.tokens;
+	interpret_set = data.interpret_set;
+	status = handle_pipe_token(tokens, cmd, gc, cursor);
+	if (status == 1)
+		return (0);
+	else if (status == -1)
+		return (-1);
+	if ((!(ft_strcmp(tokens[(*cursor).i], "<<")))
+		&& ((*cursor).i < interpret_set.token_count)
+		&& (interpret_set.flag_set[(*cursor).i + 1] == 1))
+		(*cmd)->expand_heredoc = 0;
+	status = handle_redirection_token(tokens, (*cmd), gc, cursor);
+	if (status == -1)
+		return (-1);
+	else if (status == 1)
+		return (0);
+	return (1);
 }
 
-static int	append_token_to_argv(t_command *cmd, char *token,
-	t_gc *gc, t_parser_cursor *cursor)
+static void	combine_tokens_interpret_data(t_interpret_data_tokens *data,
+	char **tokens, t_interpret interpret_set)
 {
-	size_t	j;
-	char	**new_argv;
-
-	new_argv = gc_malloc(gc, sizeof(char *) * ((cursor->argc) + 2));
-	if (!new_argv)
-		return (0);
-	j = 0;
-	while (j < (cursor->argc))
-	{
-		new_argv[j] = cmd->argv[j];
-		j++;
-	}
-	new_argv[(cursor->argc)] = token;
-	new_argv[(cursor->argc) + 1] = NULL;
-	cmd->argv = new_argv;
-	((cursor->argc))++;
-	return (1);
+	(*data).tokens = tokens;
+	(*data).interpret_set = interpret_set;
 }

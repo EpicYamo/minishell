@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:40:35 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 20:06:08 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/09 21:02:37 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+static int	is_last_heredoc_cmd(t_command *cmd);
+
 void	setup_infile_redirect(t_command *cmd, t_env *env_list)
 {
 	int	fd;
 
 	if (cmd->infile)
 	{
-		if ((cmd->heredoc == 1) && (cmd->expand_heredoc == 1))
+		if ((cmd->heredoc == 1) && (cmd->expand_heredoc == 1)
+			&& is_last_heredoc_cmd(cmd))
 		{
 			if (expand_dollar_sign_in_heredoc(cmd, env_list) != 0)
 			{
@@ -62,4 +65,18 @@ void	setup_outfile_redirect(t_command *cmd)
 			close(fd);
 		}
 	}
+}
+
+static int	is_last_heredoc_cmd(t_command *cmd)
+{
+	t_command	*tmp;
+
+	tmp = cmd->next;
+	while (tmp)
+	{
+		if (tmp->heredoc == 1)
+			return (0);
+		tmp = tmp->next;
+	}
+	return (1);
 }
