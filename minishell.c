@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 19:45:31 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/10 21:13:03 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 #include <signal.h>
 #include <readline/readline.h>
 
-static void	shell_loop(t_env *env_list, int *exit_status);
-static void	formatted_line_loop(char *line, t_env *env_list,
+static void	shell_loop(t_env **env_list, int *exit_status);
+static void	formatted_line_loop(char *line, t_env **env_list,
 				char **formatted_line, int *exit_status);
-static void	process_formatted_line(char **formatted_line, t_env *env_list,
+static void	process_formatted_line(char **formatted_line, t_env **env_list,
 				int *exit_status);
 
 int	main(int argc, char **argv, char **envp)
@@ -33,12 +33,12 @@ int	main(int argc, char **argv, char **envp)
 	print_banner();
 	signal(SIGINT, handle_sigint_interactive);
 	signal(SIGQUIT, SIG_IGN);
-	shell_loop(env_list, &exit_status);
+	shell_loop(&env_list, &exit_status);
 	free_env_list(env_list);
 	return (0);
 }
 
-static void	shell_loop(t_env *env_list, int *exit_status)
+static void	shell_loop(t_env **env_list, int *exit_status)
 {
 	char	*line;
 	char	**formatted_line;
@@ -64,7 +64,7 @@ static void	shell_loop(t_env *env_list, int *exit_status)
 	}
 }
 
-static void	process_formatted_line(char **formatted_line, t_env *env_list,
+static void	process_formatted_line(char **formatted_line, t_env **env_list,
 	int *exit_status)
 {
 	int	i;
@@ -76,7 +76,7 @@ static void	process_formatted_line(char **formatted_line, t_env *env_list,
 	free_string_array(formatted_line);
 }
 
-static void	formatted_line_loop(char *line, t_env *env_list,
+static void	formatted_line_loop(char *line, t_env **env_list,
 	char **formatted_line, int *exit_status)
 {
 	t_io		shell_io;
@@ -89,7 +89,7 @@ static void	formatted_line_loop(char *line, t_env *env_list,
 		return ;
 	if (init_interpret_set(gc, &interpret_set, line) != 0)
 		return ;
-	tokens = split_tokens(line, gc, env_list, interpret_set);
+	tokens = split_tokens(line, gc, (*env_list), interpret_set);
 	if (!tokens)
 		(*exit_status) = 2;
 	else

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 21:19:37 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/10 21:15:15 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,10 +168,10 @@ int			handle_redirection_token(char **tokens, t_command *cmd, t_gc *gc,
 				t_parser_cursor *cursor);
 int			handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc);
 int			command_executor(t_command *cmd, t_gc *gc, char	**formatted_line,
-				t_env *env_list);
+				t_env **env_list);
 int			is_builtin(const char *cmd);
 void		execute_built_in_commands(t_command *cmd, t_gc *gc,
-				char **formatted_line, t_env *env_list);
+				char **formatted_line, t_env **env_list);
 void		echo_command(t_command *cmd);
 void		pwd_command(t_command *cmd);
 void		cd_command(t_command *cmd, t_env *env_list);
@@ -188,12 +188,12 @@ void		export_malloc_fail_handler(t_env *copy, t_env *node, int option);
 void		unset_command(t_command *cmd, t_env **env_list);
 void		execute_non_built_in_command(t_command *cmd, t_env *env_list);
 void		exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
-				char **formatted_line, t_env *env_list);
+				char **formatted_line, t_env **env_list);
 void		setup_infile_redirect(t_command *cmd, t_env *env_list);
 void		setup_outfile_redirect(t_command *cmd);
 int			apply_exit_status_token(t_command *cmd, t_gc *gc);
 int			execute_single_built_in_command(t_command **cmd, t_gc *gc,
-				char **formatted_line, t_env *env_list);
+				char **formatted_line, t_env **env_list);
 int			expand_dollar_sign_in_heredoc(t_command *cmd, t_env *env_list);
 int			modify_apply_heredoc_file(t_command *cmd, char *infile,
 				t_env *env_list);

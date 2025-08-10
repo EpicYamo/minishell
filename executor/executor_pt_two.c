@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 16:12:15 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/10 21:15:00 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	io_prep(t_command *cmd);
 static void	close_fds_for_child_proc(t_command *cmd);
 
 void	exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
-	char **formatted_line, t_env *env_list)
+	char **formatted_line, t_env **env_list)
 {
 	pid_t	proc_pid;
 
@@ -66,7 +66,7 @@ static void	close_fds_for_child_proc(t_command *cmd)
 }
 
 int	execute_single_built_in_command(t_command **cmd, t_gc *gc,
-	char **formatted_line, t_env *env_list)
+	char **formatted_line, t_env **env_list)
 {
 	if (skip_command(cmd) != 0)
 		return (0);

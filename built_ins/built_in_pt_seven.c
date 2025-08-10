@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 22:10:13 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/04 19:10:08 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/10 21:40:53 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-static void	unset_command_pt_two(t_env **env_list, t_env **prev_env_node);
-static void	unset_command_pt_three(t_env **env_list, t_env **prev_env_node);
+static void	unset_command_pt_two(t_env **env_node, t_env **prev_env_node,
+				t_env **env_list);
+static void	unset_command_pt_three(t_env **env_node, t_env **prev_env_node);
 
 void	swap_env_nodes(t_env *a, t_env *b)
 {
@@ -52,62 +53,65 @@ void	unset_command(t_command *cmd, t_env **env_list)
 {
 	int		i;
 	t_env	*prev_env_node;
-	t_env	*head_env_node;
+	t_env	*tmp_env_node;
 
 	if (!cmd->argv[1])
 		return ;
 	i = 0;
-	prev_env_node = NULL;
-	head_env_node = (*env_list);
 	while (cmd->argv[++i])
 	{
-		(*env_list) = head_env_node;
-		while (*(env_list))
+		tmp_env_node = (*env_list);
+		prev_env_node = NULL;
+		while (tmp_env_node)
 		{
-			if ((*env_list)->key
-				&& ft_strcmp((*env_list)->key, cmd->argv[i]) == 0)
+			if (tmp_env_node->key
+				&& ft_strcmp(tmp_env_node->key, cmd->argv[i]) == 0)
 			{
-				unset_command_pt_two(env_list, &prev_env_node);
+				unset_command_pt_two(&tmp_env_node, &prev_env_node, env_list);
 				break ;
 			}
 			else
-				prev_env_node = (*env_list);
-			(*env_list) = (*env_list)->next;
+				prev_env_node = tmp_env_node;
+			tmp_env_node = tmp_env_node->next;
 		}
 	}
 }
 
-static void	unset_command_pt_two(t_env **env_list, t_env **prev_env_node)
+static void	unset_command_pt_two(t_env **env_node, t_env **prev_env_node,
+	t_env **env_list)
 {
 	t_env	*tmp_env_node;
 
 	tmp_env_node = NULL;
 	if (!(*prev_env_node))
 	{
-		(*env_list)->key = NULL;
-		(*env_list)->value = NULL;
-		free((*env_list)->key);
-		free((*env_list)->value);
-		if ((*env_list)->next)
+		free((*env_node)->key);
+		free((*env_node)->value);
+		(*env_node)->key = NULL;
+		(*env_node)->value = NULL;
+		if ((*env_node)->next)
 		{
-			tmp_env_node = (*env_list)->next;
-			free((*env_list));
+			tmp_env_node = (*env_node)->next;
+			free((*env_node));
 			(*env_list) = tmp_env_node;
 		}
 		else
-			free((*env_list));
+		{
+			free(*env_node);
+			(*env_list) = NULL;
+		}
 	}
 	else
-		unset_command_pt_three(env_list, prev_env_node);
+		unset_command_pt_three(env_node, prev_env_node);
 }
 
-static void	unset_command_pt_three(t_env **env_list, t_env **prev_env_node)
+static void	unset_command_pt_three(t_env **env_node, t_env **prev_env_node)
 {
-	(*prev_env_node)->next = (*env_list)->next;
-	(*env_list)->key = NULL;
-	(*env_list)->value = NULL;
-	(*env_list)->next = NULL;
-	free((*env_list)->key);
-	free((*env_list)->value);
-	free((*env_list));
+	(*prev_env_node)->next = (*env_node)->next;
+	free((*env_node)->key);
+	free((*env_node)->value);
+	(*env_node)->key = NULL;
+	(*env_node)->value = NULL;
+	(*env_node)->next = NULL;
+	free((*env_node));
 }
