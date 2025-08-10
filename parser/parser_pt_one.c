@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 21:25:50 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/10 13:55:30 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_command	*parse_tokens(char **tokens, t_gc *gc, t_io *io,
 	{
 		if (!initialize_command_if_needed(&cmd, &head, &cursor, gc))
 			return (NULL);
-		if ((interpret_set.flag_set[cursor.i] == 0))
+		if (interpret_set.flag_set[cursor.i] == 0)
 		{
 			status = parse_tokens_to_be_interpreted(data, gc, &cmd, &cursor);
 			if (status == 0)

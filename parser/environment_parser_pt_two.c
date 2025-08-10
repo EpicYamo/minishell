@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 16:35:30 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 16:55:43 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/10 13:54:24 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static void	create_pwd_env_node(t_env **env_list, t_env **node,
 	char	*pwd_val;
 
 	pwd_val = ft_strjoin("PWD=", cwd);
+	free(cwd);
 	if (!pwd_val)
 	{
 		free_env_list((*env_list));

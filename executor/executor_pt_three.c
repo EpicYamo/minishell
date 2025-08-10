@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 16:12:32 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/10 14:12:49 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ static void	replace_process_with_execution(t_command *cmd, char *path,
 {
 	if (execve(path, cmd->argv, envp) == -1)
 	{
-		perror("execve");
+		write(2, "Y-Shell: ", 9);
+		write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+		write(2, ": command not found\n", 20);
 		exit(127);
 	}
 }
@@ -94,7 +96,10 @@ static int	create_path_and_envp(t_command *cmd, t_env *env_list,
 	(*path) = resolve_path(cmd->argv[0], env_list);
 	if (!(*path))
 	{
-		perror("path");
+		write(2, "Y-Shell: ", 9);
+		write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+		write(2, ": command not found\n", 20);
+		(*cmd->io->exit_stat_ptr) = 127;
 		return (1);
 	}
 	(*envp) = get_envp(env_list);
@@ -102,6 +107,7 @@ static int	create_path_and_envp(t_command *cmd, t_env *env_list,
 	{
 		free((*path));
 		perror("envp");
+		(*cmd->io->exit_stat_ptr) = 127;
 		return (1);
 	}
 	return (0);
