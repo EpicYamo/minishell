@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/10 21:13:03 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/11 15:07:22 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,12 @@ static void	process_formatted_line(char **formatted_line, t_env **env_list,
 
 int	main(int argc, char **argv, char **envp)
 {
-	static int	exit_status = 0;
+	int			exit_status;
 	t_env		*env_list;
 
 	(void)argc;
 	(void)argv;
+	exit_status = 0;
 	env_list = create_env_list(envp);
 	print_banner();
 	signal(SIGINT, handle_sigint_interactive);
