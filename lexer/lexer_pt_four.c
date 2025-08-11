@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:59 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/11 19:27:09 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/11 20:22:46 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ static int	build_expanded_string_pt_two(char *result, const char *token,
 		if (env_token_default(result, token, env_list, data) != 0)
 			return (1);
 	}
-	else if (token[i] && (token[i] == '\'' || token[i] == '\"'))
+	else if (token[i] && ((token[i] == '\'' || token[i] == '\"'))
+		&& (token[i + 1]))
 		quoted_env_token(result, token, bounds.start_loc);
 	else
 		no_valid_env_token(result, token, bounds.start_loc);
