@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:14 by aaycan            #+#    #+#             */
-/*   Updated: 2025/07/12 19:13:45 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/11 19:29:43 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 static int	calculate_env_size_pt_two(const char *token, size_t start,
 				size_t env_var_size, t_env *env_list);
 
-int	calculate_env_size(const char *token, t_env *env_list, size_t loc)
+int	calculate_env_size(const char *token, t_env *env_list, size_t loc,
+	size_t last_sign)
 {
 	size_t	i;
 	int		env_var_size;
@@ -27,7 +28,7 @@ int	calculate_env_size(const char *token, t_env *env_list, size_t loc)
 		i++;
 	env_var_size = 0;
 	start = i;
-	while (is_env_char(token[i]))
+	while (is_env_char(token[i]) && (i < last_sign))
 	{
 		i++;
 		env_var_size++;

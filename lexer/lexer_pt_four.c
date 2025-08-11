@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:59 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 19:35:05 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/11 19:27:09 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*build_expanded_string(const char *token, size_t loc,
 	int				env_size;
 	t_env_bounds	bounds;
 
-	env_size = calculate_env_size(token, env_list, loc);
+	env_size = calculate_env_size(token, env_list, loc, last_sign);
 	if (env_size == -42)
 		return (NULL);
 	result_size = (env_size + ft_strlen(token) + 60);
