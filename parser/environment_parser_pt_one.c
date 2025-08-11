@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:46:31 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 16:52:22 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/11 17:47:21 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,22 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static void		create_env_node_pt_two(t_env *node, t_env_error *err);
+static int		skip_pre_defined_env(char *envp, size_t *i);
 
 t_env	*create_env_list(char **envp)
 {
 	t_env		*env_list;
 	t_env		*node;
 	t_env_error	err;
-	int			i;
+	size_t		i;
 
 	env_list = NULL;
 	create_pre_defined_env_nodes(&env_list, &node);
 	i = 0;
 	while (envp[i])
 	{
+		if (skip_pre_defined_env(envp[i], &i) == 1)
+			continue ;
 		node = create_env_node(envp[i], &err);
 		if (err == ENV_OK)
 			append_env_node(&env_list, node);
@@ -39,7 +41,20 @@ t_env	*create_env_list(char **envp)
 		}
 		i++;
 	}
+	create_shell_level(&env_list, &node, envp);
 	return (env_list);
+}
+
+static int	skip_pre_defined_env(char *envp, size_t *i)
+{
+	if (!(ft_strncmp(envp, "SHLVL", 5))
+		|| !(ft_strncmp(envp, "YSHELL", 6))
+		|| !(ft_strncmp(envp, "PWD", 3)))
+	{
+		(*i)++;
+		return (1);
+	}
+	return (0);
 }
 
 void	free_env_list(t_env *list)
@@ -56,43 +71,6 @@ void	free_env_list(t_env *list)
 		free(list);
 		list = next;
 	}
-}
-
-t_env	*create_env_node(char *entry, t_env_error *err)
-{
-	t_env	*node;
-	char	*eq;
-
-	eq = ft_strchr(entry, '=');
-	if (!eq)
-	{
-		(*err) = ENV_SKIP;
-		return (NULL);
-	}
-	node = malloc(sizeof(t_env));
-	if (!node)
-	{
-		*err = ENV_ALLOC_ERROR;
-		return (NULL);
-	}
-	node->key = ft_strndup(entry, eq - entry);
-	node->value = ft_strdup(eq + 1);
-	node->next = NULL;
-	if (!node->key || !node->value)
-	{
-		create_env_node_pt_two(node, err);
-		return (NULL);
-	}
-	*err = ENV_OK;
-	return (node);
-}
-
-static void	create_env_node_pt_two(t_env *node, t_env_error *err)
-{
-	free(node->key);
-	free(node->value);
-	free(node);
-	*err = ENV_ALLOC_ERROR;
 }
 
 void	append_env_node(t_env **list, t_env *new_node)
