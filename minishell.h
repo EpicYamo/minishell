@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 00:20:05 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 01:55:28 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,5 +223,8 @@ int			append_token_to_argv(t_command *cmd, char *token, t_gc *gc,
 				t_parser_cursor *cursor);
 void		create_shell_level(t_env **env_list, t_env **node, char **envp);
 void		process_child_processes(t_io io);
+void		write_error_with_arg(t_command *cmd);
+int			test_path(t_command *cmd);
+int			if_executeable(t_command *cmd);
 
 #endif

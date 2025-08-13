@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:37:17 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 00:20:18 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 01:57:17 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <dirent.h>
+#include <fcntl.h>
+
+static int	test_fd_and_folder(t_command *cmd, DIR *folder, int fd);
 
 int	skip_command(t_command **cmd)
 {
@@ -58,4 +62,51 @@ void	process_child_processes(t_io io)
 		(*io.exit_stat_ptr) = 130;
 		write(1, "\n", 1);
 	}
+}
+
+int	test_path(t_command *cmd)
+{
+	DIR	*folder;
+	int	fd;
+	int	err;
+
+	if (cmd->argv[0][0] == '\0')
+		return (1);
+	if (ft_strchr(cmd->argv[0], '/') == NULL)
+		return (0);
+	if (if_executeable(cmd) == 1)
+		return (0);
+	fd = open(cmd->argv[0], O_WRONLY);
+	folder = opendir(cmd->argv[0]);
+	err = test_fd_and_folder(cmd, folder, fd);
+	if (err == 1)
+		(*cmd->io->exit_stat_ptr) = 126;
+	if (folder)
+		closedir(folder);
+	if (fd != -1)
+		close(fd);
+	return (err);
+}
+
+static int	test_fd_and_folder(t_command *cmd, DIR *folder, int fd)
+{
+	if (fd == -1 && folder == NULL)
+	{
+		write_error_with_arg(cmd);
+		write(2, ": No such file or directory\n", 28);
+		return (1);
+	}
+	else if (fd == -1 && folder != NULL)
+	{
+		write_error_with_arg(cmd);
+		write(2, ": is a directory\n", 17);
+		return (1);
+	}
+	else if (fd != -1 && folder == NULL)
+	{
+		write_error_with_arg(cmd);
+		write(2, ": Permission denied\n", 20);
+		return (1);
+	}
+	return (0);
 }

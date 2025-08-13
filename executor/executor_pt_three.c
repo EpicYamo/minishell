@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 00:12:36 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 01:37:35 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,12 @@ static void	close_fds(t_command *cmd)
 static int	create_path_and_envp(t_command *cmd, t_env *env_list,
 	char **path, char ***envp)
 {
+	if (test_path(cmd) != 0)
+		return (1);
 	(*path) = resolve_path(cmd->argv[0], env_list);
 	if (!(*path))
 	{
-		write(2, "Y-Shell: ", 9);
-		write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+		write_error_with_arg(cmd);
 		write(2, ": command not found\n", 20);
 		(*cmd->io->exit_stat_ptr) = 127;
 		return (1);
