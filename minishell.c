@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/13 14:52:24 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/13 14:54:31 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1)
 	{
-		write(2, "Do not run minishell with arguments\n", 36);
+		write(2, "Do not run YShell with arguments\n", 33);
 		return (1);
 	}
 	(void)argv;

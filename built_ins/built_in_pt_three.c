@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 13:09:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 17:28:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/13 15:24:06 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ void	exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 	int	exit_code;
 	int	arg_err_flag;
 
-	exit_code = 0;
+	exit_code = cmd->io->exit_status;
 	arg_err_flag = 0;
-	printf("exit\n");
+	write(1, "exit\n", 5);
 	exit_command_pt_two(cmd, &arg_err_flag, &exit_code);
 	rl_clear_history();
 	gc_collect_all(gc);
@@ -63,6 +63,7 @@ static void	exit_command_pt_two(t_command *cmd, int *arg_err_flag,
 
 void	env_command(t_command *cmd, t_env *env)
 {
+	(*cmd->io->exit_stat_ptr) = 0;
 	if (cmd->outfile)
 		execute_env_outfile(cmd, env);
 	else

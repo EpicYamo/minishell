@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/06 22:10:13 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/10 21:40:53 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/13 15:23:06 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	unset_command(t_command *cmd, t_env **env_list)
 	t_env	*prev_env_node;
 	t_env	*tmp_env_node;
 
+	(*cmd->io->exit_stat_ptr) = 0;
 	if (!cmd->argv[1])
 		return ;
 	i = 0;

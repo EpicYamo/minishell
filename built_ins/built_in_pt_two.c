@@ -6,13 +6,12 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:48:24 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 17:28:56 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/13 15:19:53 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <unistd.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
 #include <readline/readline.h>
@@ -46,6 +45,7 @@ void	echo_command(t_command *cmd)
 		if (newline)
 			write(1, "\n", 1);
 	}
+	(*cmd->io->exit_stat_ptr) = 0;
 }
 
 static void	execute_echo_outfile(t_command *cmd, int i, int newline)
@@ -80,7 +80,7 @@ void	pwd_command(t_command *cmd)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		perror(cwd);
+		write(2, "Could not find current working directory\n", 41);
 		(*cmd->io->exit_stat_ptr) = 1;
 	}
 	else
@@ -90,6 +90,7 @@ void	pwd_command(t_command *cmd)
 		else
 			printf("%s\n", cwd);
 		free(cwd);
+		(*cmd->io->exit_stat_ptr) = 0;
 	}
 }
 
