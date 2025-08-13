@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 19:05:27 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/11 15:07:22 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/13 14:52:24 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,11 @@ int	main(int argc, char **argv, char **envp)
 	int			exit_status;
 	t_env		*env_list;
 
-	(void)argc;
+	if (argc != 1)
+	{
+		write(2, "Do not run minishell with arguments\n", 36);
+		return (1);
+	}
 	(void)argv;
 	exit_status = 0;
 	env_list = create_env_list(envp);
