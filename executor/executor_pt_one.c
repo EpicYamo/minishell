@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/10 21:15:32 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 00:23:48 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include <signal.h>
 #include <stdio.h>
-#include <sys/wait.h>
 
 static int	init_io(t_io *io, t_command *cmd, t_gc *gc);
 static void	init_io_stack_vars(t_io *io, t_command *cmd, int *i);
@@ -89,22 +88,7 @@ static void	init_io_stack_vars(t_io *io, t_command *cmd, int *i)
 
 static void	return_to_original_state(t_io io)
 {
-	int	i;
-
-	i = 0;
-	while (i < io.proc_count)
-	{
-		if (waitpid(io.pids[i], io.exit_stat_ptr, 0) == -1)
-		{
-			perror("waitpid");
-			(*io.exit_stat_ptr) = 2;
-		}
-		else if (WIFEXITED(*io.exit_stat_ptr))
-			(*io.exit_stat_ptr) = WEXITSTATUS(*io.exit_stat_ptr);
-		i++;
-	}
-	if ((*io.exit_stat_ptr) == 131)
-		write(2, "Quit (core dumped)\n", 19);
+	process_child_processes(io);
 	dup2(io.original_stdin, STDIN_FILENO);
 	dup2(io.original_stdout, STDOUT_FILENO);
 	close(io.original_stdin);

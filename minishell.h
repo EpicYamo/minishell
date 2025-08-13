@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/11 19:29:06 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 00:20:05 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,5 +222,6 @@ int			handle_pipe_token(char **tokens, t_command **cmd, t_gc *gc,
 int			append_token_to_argv(t_command *cmd, char *token, t_gc *gc,
 				t_parser_cursor *cursor);
 void		create_shell_level(t_env **env_list, t_env **node, char **envp);
+void		process_child_processes(t_io io);
 
 #endif
