@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 21:58:23 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/13 15:22:39 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 04:49:28 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,7 @@
 static int		export_command_pt_two(t_env **env_list, char *key, char *value);
 static int		export_command_pt_three(t_env **env_list,
 					char *key, char *value);
-static t_env	*find_env_node(t_env *env, const char *key);
-static int		is_valid_identifier(const char *s);
+static int		append_value(t_env *env_node, char *value, char *key);
 
 void	export_command(t_command *cmd, t_env **env_list)
 {
@@ -57,11 +56,16 @@ static int	export_command_pt_two(t_env **env_list, char *key, char *value)
 	{
 		if (value)
 		{
-			free(existing->value);
-			existing->value = value;
+			if (existing->value && ft_strchr(key, '+'))
+			{
+				if (append_value(existing, value, key) != 0)
+					return (1);
+			}
+			if ((existing->value) && (!(ft_strchr(key, '+'))))
+				free(existing->value);
+			if ((!(ft_strchr(key, '+'))) || (!(existing->value)))
+				existing->value = value;
 		}
-		else if (!existing->value)
-			existing->value = NULL;
 		free(key);
 	}
 	else
@@ -75,7 +79,11 @@ static int	export_command_pt_two(t_env **env_list, char *key, char *value)
 static int	export_command_pt_three(t_env **env_list, char *key, char *value)
 {
 	t_env	*new_node;
+	char	*tmp;
 
+	tmp = ft_strchr(key, '+');
+	if (tmp)
+		tmp[0] = '\0';
 	new_node = malloc(sizeof(t_env));
 	if (!new_node)
 	{
@@ -91,31 +99,19 @@ static int	export_command_pt_three(t_env **env_list, char *key, char *value)
 	return (0);
 }
 
-static t_env	*find_env_node(t_env *env, const char *key)
+static int	append_value(t_env *env_node, char *value, char *key)
 {
-	while (env)
-	{
-		if (env->key && ft_strcmp(env->key, key) == 0)
-			return (env);
-		env = env->next;
-	}
-	return (NULL);
-}
+	char	*new_value;
 
-static int	is_valid_identifier(const char *s)
-{
-	int	i;
-
-	if (!s || !s[0])
-		return (0);
-	if (!ft_isalpha(s[0]) && (s[0] != '_'))
-		return (0);
-	i = 1;
-	while (s[i] && (s[i] != '='))
+	new_value = ft_strjoin(env_node->value, value);
+	free(value);
+	if (!new_value)
 	{
-		if (!ft_isalnum(s[i]) && (s[i] != '_'))
-			return (0);
-		i++;
+		write(2, "ALLOCATION_ERROR for Export Command\n", 36);
+		free(key);
+		return (1);
 	}
-	return (1);
+	free(env_node->value);
+	env_node->value = new_value;
+	return (0);
 }
