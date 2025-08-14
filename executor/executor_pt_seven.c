@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/01 02:20:01 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/08 15:42:29 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 05:02:44 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	modify_apply_heredoc_file(t_command *cmd, char *infile, t_env *env_list)
 
 	if (init_vars(&gc, infile, &last_sign, &prev_sign) != 0)
 		return (1);
-	sign_loc = check_dollar_sign_existance(infile, &last_sign);
+	sign_loc = check_dollar_sign_existance_heredoc(infile, &last_sign);
 	while (sign_loc)
 	{
 		infile = expand_env_vars_if_applicable(infile,
@@ -44,7 +44,7 @@ int	modify_apply_heredoc_file(t_command *cmd, char *infile, t_env *env_list)
 		}
 		gc_add(gc, infile);
 		prev_sign = last_sign;
-		sign_loc = check_dollar_sign_existance(infile, &last_sign);
+		sign_loc = check_dollar_sign_existance_heredoc(infile, &last_sign);
 	}
 	if (modify_apply_heredoc_file_pt_two(cmd, infile, gc) != 0)
 		return (1);
