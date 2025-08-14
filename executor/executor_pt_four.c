@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:40:35 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 21:02:37 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 20:18:29 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,12 @@ static int	is_last_heredoc_cmd(t_command *cmd)
 		tmp = tmp->next;
 	}
 	return (1);
+}
+
+void	close_fds_error_condition(t_command *cmd)
+{
+	if (cmd->io->prev_fd != -1)
+		close(cmd->io->prev_fd);
+	close(cmd->io->pipe_fd[0]);
+	close(cmd->io->pipe_fd[1]);
 }

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 05:02:24 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 20:18:47 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,4 +229,6 @@ int			if_executeable(t_command *cmd);
 t_env		*find_env_node(t_env *env, const char *key);
 int			is_valid_identifier(const char *s);
 size_t		check_dollar_sign_existance_heredoc(char *token, size_t *last_sign);
+void		close_fds_error_condition(t_command *cmd);
+
 #endif

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 01:37:35 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/14 20:21:05 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,10 @@ void	execute_non_built_in_command(t_command *cmd, t_env *env_list)
 	char	*path;
 
 	if (create_path_and_envp(cmd, env_list, &path, &envp) != 0)
+	{
+		close_fds_error_condition(cmd);
 		return ;
+	}
 	proc_pid = fork();
 	if (proc_pid == 0)
 		exec_non_built_in_com_in_child_proc(cmd, path, envp, env_list);
