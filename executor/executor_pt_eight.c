@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:37:17 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 01:57:17 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/18 16:40:59 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ int	test_path(t_command *cmd)
 	int	fd;
 	int	err;
 
-	if (cmd->argv[0][0] == '\0')
-		return (1);
 	if (ft_strchr(cmd->argv[0], '/') == NULL)
 		return (0);
 	if (if_executeable(cmd) == 1)

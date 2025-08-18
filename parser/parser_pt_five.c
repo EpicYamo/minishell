@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 21:05:38 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 21:06:47 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/18 16:38:54 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 int	handle_pipe_token(char **tokens, t_command **cmd,
 	t_gc *gc, t_parser_cursor *cursor)
 {
-	if (((tokens[cursor->i][0] == '|') && (tokens[cursor->i][1] == '\0'))
-		&& (tokens[(cursor->i) + 1] != NULL))
+	if ((tokens[cursor->i][0] == '|') && (tokens[cursor->i][1] == '\0'))
 	{
-		if (((tokens[(cursor->i) + 1][0] == '|')
+		if ((tokens[(cursor->i) + 1] == NULL)
+			|| ((tokens[(cursor->i) + 1][0] == '|')
 			&& (tokens[(cursor->i) + 1][1] == '\0')))
 		{
 			write(2, "Y-Shell: syntax error near unexpected token `|'\n", 48);
