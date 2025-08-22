@@ -6,12 +6,13 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/09 18:16:49 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 04:50:49 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:36:30 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 #include <signal.h>
+#include <dirent.h>
 #include <unistd.h>
 
 void	reinstate_shell(t_gc *gc)
@@ -28,24 +29,16 @@ void	write_error_with_arg(t_command *cmd)
 
 int	if_executeable(t_command *cmd)
 {
-	int	i;
+	DIR	*folder;
 
-	i = 0;
-	while (cmd->argv[0][i])
+	folder = opendir(cmd->argv[0]);
+	if (folder)
 	{
-		if (ft_isspace(cmd->argv[0][i]) != 1)
-			break ;
-		i++;
+		closedir(folder);
+		return (0);
 	}
-	if (cmd->argv[0][i] == '.')
-	{
-		i++;
-		if (cmd->argv[0][i] == '/')
-		{
-			if (access(cmd->argv[0], X_OK) == 0)
-				return (1);
-		}
-	}
+	if (access(cmd->argv[0], X_OK) == 0)
+		return (1);
 	return (0);
 }
 
