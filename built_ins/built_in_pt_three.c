@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 13:09:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 20:34:13 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:21:52 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,15 @@ void	exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 	arg_err_flag = 0;
 	write(1, "exit\n", 5);
 	exit_command_pt_two(cmd, &arg_err_flag, &exit_code);
-	rl_clear_history();
-	gc_collect_all(gc);
-	free_string_array(formatted_line);
-	free_env_list(env_list);
-	exit(exit_code);
+	if (exit_code != -1)
+	{
+		rl_clear_history();
+		gc_collect_all(gc);
+		free_string_array(formatted_line);
+		free_env_list(env_list);
+		exit(exit_code);
+	}
+	(*cmd->io->exit_stat_ptr) = 1;
 }
 
 static void	exit_command_pt_two(t_command *cmd, int *arg_err_flag,
@@ -57,7 +61,7 @@ static void	exit_command_pt_two(t_command *cmd, int *arg_err_flag,
 		&& (cmd->argv[2] != NULL))
 	{
 		write(2, "Y-Shell: exit: too many arguments\n", 34);
-		(*exit_code) = 1;
+		(*exit_code) = -1;
 	}
 }
 

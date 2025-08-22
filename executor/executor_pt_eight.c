@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:37:17 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/18 16:40:59 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:12:55 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,14 @@ void	process_child_processes(t_io io)
 		}
 		else if (WIFEXITED(*io.exit_stat_ptr))
 			(*io.exit_stat_ptr) = WEXITSTATUS(*io.exit_stat_ptr);
+		else if (WIFSIGNALED(*io.exit_stat_ptr))
+		{
+			(*io.exit_stat_ptr) = 128 + WTERMSIG(*io.exit_stat_ptr);
+			if ((*io.exit_stat_ptr) == 131)
+				write(2, "Quit (core dumped)", 18);
+			write(1, "\n", 1);
+		}
 		i++;
-	}
-	if ((*io.exit_stat_ptr) == 131)
-		write(2, "Quit (core dumped)\n", 19);
-	if ((*io.exit_stat_ptr) == 2)
-	{
-		(*io.exit_stat_ptr) = 130;
-		write(1, "\n", 1);
 	}
 }
 
