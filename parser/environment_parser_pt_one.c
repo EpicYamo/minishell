@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 19:46:31 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/11 17:47:21 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/22 16:03:46 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ t_env	*create_env_list(char **envp)
 static int	skip_pre_defined_env(char *envp, size_t *i)
 {
 	if (!(ft_strncmp(envp, "SHLVL", 5))
-		|| !(ft_strncmp(envp, "YSHELL", 6))
 		|| !(ft_strncmp(envp, "PWD", 3)))
 	{
 		(*i)++;
