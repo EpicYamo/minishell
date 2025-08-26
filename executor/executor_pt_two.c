@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 21:37:53 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 22:12:01 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,20 @@ int	execute_single_built_in_command(t_command **cmd, t_gc *gc,
 	if ((*cmd) && ((*cmd)->next == NULL) && (is_builtin((*cmd)->argv[0])))
 	{
 		if (apply_exit_status_token((*cmd), gc) != 0)
+		{
+			if ((*cmd)->io->heredoc_path)
+				unlink((*cmd)->io->heredoc_path);
+			close((*cmd)->io->original_stdin);
+			close((*cmd)->io->original_stdout);
 			return (1);
+		}
+		if (ft_strcmp((*cmd)->argv[0], "exit") == 0)
+		{
+			if ((*cmd)->io->heredoc_path)
+				unlink((*cmd)->io->heredoc_path);
+			close((*cmd)->io->original_stdin);
+			close((*cmd)->io->original_stdout);
+		}
 		execute_built_in_commands((*cmd), gc, formatted_line, env_list);
 		(*cmd) = (*cmd)->next;
 	}

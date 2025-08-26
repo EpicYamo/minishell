@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 21:39:50 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 21:52:59 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:56:38 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ void	execve_fail_handler(t_command *cmd, char *path,
 	write(2, "Y-Shell: ", 9);
 	write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
 	write(2, ": command not found\n", 20);
-	close(cmd->io->original_stdin);
-	close(cmd->io->original_stdout);
 	rl_clear_history();
 	gc_collect_all(data_set.gc);
 	free_string_array(data_set.formatted_line);

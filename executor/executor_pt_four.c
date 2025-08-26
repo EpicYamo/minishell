@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:40:35 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 19:21:21 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 22:00:11 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	setup_infile_redirect(t_command *cmd, t_env *env_list)
 {
 	int	fd;
 
+	close(cmd->io->original_stdin);
+	close(cmd->io->original_stdout);
 	if (cmd->infile)
 	{
 		if ((cmd->heredoc == 1) && (cmd->expand_heredoc == 1)
