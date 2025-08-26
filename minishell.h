@@ -6,15 +6,15 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 22:37:19 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 23:04:31 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define EXIT_STATUS_TOKEN "--ENCP0MAClAKDJV_MINISHELL_EXIT_STATUS_ENC--"
-# define DOLLAR_SIGN_TOKEN "--ENCP0MAClAKDJV_DOLLAR_SIGN_ENC--"
+# define EXIT_STATUS_TOKEN "--\x1FMINISHELL_EXIT_STATUS_ENCMXLFOEKAXXXXX\x1E--"
+# define DOLLAR_SIGN_TOKEN "--\x1FMINISHELL_DOLLAR_SIGN_ENCMXX\x1E--"
 # include <stddef.h>
 
 typedef struct s_io
