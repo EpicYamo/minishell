@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 21:26:55 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:51:32 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,13 @@ typedef struct s_interpret_data_and_tokens
 	char		**tokens;
 }	t_interpret_data_tokens;
 
+typedef struct s_non_built_in_data_set
+{
+	t_gc	*gc;
+	char	**formatted_line;
+	t_env	**env_list;
+}	t_com_data_set;
+
 size_t		ft_strlen(const char *s);
 char		*ft_strndup(const char *s, size_t n);
 int			ft_isspace(char c);
@@ -187,7 +194,8 @@ int			split_key_value(char *arg, char **key, char **value);
 void		swap_env_nodes(t_env *a, t_env *b);
 void		export_malloc_fail_handler(t_env *copy, t_env *node, int option);
 void		unset_command(t_command *cmd, t_env **env_list);
-void		execute_non_built_in_command(t_command *cmd, t_env *env_list);
+void		execute_non_built_in_command(t_command *cmd, t_gc *gc,
+				char **formatted_line, t_env **env_list);
 void		exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
 				char **formatted_line, t_env **env_list);
 void		setup_infile_redirect(t_command *cmd, t_env *env_list);
@@ -239,5 +247,9 @@ void		exit_command_in_child_proc(t_command *cmd, t_gc *gc,
 void		close_fds_for_child_proc(t_command *cmd);
 void		clean_before_exit(t_command *cmd, t_gc *gc,
 				char **formatted_line, t_env *env_list);
+void		init_non_built_in_data_struct(t_com_data_set *data_set, t_gc *gc,
+				char **formatted_line, t_env **env_list);
+void		execve_fail_handler(t_command *cmd, char *path,
+				char **envp, t_com_data_set data_set);
 
 #endif

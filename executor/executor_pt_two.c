@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 21:27:19 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:37:53 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <readline/readline.h>
 
 static void	io_prep(t_command *cmd);
 

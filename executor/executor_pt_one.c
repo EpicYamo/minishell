@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:26:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 00:23:48 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:29:47 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	command_executor(t_command *cmd, t_gc *gc, char **formatted_line,
 		if (is_builtin(cmd->argv[0]))
 			exec_built_in_com_in_child_proc(cmd, gc, formatted_line, env_list);
 		else
-			execute_non_built_in_command(cmd, (*env_list));
+			execute_non_built_in_command(cmd, gc, formatted_line, env_list);
 		cmd = cmd->next;
 	}
 	return_to_original_state(io_local);
