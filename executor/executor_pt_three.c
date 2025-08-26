@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 21:59:56 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 23:43:54 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 
 static void	exec_non_built_in_com_in_child_proc(t_command *cmd, char *path,
 				char **envp, t_com_data_set data_set);
 static void	replace_process_with_execution(t_command *cmd, char *path,
 				char **envp, t_com_data_set data_set);
-static int	create_path_and_envp(t_command *cmd, t_env *env_list,
-				char **path, char ***envp);
 static void	close_fds(t_command *cmd);
 
 void	execute_non_built_in_command(t_command *cmd, t_gc *gc,
@@ -80,7 +79,18 @@ static void	replace_process_with_execution(t_command *cmd, char *path,
 {
 	if (execve(path, cmd->argv, envp) == -1)
 	{
-		execve_fail_handler(cmd, path, envp, data_set);
+		if (errno == ENOEXEC)
+		{
+			write(2, "Y-Shell: ", 9);
+			write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+			write(2, ": exec format error\n", 20);
+			execve_fail_handler(path, envp, data_set);
+			exit(126);
+		}
+		write(2, "Y-Shell: ", 9);
+		write(2, cmd->argv[0], ft_strlen(cmd->argv[0]));
+		write(2, ": command not found\n", 20);
+		execve_fail_handler(path, envp, data_set);
 		exit(127);
 	}
 }
@@ -97,28 +107,4 @@ static void	close_fds(t_command *cmd)
 	else
 		close(cmd->io->pipe_fd[0]);
 	close(cmd->io->pipe_fd[1]);
-}
-
-static int	create_path_and_envp(t_command *cmd, t_env *env_list,
-	char **path, char ***envp)
-{
-	if (test_path(cmd) != 0)
-		return (1);
-	(*path) = resolve_path(cmd->argv[0], env_list);
-	if (!(*path))
-	{
-		write_error_with_arg(cmd);
-		write(2, ": command not found\n", 20);
-		(*cmd->io->exit_stat_ptr) = 127;
-		return (1);
-	}
-	(*envp) = get_envp(env_list);
-	if (!(*envp))
-	{
-		free((*path));
-		perror("envp");
-		(*cmd->io->exit_stat_ptr) = 127;
-		return (1);
-	}
-	return (0);
 }

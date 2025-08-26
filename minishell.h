@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 23:04:31 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 23:44:09 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -259,9 +259,11 @@ void		clean_before_exit(t_command *cmd, t_gc *gc,
 				char **formatted_line, t_env *env_list);
 void		init_non_built_in_data_struct(t_com_data_set *data_set, t_gc *gc,
 				char **formatted_line, t_env **env_list);
-void		execve_fail_handler(t_command *cmd, char *path,
-				char **envp, t_com_data_set data_set);
+void		execve_fail_handler(char *path, char **envp,
+				t_com_data_set data_set);
 void		add_other_garbages_to_struct(t_interpret *interpret_set,
 				char **formatted_line, t_env *env_list);
+int			create_path_and_envp(t_command *cmd, t_env *env_list,
+				char **path, char ***envp);
 
 #endif
