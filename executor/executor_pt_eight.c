@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/08 15:37:17 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/22 16:12:55 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 20:55:50 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ int	apply_pipe(t_io *io)
 void	process_child_processes(t_io io)
 {
 	int	i;
+	int	flag;
 
 	i = 0;
+	flag = 0;
 	while (i < io.proc_count)
 	{
 		if (waitpid(io.pids[i], io.exit_stat_ptr, 0) == -1)
@@ -56,12 +58,13 @@ void	process_child_processes(t_io io)
 		else if (WIFSIGNALED(*io.exit_stat_ptr))
 		{
 			(*io.exit_stat_ptr) = 128 + WTERMSIG(*io.exit_stat_ptr);
-			if ((*io.exit_stat_ptr) == 131)
-				write(2, "Quit (core dumped)", 18);
-			write(1, "\n", 1);
+			if (*io.exit_stat_ptr == 130 && flag == 0)
+				put_newline_and_set_flag(&flag);
 		}
 		i++;
 	}
+	if ((*io.exit_stat_ptr) == 131)
+		write(2, "Quit (core dumped)\n", 19);
 }
 
 int	test_path(t_command *cmd)

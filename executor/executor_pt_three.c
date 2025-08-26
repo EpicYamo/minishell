@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 19:11:43 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 20:34:37 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	execute_non_built_in_command(t_command *cmd, t_env *env_list)
 static void	exec_non_built_in_com_in_child_proc(t_command *cmd, char *path,
 	char **envp, t_env *env_list)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (cmd->next)
 		dup2(cmd->io->pipe_fd[1], STDOUT_FILENO);
 	close(cmd->io->pipe_fd[1]);
@@ -84,8 +86,11 @@ static void	replace_process_with_execution(t_command *cmd, char *path,
 static void	close_fds(t_command *cmd)
 {
 	if (cmd->io->prev_fd != -1)
+	{
 		close(cmd->io->prev_fd);
-	if (cmd->next != NULL)
+		cmd->io->prev_fd = -1;
+	}
+	if (cmd->next)
 		cmd->io->prev_fd = cmd->io->pipe_fd[0];
 	else
 		close(cmd->io->pipe_fd[0]);
