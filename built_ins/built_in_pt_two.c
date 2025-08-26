@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 19:48:24 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 18:46:11 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/27 00:08:29 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,7 @@ void	echo_command(t_command *cmd)
 
 	i = 1;
 	newline = 1;
-	if (cmd->argv[1] && (ft_strcmp(cmd->argv[1], "-n") == 0))
-	{
-		newline = 0;
-		i++;
-	}
+	check_no_newline_option(cmd, &newline, &i);
 	if (cmd->outfile)
 		execute_echo_outfile(cmd, i, newline);
 	else

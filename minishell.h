@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 23:44:09 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/27 00:08:39 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,5 +265,6 @@ void		add_other_garbages_to_struct(t_interpret *interpret_set,
 				char **formatted_line, t_env *env_list);
 int			create_path_and_envp(t_command *cmd, t_env *env_list,
 				char **path, char ***envp);
+void		check_no_newline_option(t_command *cmd, int *newline, int *i);
 
 #endif
