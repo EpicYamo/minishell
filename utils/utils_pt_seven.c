@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 15:57:53 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/14 01:42:53 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 23:25:33 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ char	*resolve_path(const char *cmd, t_env *env_list)
 	char	*path_value;
 	char	*full_path;
 
-	if (access(cmd, X_OK) == 0)
+	if (access(cmd, X_OK) == 0 && ft_strchr(cmd, '/'))
 	{
 		full_path = ft_strdup(cmd);
 		return (full_path);
