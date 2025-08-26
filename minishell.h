@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 20:56:11 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:26:55 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,5 +231,13 @@ int			is_valid_identifier(const char *s);
 size_t		check_dollar_sign_existance_heredoc(char *token, size_t *last_sign);
 void		close_fds_error_condition(t_command *cmd);
 void		put_newline_and_set_flag(int *flag);
+int			check_exit_code_validity(char *argv);
+void		exit_command_validity(t_command *cmd, int *arg_err_flag,
+				int *exit_code);
+void		exit_command_in_child_proc(t_command *cmd, t_gc *gc,
+				char **formatted_line, t_env *env_list);
+void		close_fds_for_child_proc(t_command *cmd);
+void		clean_before_exit(t_command *cmd, t_gc *gc,
+				char **formatted_line, t_env *env_list);
 
 #endif

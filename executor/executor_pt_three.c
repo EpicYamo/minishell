@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 17:21:42 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 20:34:37 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:23:13 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	execute_non_built_in_command(t_command *cmd, t_env *env_list)
 	if (proc_pid < 0)
 	{
 		perror("fork");
+		(*cmd->io->exit_stat_ptr) = 1;
 		return ;
 	}
 	cmd->io->pids[cmd->io->proc_count] = proc_pid;

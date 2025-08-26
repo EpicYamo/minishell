@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 13:09:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/22 16:21:52 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:08:14 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,7 @@
 #include <unistd.h>
 #include <readline/readline.h>
 
-static void	exit_command_pt_two(t_command *cmd, int *arg_err_flag,
-				int *exit_code);
 static void	execute_env_outfile(t_command *cmd, t_env *env);
-static int	check_exit_code_validity(char *argv);
 
 void	exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 				t_env *env_list)
@@ -30,7 +27,7 @@ void	exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 	exit_code = cmd->io->exit_status;
 	arg_err_flag = 0;
 	write(1, "exit\n", 5);
-	exit_command_pt_two(cmd, &arg_err_flag, &exit_code);
+	exit_command_validity(cmd, &arg_err_flag, &exit_code);
 	if (exit_code != -1)
 	{
 		rl_clear_history();
@@ -42,7 +39,7 @@ void	exit_command(t_command *cmd, t_gc *gc, char **formatted_line,
 	(*cmd->io->exit_stat_ptr) = 1;
 }
 
-static void	exit_command_pt_two(t_command *cmd, int *arg_err_flag,
+void	exit_command_validity(t_command *cmd, int *arg_err_flag,
 				int *exit_code)
 {
 	if (cmd->argv[1])
@@ -108,7 +105,7 @@ static void	execute_env_outfile(t_command *cmd, t_env *env)
 	close(fd);
 }
 
-static int	check_exit_code_validity(char *argv)
+int	check_exit_code_validity(char *argv)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 20:48:52 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 21:27:19 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include <readline/readline.h>
 
 static void	io_prep(t_command *cmd);
-static void	close_fds_for_child_proc(t_command *cmd);
 
 void	exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
 	char **formatted_line, t_env **env_list)
@@ -33,21 +32,21 @@ void	exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
 		if (cmd->next)
 			dup2(cmd->io->pipe_fd[1], STDOUT_FILENO);
 		exit_status = (*cmd->io->exit_stat_ptr);
-		//if (ft_strcmp(cmd->argv[0], "exit") == 0)
-		//	execute_exit_command_in_child_proc();  (execute exit seperately)
-		execute_built_in_commands(cmd, gc, formatted_line, env_list);
-		close_fds_for_child_proc(cmd);
-		rl_clear_history();
-		gc_collect_all(gc);
-		free_string_array(formatted_line);
-		free_env_list(*env_list);
+		if (ft_strcmp(cmd->argv[0], "exit") == 0)
+			exit_command_in_child_proc(cmd, gc, formatted_line, (*env_list));
+		else
+			execute_built_in_commands(cmd, gc, formatted_line, env_list);
+		clean_before_exit(cmd, gc, formatted_line, (*env_list));
 		exit(exit_status);
 	}
-	if (proc_pid > 0)
-		cmd->io->pids[(cmd->io->proc_count)++] = proc_pid;
 	close(cmd->io->pipe_fd[1]);
 	if (proc_pid < 0)
+	{
+		(*cmd->io->exit_stat_ptr) = 1;
 		perror("fork");
+		return ;
+	}
+	cmd->io->pids[(cmd->io->proc_count)++] = proc_pid;
 }
 
 static void	io_prep(t_command *cmd)
@@ -64,7 +63,7 @@ static void	io_prep(t_command *cmd)
 		close(cmd->io->pipe_fd[0]);
 }
 
-static void	close_fds_for_child_proc(t_command *cmd)
+void	close_fds_for_child_proc(t_command *cmd)
 {
 	close(cmd->io->original_stdin);
 	close(cmd->io->original_stdout);
