@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 17:29:58 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 22:36:27 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,14 @@
 #include <signal.h>
 #include <sys/wait.h>
 
-static void	handle_heredoc_pt_two(char *delimiter, int fd);
+static void	handle_heredoc_pt_two(char *delimiter, int fd,
+				t_garbages all_garbage);
 static void	write_heredoc_error(char *delimiter);
 static int	fork_proc_read_input(t_command *cmd, char *delimiter,
-				char *tempfile);
+				char *tempfile, t_garbages all_garbage);
 
-int	handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc)
+int	handle_heredoc(t_command *cmd, char **tokens, size_t *i,
+	t_garbages all_garbage)
 {
 	char	*delimiter;
 	char	*tempfile;
@@ -38,9 +40,9 @@ int	handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc)
 		return (-1);
 	}
 	else
-		gc_add(gc, tempfile);
+		gc_add(all_garbage.gc, tempfile);
 	signal(SIGINT, SIG_IGN);
-	if (fork_proc_read_input(cmd, delimiter, tempfile) != 1)
+	if (fork_proc_read_input(cmd, delimiter, tempfile, all_garbage) != 1)
 		return (-1);
 	if (WIFEXITED(*cmd->io->exit_stat_ptr))
 		(*cmd->io->exit_stat_ptr) = WEXITSTATUS((*cmd->io->exit_stat_ptr));
@@ -53,7 +55,7 @@ int	handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc)
 }
 
 static int	fork_proc_read_input(t_command *cmd, char *delimiter,
-	char *tempfile)
+	char *tempfile, t_garbages all_garbage)
 {
 	int		fd;
 	pid_t	proc_pid;
@@ -66,7 +68,7 @@ static int	fork_proc_read_input(t_command *cmd, char *delimiter,
 	}
 	proc_pid = fork();
 	if (proc_pid == 0)
-		handle_heredoc_pt_two(delimiter, fd);
+		handle_heredoc_pt_two(delimiter, fd, all_garbage);
 	close(fd);
 	if (proc_pid < 0)
 	{
@@ -81,7 +83,8 @@ static int	fork_proc_read_input(t_command *cmd, char *delimiter,
 	return (1);
 }
 
-static void	handle_heredoc_pt_two(char *delimiter, int fd)
+static void	handle_heredoc_pt_two(char *delimiter, int fd,
+	t_garbages all_garbage)
 {
 	char	*line;
 
@@ -102,6 +105,9 @@ static void	handle_heredoc_pt_two(char *delimiter, int fd)
 	}
 	if (!line)
 		write_heredoc_error(delimiter);
+	free_string_array(all_garbage.formatted_line);
+	gc_collect_all(all_garbage.gc);
+	free_env_list(all_garbage.env_list);
 	close(fd);
 	exit(EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:55 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/10 13:55:30 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 22:30:32 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,11 @@ static int	parse_tokens_to_be_interpreted(t_interpret_data_tokens data,
 	int			status;
 	char		**tokens;
 	t_interpret	interpret_set;
+	t_garbages	all_garbage;
 
+	all_garbage.gc = gc;
+	all_garbage.formatted_line = data.interpret_set.formatted_line;
+	all_garbage.env_list = data.interpret_set.env_list;
 	tokens = data.tokens;
 	interpret_set = data.interpret_set;
 	status = handle_pipe_token(tokens, cmd, gc, cursor);
@@ -94,7 +98,7 @@ static int	parse_tokens_to_be_interpreted(t_interpret_data_tokens data,
 		&& ((*cursor).i < interpret_set.token_count)
 		&& (interpret_set.flag_set[(*cursor).i + 1] == 1))
 		(*cmd)->expand_heredoc = 0;
-	status = handle_redirection_token(tokens, (*cmd), gc, cursor);
+	status = handle_redirection_token(tokens, (*cmd), all_garbage, cursor);
 	if (status == -1)
 		return (-1);
 	else if (status == 1)

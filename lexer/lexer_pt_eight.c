@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/06 14:52:11 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/09 19:39:09 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 22:22:03 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,11 @@ static int	init_vars_strip_quotes(char **result, size_t *i, size_t *j, char *s)
 	(*i) = 0;
 	(*j) = 0;
 	return (0);
+}
+
+void	add_other_garbages_to_struct(t_interpret *interpret_set,
+	char **formatted_line, t_env *env_list)
+{
+	(*interpret_set).formatted_line = formatted_line;
+	(*interpret_set).env_list = env_list;
 }

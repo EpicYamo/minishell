@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 03:25:32 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 21:51:32 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/26 22:37:19 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ typedef struct s_interpret_flag_set
 {
 	size_t	*flag_set;
 	size_t	token_count;
+	char	**formatted_line;
+	t_env	*env_list;
 }	t_interpret;
 
 typedef struct s_interpret_data_and_input
@@ -118,6 +120,13 @@ typedef struct s_non_built_in_data_set
 	char	**formatted_line;
 	t_env	**env_list;
 }	t_com_data_set;
+
+typedef struct s_all_garbages
+{
+	t_gc	*gc;
+	char	**formatted_line;
+	t_env	*env_list;
+}	t_garbages;
 
 size_t		ft_strlen(const char *s);
 char		*ft_strndup(const char *s, size_t n);
@@ -172,9 +181,10 @@ char		*replace_dollar_signs(char *token, t_gc *gc);
 t_command	*parse_tokens(char **tokens, t_gc *garbage_c, t_io *io,
 				t_interpret interpret_set);
 t_command	*new_command(t_gc *gc);
-int			handle_redirection_token(char **tokens, t_command *cmd, t_gc *gc,
-				t_parser_cursor *cursor);
-int			handle_heredoc(t_command *cmd, char **tokens, size_t *i, t_gc *gc);
+int			handle_redirection_token(char **tokens, t_command *cmd,
+				t_garbages all_garbage, t_parser_cursor *cursor);
+int			handle_heredoc(t_command *cmd, char **tokens, size_t *i,
+				t_garbages all_garbage);
 int			command_executor(t_command *cmd, t_gc *gc, char	**formatted_line,
 				t_env **env_list);
 int			is_builtin(const char *cmd);
@@ -251,5 +261,7 @@ void		init_non_built_in_data_struct(t_com_data_set *data_set, t_gc *gc,
 				char **formatted_line, t_env **env_list);
 void		execve_fail_handler(t_command *cmd, char *path,
 				char **envp, t_com_data_set data_set);
+void		add_other_garbages_to_struct(t_interpret *interpret_set,
+				char **formatted_line, t_env *env_list);
 
 #endif
