@@ -6,12 +6,12 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/28 02:34:45 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 22:36:27 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/27 14:05:00 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include "fcntl.h"
+#include <fcntl.h>
 #include <unistd.h>
 #include <readline/readline.h>
 #include <stdlib.h>

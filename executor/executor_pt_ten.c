@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/26 21:39:50 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 23:43:44 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/27 14:03:22 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include <readline/readline.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 void	init_non_built_in_data_struct(t_com_data_set *data_set, t_gc *gc,
 	char **formatted_line, t_env **env_list)
