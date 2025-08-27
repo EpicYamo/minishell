@@ -6,7 +6,7 @@
 /*   By: aaycan <aaycan@student.42kocaeli.com.tr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 18:04:26 by aaycan            #+#    #+#             */
-/*   Updated: 2025/08/26 22:12:01 by aaycan           ###   ########.fr       */
+/*   Updated: 2025/08/27 15:08:40 by aaycan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ void	exec_built_in_com_in_child_proc(t_command *cmd, t_gc *gc,
 	{
 		if (cmd->next)
 			dup2(cmd->io->pipe_fd[1], STDOUT_FILENO);
-		exit_status = (*cmd->io->exit_stat_ptr);
 		if (ft_strcmp(cmd->argv[0], "exit") == 0)
 			exit_command_in_child_proc(cmd, gc, formatted_line, (*env_list));
 		else
 			execute_built_in_commands(cmd, gc, formatted_line, env_list);
+		exit_status = (*cmd->io->exit_stat_ptr);
 		clean_before_exit(cmd, gc, formatted_line, (*env_list));
 		exit(exit_status);
 	}
