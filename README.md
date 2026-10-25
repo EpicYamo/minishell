@@ -1,7 +1,7 @@
 # minishell
 
-A small Bash-like shell written from scratch in C, for the 42 common core
-(minishell, 42 Kocaeli).
+A small Bash-like shell written from scratch in C, as part of the
+42 school curriculum (minishell).
 
 It reads a line through GNU readline, tokenises it, builds a command list,
 runs pipelines and redirections, and takes care of its own environment, exit
@@ -124,8 +124,8 @@ cd ignore_readline_leaks
 
 ## About
 
-Built as part of the 42 common core at **42 Kocaeli** by
-**M. Arda Aycan** ([@EpicYamo](https://github.com/EpicYamo)).
+Built as part of the 42 school curriculum by
+**Arda Aycan** ([@EpicYamo](https://github.com/EpicYamo)).
 
 The subject asks for a shell that behaves like Bash for a defined set of
 features; anything beyond that list was left out on purpose rather than
